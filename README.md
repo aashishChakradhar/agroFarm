@@ -1,5 +1,4 @@
 <h1>This is project work for fifth semester.</h1>
-
 <h3>superuser detail:</h3>
 username: admin<br>
 password: admin<br>
