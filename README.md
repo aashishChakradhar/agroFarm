@@ -1,6 +1,6 @@
-This is project work for fifth semester.<br>
+<h1>This is project work for fifth semester.</h1>
 
-superuser detail:<br>
+<h3>superuser detail:</h3>
 username: admin<br>
 password: admin<br>
 <p>
