@@ -5,4 +5,5 @@ from agroFarm import views
 urlpatterns = [
     #path("{urlpath}",{view class}, name="{reverse indexing}")
     path('', views.Index.as_view(), name='index'),
+    path('dashboard', views.dashboardpageloader, name='dashboard'),
 ]
