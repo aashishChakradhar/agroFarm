@@ -1,0 +1,70 @@
+:root {
+    --color-one: #064635;
+    --color-two: #519259;
+    --color-three: #F0BB62;
+    --color-four: #F4EEA9;
+    --alert_color: #eb1d36;
+    --color-bg: #eae3d2;
+    --color-bgd: #f9f5eb;
+}
+
+body {
+    background-color: var(--color-bg);
+}
+
+
+.navbar {
+    background-color: var(--color-two);
+    margin: 1em 0;
+    padding: 1em 0;
+    width: 100%;
+    border-radius: 2em;
+}
+
+.custom {
+    background-color: var(--color-one);
+    border: 0 none;
+    margin: 0;
+    padding: 0;
+    border-radius: 2em;
+}
+
+.navbar-brand {
+    background-color: var(--color-one);
+    color: var(--color-three);
+    margin: 0 0 0 1.3em;
+    padding: 0 0.5em;
+    border-radius: 2em;
+    font-size: 3em;
+    font-weight: 700;
+}
+
+.navbar-brand:hover {
+    background-color: var(--color-two);
+    color: var(--color-four);
+}
+
+.nav-item .nav-link {
+    background-color: var(--color-one);
+    color: var(--color-three);
+    margin: 0.8em 0;
+    padding: 0 0.5em;
+    font-size: x-large;
+    font-weight: 900;
+    border-radius: 2em;
+}
+
+.nav-item .nav-link:hover {
+    background-color: var(--color-two);
+    color: var(--color-four);
+}
+
+button.btn {
+    color: var(--color-bgd);
+    border-color: var(--color-bgd);
+    margin-right: 1.2em;
+}
+
+.button:hover {
+    color: var(--color-bgd);
+}
