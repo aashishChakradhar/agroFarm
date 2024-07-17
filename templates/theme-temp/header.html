@@ -6,11 +6,14 @@
 
     <title>{% block title %}{% endblock title %}| agroFarm</title>
     {% load static %}{% load bootstrap5 %} {% bootstrap_css %}
-    {%bootstrap_javascript %} {% block head %}{% endblock head %}
+    {%bootstrap_javascript %}
+    {% block head %}{% endblock head %}
   </head>
   <body>
     {% block theme_headder %}{% endblock theme_headder %}
+
     {% block theme_body%}{% endblock theme_body%}
+
     {% block theme_footer %}{% endblock theme_footer %}
   </body>
   </html>
