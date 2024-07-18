@@ -3,11 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}{% endblock title %}| agroFarm</title>
     {% load static %}{% load bootstrap5 %} {% bootstrap_css %}
+    <title>{% block title %}{% endblock title %}| agroFarm</title>
     {%bootstrap_javascript %}
     <link rel="stylesheet" href="static/main.css">
-    {% block head %}{% endblock head %}
   </head>
   <body>
       <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary">
