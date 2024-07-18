@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
 from django.urls import reverse_lazy
 from agroFarm.models import *
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 class Index(View):
     def get(self, request):
