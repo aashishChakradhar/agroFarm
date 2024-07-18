@@ -1,14 +1,2 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>{% block title %}{% endblock title %}| agroFarm</title>
-    {% load static %}{% load bootstrap5 %} {% bootstrap_css %}
-    {%bootstrap_javascript %} {% block head %}{% endblock head %}
-  </head>
-  <body>
-    {% block body %}{% endblock body %}
-  </body>
-</html>
+{% include 'theme-temp/header.html' %} {% block body %}{% endblock body %}
+{%include 'theme-temp/footer.html' %}
