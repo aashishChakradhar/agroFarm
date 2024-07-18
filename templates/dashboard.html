@@ -1,9 +1,9 @@
-{% include 'theme-temp/header.html' %}
+{% include 'theme-temp/dashboard-header.html' %}
 
 <section class="dashboard-page">
   <div class="row">
-    <div class="col-md-3">
-      <div class="dashboard-nav-wrapper">
+    <div class="col-md-2">
+      <div class="dashboard-nav-wrapper container">
         <ul>
           <li><a href="/dashboard" title="">Dashboard</a></li>
           <li><a href="#" title="">Users</a></li>
@@ -12,10 +12,11 @@
         </ul>
       </div>
     </div>
-    <div class="col-md-9">
-      <p>This is dashboard</p>
+    <div class="col-md-10">
+        <div class="dashboard-content-wrapper">
+            <p>This is dashboard</p>
+        </div>
     </div>
   </div>
 </section>
-
-{% include 'theme-temp/footer.html' %}
+{% include 'theme-temp/dashboard-footer.html' %}
