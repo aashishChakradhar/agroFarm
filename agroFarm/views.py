@@ -67,27 +67,9 @@ class Signup_View (View):
                 request.session['alert_detail'] = "Password did not match."
                 return redirect(request.path)
             else:
-                my_user = User.objects.create_user(username, email, password1)
-                my_user.save()
-                my_user = authenticate(username = username, password = password1)
-                if my_user is not None:# checks if the user is logged in or not?
-                    login(request,my_user) #logins the user
+                user = User.objects.create_user(username = username, email=email, password=password1)
+                user.save()
+                user = authenticate(username = username, password = password1)
+                if user is not None:# checks if the user is logged in or not?
+                    login(request,user) #logins the user
                     return redirect ('/')
-
-    def LoginPage(request):
-        if request.method == 'POST':
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            user = authenticate(request, username = username, password = password)
-            if user is not None:
-                login(request, user)
-                customer = user.usename
-                return redirect('dashboard') 
-            else:
-                return redirect('signup')
-            
-        return render(request, 'login.html')
-
-def LogoutPage(request):
-    logout(request)
-    return redirect('login')
