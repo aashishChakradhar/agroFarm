@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <title>Signup Page</title>
+</head>
+<body>
+    <div class="background"></div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <h3>Signup</h3>
+
+        <label for ="username">Username</label>
+        <input type = "text" placeholder="Username" name="username" id ="username">
+        
+        <label for = "email">Email</label>
+        <input type = "text" placeholder="Email or Phone Number" name="email" id="email">
+
+        <label for="password1">Password</label>
+        <input type="text" placeholder="Password" name="password1" id="password1">
+
+        <label for="password2">Confirm Password</label>
+        <input type="text" placeholder="Confirm Password" name="password2" id="password2">
+
+        <button type="submit">Signup</button>
+        <a href="{% url 'login' %}">I already have an account</a>
+    </form>
+</body>
+
+</html>
