@@ -12,7 +12,6 @@ body {
     background-color: var(--color-bg);
 }
 
-
 .navbar {
     background-color: var(--color-two);
     margin: 1em 0;
@@ -59,12 +58,13 @@ body {
     color: var(--color-four);
 }
 
-button.btn {
+.btn {
     color: var(--color-bgd);
     border-color: var(--color-bgd);
     margin-right: 1.2em;
 }
 
-.button:hover {
-    color: var(--color-bgd);
+.btn:hover {
+    background-color: var(--color-two);
+    border-color: var(--color-bgd);
 }
