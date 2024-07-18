@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.validators import MinValueValidator,MaxValueValidator,RegexValidator
 from datetime import date
+from django.contrib.auth import User
+
 
 # Create your models here.
 class BaseModel(models.Model):
@@ -10,3 +12,15 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+
+    
+
+class Product(BaseModel):
+    product_name = models.CharField()
+    product_type = models.CharField()
+    product_price = models.DecimalField(_max_digits=5, decimal_places=2)
+    seller_id = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.uid
+    
