@@ -61,14 +61,14 @@ def SignupPage(request):
     return render(request, 'signup.html')
 
 def LoginPage(request):
-    if request.method = 'POST':
+    if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request, usename = usename, password = password)
+        user = authenticate(request, username = username, password = password)
         if user is not None:
             login(request, user)
             customer = user.usename
-            return redirect('dashboard.') 
+            return redirect('dashboard') 
         else:
             return redirect('signup')
         
