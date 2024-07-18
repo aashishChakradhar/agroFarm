@@ -9,5 +9,6 @@ urlpatterns = [
     path('index',views.Index.as_view(),name='home'),
     path('login', views.Login_view.as_view(), name='login'),
     path('logout', views.Logout_view.as_view(), name='logout'),
+    path('signup', views.Signup_View.as_view(), name='signup'),
     path('dashboard', views.dashboardpageloader, name='dashboard'),
 ]
