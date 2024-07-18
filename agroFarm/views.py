@@ -43,7 +43,7 @@ def dashboardpageloader(request):
 
 
 #signup and login page ko lagi function from kiran
-@login_required(login_url = 'login')      
+# @login_required(login_url = 'login')      
 def SignupPage(request):
     if request.method == 'POST':
         username = request.POST.get('username')
