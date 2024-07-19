@@ -1,6 +1,9 @@
 body{
     font-family: 'poppins';
 }
+.dashboard-page .row{
+    margin-right: 0px;
+}
 
 .top-nav{
     background:#22a776;
@@ -24,4 +27,9 @@ body{
 
 .dashboard-content-wrapper{
     padding: 20px 0px;
+}
+
+.dashboard-nav-wrapper i{
+    font-size: 16px;
+    margin-right: 8px;
 }
