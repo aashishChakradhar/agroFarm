@@ -1,5 +1,6 @@
-{% include 'theme-temp/header.html' %} {% block title %}signup{% endblock title%}
-{% block head %} {% load static %}
+{% include 'theme-temp/header.html' %} {% block title %}signup{% endblock
+title%} {% block head %} {% load static %}
+<!-- here the above line is giving error on it own.-->
 <link rel="stylesheet" href="static/form.css" />
 {% endblock head %} {% block body %}
 <div class="form">
@@ -39,7 +40,13 @@
     </div>
     <div class="mb-3">
       <label for="email" class="form-label">Email</label>
-      <input type="mail" class="form-control" id="email" name="email" required />
+      <input
+        type="mail"
+        class="form-control"
+        id="email"
+        name="email"
+        required
+      />
     </div>
     <div class="mb-3">
       <label for="password1" class="form-label">Password</label>
