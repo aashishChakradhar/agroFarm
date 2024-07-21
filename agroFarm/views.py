@@ -18,8 +18,11 @@ class Login_view(View):
         alert_detail = request.session.get('alert_detail',False)
         if(alert_title):del(request.session['alert_title'])
         if(alert_detail):del(request.session['alert_detail'])
-        context = {'alert_title':alert_title,
-            'alert_detail':alert_detail,}
+        context = {
+            'alert_title': alert_title,
+            'alert_detail': alert_detail,
+            'page_name': 'Login'
+        }
         return render(request,"login.html",context)
     
     def post(self,request):
@@ -33,6 +36,7 @@ class Login_view(View):
             request.session['alert_title'] = "Invalid Login Attempt"
             request.session['alert_detail'] = "Please enter valid login credential."
             return redirect(request.path)
+        
 class Logout_view(View):
     def get(self,request):
         request.session.clear()
@@ -40,8 +44,10 @@ class Logout_view(View):
         return redirect('/')
 
 def dashboardpageloader(request):
-  template = loader.get_template('dashboard.html')
-  return HttpResponse(template.render())
+  context = {
+    'page_name': 'Dashboard'
+  }
+  return render(request, "dashboard.html" ,context)
 
 
 #signup and login page ko lagi function from kiran
@@ -52,8 +58,11 @@ class Signup_View (View):
         alert_detail = request.session.get('alert_detail',False)
         if(alert_title):del(request.session['alert_title'])
         if(alert_detail):del(request.session['alert_detail'])
-        context = {'alert_title':alert_title,
-            'alert_detail':alert_detail,}
+        context = {
+            'alert_title':alert_title,
+            'alert_detail':alert_detail,
+            'page_name': 'Dashboard'
+        }
         return render(request,"signup.html",context)
         
     def post(self,request):
