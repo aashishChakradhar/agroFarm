@@ -1,6 +1,4 @@
-{% extends "theme-temp/con_base.html" %}
-{% block title %}login{% endblock title %}
-{% block body %}
+{% include 'theme-temp/customer-header.html' %}
 <div class="form">
   {% if alert_title %}
   <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -53,4 +51,4 @@
     </div>
   </form>
 </div>
-{% endblock body %}
+{% include "theme-temp/customer-footer.html" %}
