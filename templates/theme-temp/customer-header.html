@@ -6,13 +6,47 @@
     {% load static %}{% load bootstrap5 %} {% bootstrap_css %}
     <title>{{page_name}} | AgroFarm</title>
     {%bootstrap_javascript %}
-    <link rel="stylesheet" href="{% static "css/main.css" %}">
-    <link rel="stylesheet" href="{% static "css/form.css" %}"/>
+    <link rel="stylesheet" href="{% static 'css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/form.css' %}"/>
   </head>
   <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <div class="logo-wrapper">
+              <a class="brand-name" href="/">Agro<span>Farm</span></a>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="search-form-wrapper">
+              <form id="searchform" method="get">
+                <div class="d-flex">
+                  <div class="col-md-12">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="login-signup-wrapper d-flex justify-content-end">
+              <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-regular fa-user"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Login</a></li>
+                <li><a class="dropdown-item" href="#">Signup</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
       <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary">
         <div class="custom container-fluid">
-          <a class="navbar-brand" href="/">Navbar</a>
+          <a class="navbar-brand" href="/">Agro<span>Farm</span></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
