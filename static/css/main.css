@@ -96,3 +96,20 @@ img{
     padding: 8px 15px;
     background-color: #d4d4d4;
 }
+
+.search-form-wrapper form input:focus{
+    border-color: var(--primary-color) ;
+    box-shadow: none;
+}
+
+.login-signup-wrapper a{
+    color: #000;
+}
+
+.login-signup-wrapper a:hover, .login-signup-wrapper a:focus{
+    color: var(--primary-color)
+}
+
+.dropdown-menu{
+    z-index: 99999;
+}
