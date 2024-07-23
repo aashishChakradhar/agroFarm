@@ -6,12 +6,13 @@
     {% load static %}{% load bootstrap5 %} {% bootstrap_css %}
     <title>{{page_name}} | AgroFarm</title>
     {%bootstrap_javascript %}
-    <link rel="stylesheet" href="static/main.css">
+    <link rel="stylesheet" href="{% static "css/main.css" %}">
+    <link rel="stylesheet" href="{% static "css/form.css" %}"/>
   </head>
   <body>
       <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary">
         <div class="custom container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
+          <a class="navbar-brand" href="/">Navbar</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>

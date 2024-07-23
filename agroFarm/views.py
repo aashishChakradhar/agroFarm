@@ -10,7 +10,10 @@ from django.contrib.auth.decorators import login_required
 
 class Index(View):
     def get(self, request):
-        return render(request,'index.html')
+        context = {
+            "page_name":"home"
+        }
+        return render(request,'index.html',context)
       
 class Login_view(View):
     def get(self,request):
@@ -21,7 +24,7 @@ class Login_view(View):
         context = {
             'alert_title': alert_title,
             'alert_detail': alert_detail,
-            'page_name': 'Login'
+            'page_name': 'login'
         }
         return render(request,"login.html",context)
     
@@ -61,7 +64,7 @@ class Signup_View (View):
         context = {
             'alert_title':alert_title,
             'alert_detail':alert_detail,
-            'page_name': 'Dashboard'
+            'page_name': 'signup'
         }
         return render(request,"signup.html",context)
         
