@@ -46,23 +46,6 @@ class Logout_view(View):
         request.session.clear()
         logout(request)
         return redirect('/')
-    
-class Dashboard_view(View):
-    def get(self, request):
-        if request.user.is_anonymous:
-            return redirect('/login')
-        else:
-            try:
-                current_user = request.user
-                context = {
-                    'user' : current_user,
-                    'page_name': 'Dashboard'
-                }
-                return render(request, "dashboard.html" ,context)
-            except:
-                messages.error(request, str(e))
-                return render(request,"dashboard.html")
-
 
 #signup and login page ko lagi function from kiran
 # @login_required(login_url = 'login')    
@@ -95,4 +78,36 @@ class Signup_View (View):
                 user = authenticate(username = username, password = password1)
                 if user is not None:# checks if the user is logged in or not?
                     login(request,user) #logins the user
-                    return redirect ('/')
+                    return redirect ('/')          
+
+class Dashboard_view(View):
+    def get(self, request):
+        if request.user.is_anonymous:
+            return redirect('/login')
+        else:
+            try:
+                current_user = request.user
+                context = {
+                    'user' : current_user,
+                    'page_name': 'Dashboard'
+                }
+                return render(request, "dashboard.html" ,context)
+            except:
+                messages.error(request, str(e))
+                return render(request,"dashboard.html")
+            
+class Account_dash_view(View):
+    def get(self, request):
+        if request.user.is_anonymous:
+            return redirect('/login')
+        else:
+            try:
+                current_user = request.user
+                context = {
+                    'user' : current_user,
+                    'page_name': 'My Account'
+                }
+                return render(request, "account-dashboard.html" ,context)
+            except:
+                messages.error(request, str(e))
+                return render(request,"account-dashboard.html")

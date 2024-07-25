@@ -1,0 +1,21 @@
+{% include 'theme-temp/dashboard-header.html' %}
+<section class="dashboard-page">
+  <div class="row">
+    <div class="col-md-2">
+      <div class="dashboard-nav-wrapper container">
+        {% include 'template-parts/dashboard-nav.html' %}
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="dashboard-content-wrapper">
+        <h2>Profile</h2>
+        <form method="post" id="accountdetail">
+            <label>Name</label>
+            <input type="text" name="username">
+            <input type="submit" value="Update Profile">
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% include 'theme-temp/dashboard-footer.html' %}
