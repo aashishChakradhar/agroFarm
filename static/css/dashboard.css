@@ -10,6 +10,15 @@ body{
     padding: 5px 20px ;
     color: #fff;
 }
+
+.top-nav-content{
+    display: inline-block;
+}
+
+.right-user-info{
+    display: inline-block;
+}
+
 .top-nav a, .dashboard-nav-wrapper a{
     text-decoration: none;
     color: #000;
@@ -23,6 +32,7 @@ body{
 
 .dashboard-nav-wrapper ul{
     list-style: none;
+    padding-left: 20px;
 }
 
 .dashboard-content-wrapper{
