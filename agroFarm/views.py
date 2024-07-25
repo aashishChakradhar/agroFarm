@@ -3,6 +3,7 @@ from django.views import View
 from django.template import loader
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
+from django.contrib import messages
 from django.urls import reverse_lazy
 from agroFarm.models import *
 from django.contrib.auth.models import User
@@ -11,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 class Index(View):
     def get(self, request):
         context = {
-            "page_name":"home"
+            "page_name":"Home"
         }
         return render(request,'index.html',context)
       
@@ -24,7 +25,7 @@ class Login_view(View):
         context = {
             'alert_title': alert_title,
             'alert_detail': alert_detail,
-            'page_name': 'login'
+            'page_name': 'Login'
         }
         return render(request,"login.html",context)
     
@@ -34,7 +35,7 @@ class Login_view(View):
         user = authenticate(username = username, password = password)
         if user is not None:# checks if the user is logged in or not?
             login(request,user) #logins the user
-            return redirect ('/')
+            return redirect ('/dashboard')
         else:
             request.session['alert_title'] = "Invalid Login Attempt"
             request.session['alert_detail'] = "Please enter valid login credential."
@@ -45,12 +46,22 @@ class Logout_view(View):
         request.session.clear()
         logout(request)
         return redirect('/')
-
-def dashboardpageloader(request):
-  context = {
-    'page_name': 'Dashboard'
-  }
-  return render(request, "dashboard.html" ,context)
+    
+class Dashboard_view(View):
+    def get(self, request):
+        if request.user.is_anonymous:
+            return redirect('/login')
+        else:
+            try:
+                current_user = request.user
+                context = {
+                    'user' : current_user,
+                    'page_name': 'Dashboard'
+                }
+                return render(request, "dashboard.html" ,context)
+            except:
+                messages.error(request, str(e))
+                return render(request,"dashboard.html")
 
 
 #signup and login page ko lagi function from kiran
@@ -64,7 +75,7 @@ class Signup_View (View):
         context = {
             'alert_title':alert_title,
             'alert_detail':alert_detail,
-            'page_name': 'signup'
+            'page_name': 'Signup'
         }
         return render(request,"signup.html",context)
         
