@@ -1,6 +1,11 @@
 body{
     font-family: 'poppins';
 }
+
+.container{
+    max-width: 100%;
+}
+
 .dashboard-page .row{
     margin-right: 0px;
 }
@@ -32,16 +37,26 @@ body{
 
 .dashboard-nav-wrapper ul{
     list-style: none;
-    padding-left: 20px;
+}
+
+.dashboard-nav-wrapper li a{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 5px 0;
 }
 
 .dashboard-content-wrapper{
     padding: 20px 0px;
 }
 
-.dashboard-nav-wrapper i{
-    font-size: 16px;
-    margin-right: 8px;
+.dashboard-nav-wrapper svg{
+    height: auto;
+    width: 30px;
+}
+
+.dashboard-nav-wrapper svg path{
+    stroke: #000;
 }
 
 #profileimg{
@@ -52,6 +67,6 @@ body{
     width: 60px;
 }
 
-label.profile-img{
+#removeimg{
     display: block;
 }
