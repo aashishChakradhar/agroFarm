@@ -43,3 +43,15 @@ body{
     font-size: 16px;
     margin-right: 8px;
 }
+
+#profileimg{
+    display: none;
+}
+
+#fimg{
+    width: 60px;
+}
+
+label.profile-img{
+    display: block;
+}
