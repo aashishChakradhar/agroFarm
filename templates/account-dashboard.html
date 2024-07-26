@@ -12,10 +12,12 @@
         <form method="post" id="accountdetail" class="accountdetailform">
           {% csrf_token %}
           <div class="form-field user-profile-image">
-            <label>Profile
-              <input type="file" style="visibility: hidden;" name="profilepic" id="profilepic" value="#">
-              <img src="#" id="fimg">
+            <label class="profile-img" for="profileimg">
+              Profile image 
+              <input type="file" style="visibility: hidden;" name="profileimg" id="profileimg" accept="image/*">
+              <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg" alt="img">
             </label>
+            <button id="removeimg">Remove Image</button>
           </div>
           <div class="form-field user-first-name">
             <label>First Name</label>
@@ -45,12 +47,4 @@
     </div>
   </div>
 </section>
-<script>
-  profilepic.onchange = evt => {
-    const [file] = profilepic.files
-    if (file) {
-        fimg.src = URL.createObjectURL(file)
-    }
-  }
-</script>
 {% include 'theme-temp/dashboard-footer.html' %}
