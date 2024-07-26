@@ -9,13 +9,48 @@
     <div class="col-md-10">
       <div class="dashboard-content-wrapper">
         <h2>Profile</h2>
-        <form method="post" id="accountdetail">
-            <label>Name</label>
+        <form method="post" id="accountdetail" class="accountdetailform">
+          {% csrf_token %}
+          <div class="form-field user-profile-image">
+            <label>Profile
+              <input type="file" style="visibility: hidden;" name="profilepic" id="profilepic" value="#">
+              <img src="#" id="fimg">
+            </label>
+          </div>
+          <div class="form-field user-first-name">
+            <label>First Name</label>
+            <input type="text" name="firstname">
+          </div>
+          <div class="form-field user-last-name">
+            <label>Last Name</label>
+            <input type="text" name="lastname">
+          </div>
+          <div class="form-field user-name">
+            <label>Username</label>
             <input type="text" name="username">
+          </div>
+          <div class="form-field user-email">
+            <label>Email</label>
+            <input type="text" name="email">
+          </div>
+          <div class="form-field user-bio">
+            <label>Bio</label>
+            <textarea id="biotext" name="biotext" rows="4" cols="50"></textarea>
+          </div>
+          <div class="form-field submit-button">
             <input type="submit" value="Update Profile">
+          </div>
         </form>
       </div>
     </div>
   </div>
 </section>
+<script>
+  profilepic.onchange = evt => {
+    const [file] = profilepic.files
+    if (file) {
+        fimg.src = URL.createObjectURL(file)
+    }
+  }
+</script>
 {% include 'theme-temp/dashboard-footer.html' %}
