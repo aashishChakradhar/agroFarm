@@ -93,7 +93,7 @@ class Dashboard_view(View):
                     'page_name': 'Dashboard'
                 }
                 return render(request, "dashboard.html" ,context)
-            except:
+            except Exception as e:
                 messages.error(request, str(e))
                 return render(request,"dashboard.html")
             
@@ -109,6 +109,6 @@ class Account_dash_view(View):
                     'page_name': 'My Account'
                 }
                 return render(request, "account-dashboard.html" ,context)
-            except:
+            except Exception as e:
                 messages.error(request, str(e))
                 return render(request,"account-dashboard.html")
