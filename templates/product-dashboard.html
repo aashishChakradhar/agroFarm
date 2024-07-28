@@ -1,0 +1,59 @@
+{% include 'theme-temp/dashboard-header.html' %}
+
+<section class="dashboard-page">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-2">
+        <div class="dashboard-nav-wrapper container">
+          {% include 'template-parts/dashboard-nav.html' %}
+        </div>
+      </div>
+      <div class="col-md-10">
+        <div class="title">
+            <h1>Products</h1>
+            <a href="#">Add Product</a>
+        </div>
+        <div class="dashboard-products-wrapper">
+            <table>
+                <thead>
+                    <th>S.N</th>
+                    <th>
+                        <svg width="61" height="61" viewBox="0 0 61 61" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_38_5)">
+                        <path d="M60.2874 0.40686H0.287354V60.4069H60.2874V0.40686Z" fill="white"/>
+                        <path d="M52.7874 40.4069V50.4069C52.7874 51.7876 51.6681 52.9069 50.2874 52.9069H10.2874C8.90665 52.9069 7.78735 51.7876 7.78735 50.4069V45.4069M52.7874 40.4069V10.4069C52.7874 9.02616 51.6681 7.90686 50.2874 7.90686H10.2874C8.90665 7.90686 7.78735 9.02616 7.78735 10.4069V45.4069M52.7874 40.4069L38.9946 31.2116C38.2481 30.7139 37.2921 30.6544 36.4896 31.0556L7.78735 45.4069" stroke="black" stroke-width="2.5" stroke-linejoin="round"/>
+                        <path d="M20.2874 27.9069C23.0488 27.9069 25.2874 25.6683 25.2874 22.9069C25.2874 20.1454 23.0488 17.9069 20.2874 17.9069C17.5259 17.9069 15.2874 20.1454 15.2874 22.9069C15.2874 25.6683 17.5259 27.9069 20.2874 27.9069Z" stroke="black" stroke-width="2.5" stroke-linejoin="round"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_38_5">
+                        <rect width="60" height="60" fill="white" transform="translate(0.287354 0.40686)"/>
+                        </clipPath>
+                        </defs>
+                        </svg>
+                    </th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Published Date</th>
+                </thead>
+                <tbody>
+                    {% for x in products %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>img</td>
+                        <td>{{ x.product_name }}</td>
+                        <td>Price</td>
+                        <td>cat</td>
+                        <td>p</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6">Sorry, No products found</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include 'theme-temp/dashboard-footer.html' %}

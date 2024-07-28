@@ -70,3 +70,8 @@ body{
 #removeimg{
     display: block;
 }
+
+.dashboard-products-wrapper table{
+    width: 100%;
+    max-width: 100%;
+}
