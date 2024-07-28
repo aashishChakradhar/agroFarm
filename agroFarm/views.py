@@ -66,6 +66,7 @@ class Signup_View (View):
         if request.method == 'POST':
             username = request.POST.get('username')
             email = request.POST.get('email')
+            #yeta email ko validation garnu parxa hola hai garbage value ma ni accept gari rakhya xa 
             password1 = request.POST.get('password1')
             password2 = request.POST.get('password2')
             if (password1 != password2):
