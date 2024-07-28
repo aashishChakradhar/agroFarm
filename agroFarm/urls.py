@@ -12,4 +12,5 @@ urlpatterns = [
     path('signup', views.Signup_View.as_view(), name='signup'),
     path('dashboard', views.Dashboard_view.as_view(), name='dashboard'),
     path('dashboard/account', views.Account_dash_view.as_view(), name='Account'),
+    path('dashboard/products', views.Product_dash_view.as_view(), name='Products'),
 ]
