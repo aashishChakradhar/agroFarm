@@ -112,3 +112,23 @@ class Account_dash_view(View):
             except Exception as e:
                 messages.error(request, str(e))
                 return render(request,"account-dashboard.html")
+            
+class Product_dash_view(View):
+    def get(self, request):
+        if request.user.is_anonymous:
+            return redirect('/login')
+        else:
+            if request.user.is_superuser:
+                products = Product.objects.all()
+            else:
+                products = Product.objects.filter(sellerid=request.user)
+            
+            try:
+                context = {
+                    'products' : products,
+                    'page_name': 'Products'
+                }
+                return render(request, "product-dashboard.html" ,context)
+            except Exception as e:
+                messages.error(request, str(e))
+                return render(request,"product-dashboard.html")
