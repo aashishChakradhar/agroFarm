@@ -85,7 +85,8 @@ class Dashboard_view(View):
     def get(self, request):
         if request.user.is_anonymous:
             return redirect('/login')
-        else:
+        
+        if request.user.is_superuser or request.user.is_staff:
             try:
                 current_user = request.user
                 context = {
@@ -96,12 +97,16 @@ class Dashboard_view(View):
             except Exception as e:
                 messages.error(request, str(e))
                 return render(request,"dashboard.html")
+        
+        messages.error(request, 'Access Denied')
+        return redirect('/')
             
 class Account_dash_view(View):
     def get(self, request):
         if request.user.is_anonymous:
             return redirect('/login')
-        else:
+        
+        if request.user.is_superuser or request.user.is_staff:
             try:
                 current_user = request.user
                 context = {
@@ -113,11 +118,15 @@ class Account_dash_view(View):
                 messages.error(request, str(e))
                 return render(request,"account-dashboard.html")
             
+        messages.error(request, 'Access Denied')
+        return redirect('/')
+            
 class Product_dash_view(View):
     def get(self, request):
         if request.user.is_anonymous:
             return redirect('/login')
-        else:
+        
+        if request.user.is_superuser or request.user.is_staff:
             if request.user.is_superuser:
                 products = Product.objects.all()
             else:
@@ -132,3 +141,25 @@ class Product_dash_view(View):
             except Exception as e:
                 messages.error(request, str(e))
                 return render(request,"product-dashboard.html")
+            
+        messages.error(request, 'Access Denied')
+        return redirect('/')
+            
+class Add_product_view(View):
+    def get(self, request):
+        if request.user.is_anonymous:
+            return redirect('/login')
+        
+        if request.user.is_superuser or request.user.is_staff:
+            
+            try:
+                context = {
+                    'page_name': 'Add Products'
+                }
+                return render(request, "add-product-dashboard.html" ,context)
+            except Exception as e:
+                messages.error(request, str(e))
+                return render(request,"add-product-dashboard.html")
+            
+        messages.error(request, 'Access Denied')
+        return redirect('/')

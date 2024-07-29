@@ -11,10 +11,26 @@
       <div class="col-md-10">
         <div class="title">
             <h1>Products</h1>
-            <a href="#">Add Product</a>
+            <a href="/dashboard/products/add-new">Add Product</a>
         </div>
         <div class="dashboard-products-wrapper">
-            <p>Add product form here</p>
+          <div class="form-wrap">
+            <form method="post" id="addproductform">
+              {% csrf_token %}
+              <input type="text" name="producttitle" id="producttitle" placeholder="Product Title">
+              <div class="form-field user-profile-image">
+                <label class="profile-img" for="productimg">
+                  Product Featured image 
+                  <input type="file" style="visibility: hidden;" name="productimg" id="productimg" accept="image/*">
+                  <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg" alt="img">
+                </label>
+                <button id="removeimg">Remove Image</button>
+              </div>
+              <input type="text" name="price" id="price" placeholder="Price">
+              <textarea id="content" name="content" placeholder="Content" required></textarea>
+              <input type="submit" value="Publish">
+            </form>
+          </div>
         </div>
       </div>
     </div>
