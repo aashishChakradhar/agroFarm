@@ -1,2 +1,3 @@
 agro_venv
-_pycache_/
+/agroFarm/_pycache_/
+/config/_pycache_/
