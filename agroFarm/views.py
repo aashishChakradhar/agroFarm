@@ -65,14 +65,13 @@ class Signup_View (View):
         
     def post(self,request):
         if request.method == 'POST':
+            firstName = request.POST.get('firstName').upper()
+            lastName = request.POST.get('lastName').upper()
             username = request.POST.get('username')
-            email = request.POST.get('email')
-            #yeta email ko validation garnu parxa hola hai garbage value ma ni accept gari rakhya xa 
+            email = request.POST.get('email') #validation required
             password1 = request.POST.get('password1')
             password2 = request.POST.get('password2')
-            status = request.POST.get('status')
-            firstName = request.POST.get('firstName')
-            lastName = request.POST.get('lastName')
+            status = request.POST.get('status').lower()
 
             #determine type of user
             if status == 'admin':
@@ -152,7 +151,7 @@ class Product_dash_view(View):
             if request.user.is_superuser:
                 products = Product.objects.all()
             else:
-                products = Product.objects.filter(sellerid=request.user)
+                products = Product.objects.filter(sellerId=request.user)
             
             try:
                 context = {
