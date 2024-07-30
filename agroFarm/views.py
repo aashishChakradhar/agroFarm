@@ -168,7 +168,6 @@ class Add_product_view(View):
             return redirect('/login')
         
         if request.user.is_superuser or request.user.is_staff:
-            
             try:
                 context = {
                     'page_name': 'Add Products'
@@ -180,3 +179,31 @@ class Add_product_view(View):
             
         messages.error(request, 'Access Denied')
         return redirect('/')
+
+    def post(self,request):
+        if request.method == 'POST':
+            try:
+                producttitle = request.POST.get('producttitle')
+                productimg = request.POST.get('productimg')
+                price = request.POST.get('price')
+                sellerid = request.user
+
+                if not producttitle or not price:
+                    messages.error(request, "All fields are required.")
+                    return render(request, 'add-product-dashboard.html')
+                
+                product = Product(
+                    productName=producttitle,
+                    featuredimage=productimg,
+                    sellerId=sellerid,
+                    productPrice = price
+                )
+                product.save()
+
+                messages.success(request, "Your Blog Has Been Successfully Added!")
+                return redirect('/dashboard/products/add-new')  # Redirect to a blog list or success page after adding
+            
+            except Exception as e:
+                messages.error(request, str(e))
+      
+        return render(request, 'add-product-dashboard.html')   
