@@ -1,8 +1,9 @@
 from django.db import models
-from tinymce.models import HTMLField
-from django.core.validators import MinValueValidator,MaxValueValidator,RegexValidator
+from django.core.validators import MinValueValidator,MaxValueValidator,RegexValidator,validate_email
 from django.contrib.auth.models import User
-from datetime import date
+from tinymce.models import HTMLField
+
+# from datetime import date
 
 # Create your models here.
 class BaseModel(models.Model):
@@ -12,21 +13,25 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-class Category(BaseModel):
-  name = models.CharField(max_length=30)
-  content = HTMLField(default = '')
-  featuredimage = models.ImageField(upload_to='uploads/', default=0) 
-  author = models.ForeignKey(User, on_delete=models.CASCADE, default='')
-
-  def __str__(self):
-    return f'{self.name}'
+class ExtendedUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    country = models.CharField(max_length=20)
+    province = models.CharField(max_length=20)
+    district = models.CharField(max_length=20)
+    streetName = models.CharField(max_length=20)
+    landMark = models.CharField(max_length=20)
+    postalCode = models.DecimalField(max_digits=6,decimal_places=0)
+    default = models.BooleanField()
+    def __str__(self):
+        return self.country
 
 class Product(BaseModel):
-    product_name = models.CharField(max_length=50, default='')
-    featuredimage = models.ImageField(upload_to='uploads/', default=0)
-    sellerid = models.ForeignKey(User, on_delete=models.CASCADE, default='')
-    product_price = models.IntegerField(default=0)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products', default=1)
+    sellerId = models.ForeignKey(User, on_delete=models.CASCADE,default=00)
+    productName = models.CharField(max_length=30,default="unknown")
+    productType = models.CharField(max_length=30,default="unknown")
+    productDescription = models.CharField(max_length=100,default="unknown")
+    productPrice = models.DecimalField(max_digits=5, decimal_places=2,default="unknown")
 
     def __str__(self):
-        return f'{self.title}'
+        return self.productName
+    

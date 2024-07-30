@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect,HttpResponse
 from django.views import View
-from django.template import loader
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
-from django.contrib import messages
-from django.urls import reverse_lazy
-from agroFarm.models import *
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from agroFarm.models import *
+from agroFarm.form import SignupForm
+
+# from django.template import loader
+# from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+# from django.contrib.auth.decorators import login_required
+# from django.urls import reverse_lazy
 
 class Index(View):
     def get(self, request):
@@ -64,22 +66,37 @@ class Signup_View (View):
         
     def post(self,request):
         if request.method == 'POST':
+            firstName = request.POST.get('firstName')
+            lastName = request.POST.get('lastName')
             username = request.POST.get('username')
-            email = request.POST.get('email')
-            #yeta email ko validation garnu parxa hola hai garbage value ma ni accept gari rakhya xa 
-            password1 = request.POST.get('password1')
-            password2 = request.POST.get('password2')
-            if (password1 != password2):
-                request.session['alert_title'] = "Invalid Password"
-                request.session['alert_detail'] = "Password did not match."
-                return redirect(request.path)
-            else:
-                user = User.objects.create_user(username = username, email=email, password=password1)
-                user.save()
-                user = authenticate(username = username, password = password1)
-                if user is not None:# checks if the user is logged in or not?
-                    login(request,user) #logins the user
-                    return redirect ('/')          
+            email = request.POST.get('email') #validation required
+            password = request.POST.get('password')
+            status = request.POST.get('status')
+
+            #determine type of user
+            if status == 'admin':
+                is_superuser = True 
+                is_staff = True
+            elif status == 'seller':
+                is_superuser == False
+                is_staff = True
+            elif status =='customer':
+                is_staff = False
+                is_superuser = False
+
+                
+            user = User.objects.create_user(username , email, password,is_superuser=is_superuser,is_staff = is_staff)
+            user.save()
+
+            #additional user details
+            user.first_name=firstName
+            user.last_name=lastName
+            user.save()
+            user = authenticate(username = username, password = password)
+            if user is not None:# checks if the user is logged in or not?
+                login(request,user) #logins the user
+            return redirect ('/')          
+
 
 class Dashboard_view(View):
     def get(self, request):
@@ -130,7 +147,7 @@ class Product_dash_view(View):
             if request.user.is_superuser:
                 products = Product.objects.all()
             else:
-                products = Product.objects.filter(sellerid=request.user)
+                products = Product.objects.filter(sellerId=request.user)
             
             try:
                 context = {
