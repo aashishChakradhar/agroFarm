@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect,HttpResponse
 from django.views import View
-from django.template import loader
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
-from django.contrib import messages
-from django.urls import reverse_lazy
-from agroFarm.models import *
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from agroFarm.models import *
+
+# from django.template import loader
+# from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+# from django.contrib.auth.decorators import login_required
+# from django.urls import reverse_lazy
 
 class Index(View):
     def get(self, request):
@@ -69,12 +70,33 @@ class Signup_View (View):
             #yeta email ko validation garnu parxa hola hai garbage value ma ni accept gari rakhya xa 
             password1 = request.POST.get('password1')
             password2 = request.POST.get('password2')
+            status = request.POST.get('status')
+            firstName = request.POST.get('firstName')
+            lastName = request.POST.get('lastName')
+
+            #determine type of user
+            if status == 'admin':
+                is_superuser = True 
+                is_staff = True
+            elif status == 'seller':
+                is_superuser == False
+                is_staff = True
+            elif status =='customer':
+                is_staff = False
+                is_superuser = False
+
             if (password1 != password2):
                 request.session['alert_title'] = "Invalid Password"
                 request.session['alert_detail'] = "Password did not match."
                 return redirect(request.path)
             else:
-                user = User.objects.create_user(username = username, email=email, password=password1)
+                
+                user = User.objects.create_user(username , email, password1,is_superuser=is_superuser,is_staff = is_staff)
+                user.save()
+
+                #additional user details
+                user.first_name=firstName
+                user.last_name=lastName
                 user.save()
                 user = authenticate(username = username, password = password1)
                 if user is not None:# checks if the user is logged in or not?
