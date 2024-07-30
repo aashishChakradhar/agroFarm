@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator,MaxValueValidator,RegexValidator,validate_email
 from django.contrib.auth.models import User
-from django.contrib.auth.models import User
 from tinymce.models import HTMLField
 
 # from datetime import date
@@ -14,29 +13,24 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-
-class BillingAddresss(BaseModel):
-    user= models.ForeignKey(User, on_delete=models.CASCADE)# to read user id
+class ExtendedUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     country = models.CharField(max_length=20)
     province = models.CharField(max_length=20)
     district = models.CharField(max_length=20)
     streetName = models.CharField(max_length=20)
     landMark = models.CharField(max_length=20)
     postalCode = models.DecimalField(max_digits=6,decimal_places=0)
-    phone_number = models.DecimalField(max_digits=10, decimal_places=0)
-
+    default = models.BooleanField()
     def __str__(self):
-        return self.user.username
-
-    
+        return self.country
 
 class Product(BaseModel):
-    user= models.ForeignKey(User, on_delete=models.CASCADE)# to read user id
-    productName = models.CharField(max_length=30)
-    productType = models.CharField(max_length=30)
-    productDescription = models.CharField(max_length=100)
-    productPrice = models.DecimalField(max_digits=5, decimal_places=2)
-    sellerId = models.ForeignKey(User, on_delete=models.CASCADE)
+    sellerId = models.ForeignKey(User, on_delete=models.CASCADE,default=00)
+    productName = models.CharField(max_length=30,default="unknown")
+    productType = models.CharField(max_length=30,default="unknown")
+    productDescription = models.CharField(max_length=100,default="unknown")
+    productPrice = models.DecimalField(max_digits=5, decimal_places=2,default="unknown")
 
     def __str__(self):
         return self.productName

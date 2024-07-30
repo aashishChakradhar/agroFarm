@@ -4,6 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from agroFarm.models import *
+from agroFarm.form import SignupForm
 
 # from django.template import loader
 # from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -65,13 +66,12 @@ class Signup_View (View):
         
     def post(self,request):
         if request.method == 'POST':
-            firstName = request.POST.get('firstName').upper()
-            lastName = request.POST.get('lastName').upper()
+            firstName = request.POST.get('firstName')
+            lastName = request.POST.get('lastName')
             username = request.POST.get('username')
             email = request.POST.get('email') #validation required
-            password1 = request.POST.get('password1')
-            password2 = request.POST.get('password2')
-            status = request.POST.get('status').lower()
+            password = request.POST.get('password')
+            status = request.POST.get('status')
 
             #determine type of user
             if status == 'admin':
@@ -84,23 +84,19 @@ class Signup_View (View):
                 is_staff = False
                 is_superuser = False
 
-            if (password1 != password2):
-                request.session['alert_title'] = "Invalid Password"
-                request.session['alert_detail'] = "Password did not match."
-                return redirect(request.path)
-            else:
                 
-                user = User.objects.create_user(username , email, password1,is_superuser=is_superuser,is_staff = is_staff)
-                user.save()
+            user = User.objects.create_user(username , email, password,is_superuser=is_superuser,is_staff = is_staff)
+            user.save()
 
-                #additional user details
-                user.first_name=firstName
-                user.last_name=lastName
-                user.save()
-                user = authenticate(username = username, password = password1)
-                if user is not None:# checks if the user is logged in or not?
-                    login(request,user) #logins the user
-                    return redirect ('/')          
+            #additional user details
+            user.first_name=firstName
+            user.last_name=lastName
+            user.save()
+            user = authenticate(username = username, password = password)
+            if user is not None:# checks if the user is logged in or not?
+                login(request,user) #logins the user
+            return redirect ('/')          
+
 
 class Dashboard_view(View):
     def get(self, request):
