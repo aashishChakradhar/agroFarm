@@ -186,6 +186,7 @@ class Add_product_view(View):
                 producttitle = request.POST.get('producttitle')
                 productimg = request.POST.get('productimg')
                 price = request.POST.get('price')
+                type = request.POST.getlist('producttype')
                 sellerid = request.user
 
                 if not producttitle or not price:
@@ -194,8 +195,8 @@ class Add_product_view(View):
                 
                 product = Product(
                     productName=producttitle,
-                    featuredimage=productimg,
                     sellerId=sellerid,
+                    productType = type,
                     productPrice = price
                 )
                 product.save()
