@@ -14,6 +14,9 @@
             <a href="/dashboard/products/add-new">Add Product</a>
         </div>
         <div class="dashboard-products-wrapper">
+          {% for message in messages %}
+            {{message}}
+          {% endfor %}
           <div class="form-wrap">
             <form method="post" id="addproductform">
               {% csrf_token %}
@@ -32,11 +35,11 @@
               <div>
                 <label>Categories</label>
                 <div>
-                  <input type="checkbox" id="scales" name="scales" checked />
+                  <input type="checkbox" id="scales" name="producttype" value="scales" checked />
                   <label for="scales">Scales</label>
                 </div>
                 <div>
-                  <input type="checkbox" id="food" name="food" checked />
+                  <input type="checkbox" id="food" name="producttype" value="edibles" checked />
                   <label for="food">Food</label>
                 </div>
               </div>
