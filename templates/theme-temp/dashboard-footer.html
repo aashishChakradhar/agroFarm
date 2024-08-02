@@ -8,6 +8,16 @@
         placeholder: 'Product Description',
         theme: 'snow'
     });
+    var form = document.getElementById('addproductform');
+
+    // Add a submit event listener to the form
+    form.onsubmit = function() {
+        // Get the content from the Quill editor
+        var editorContent = quill.root.innerHTML;
+
+        // Set the hidden input field's value to the editor content
+        document.getElementById('editorContent').value = editorContent;
+    };
 </script>
 <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 </body>
