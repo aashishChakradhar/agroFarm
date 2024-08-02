@@ -145,9 +145,9 @@ class Product_dash_view(View):
         
         if request.user.is_superuser or request.user.is_staff:
             if request.user.is_superuser:
-                products = Product.objects.all()
+                products = Product.objects.all().order_by('-created')
             else:
-                products = Product.objects.filter(sellerId=request.user)
+                products = Product.objects.filter(sellerId=request.user).order_by('-created')
             
             try:
                 context = {
@@ -184,9 +184,10 @@ class Add_product_view(View):
         if request.method == 'POST':
             try:
                 producttitle = request.POST.get('producttitle')
-                productimg = request.POST.get('productimg')
+                featuredimage = request.FILES.get('featuredimage')
                 price = request.POST.get('price')
                 type = request.POST.getlist('producttype')
+                description = request.POST.get('editorContent')
                 sellerid = request.user
 
                 if not producttitle or not price:
@@ -196,8 +197,10 @@ class Add_product_view(View):
                 product = Product(
                     productName=producttitle,
                     sellerId=sellerid,
+                    featuredimage=featuredimage,
                     productType = type,
-                    productPrice = price
+                    productPrice = price,
+                    productDescription = description
                 )
                 product.save()
 
