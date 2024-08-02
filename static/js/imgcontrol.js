@@ -27,16 +27,11 @@ function handleFileInputChange(evt, maxSizeKB, imgElementId) {
 const profileImgInput = document.getElementById('profileimg');
 const productImgInput = document.getElementById('productimg');
 const removeimg = document.getElementById('removeimg');
+const fimg = document.getElementById('fimg')
 
 if (profileImgInput) {
     profileImgInput.onchange = function(evt) {
         handleFileInputChange(evt, 30, 'fimg');
-    };
-}
-
-if (productImgInput) {
-    productImgInput.onchange = function(evt) {
-        handleFileInputChange(evt, 30, 'fimg'); 
     };
 }
 
@@ -51,3 +46,11 @@ removeimg.addEventListener('click', (e) => {
         document.getElementById('fimg').setAttribute('src', 'http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png');
     }
 })
+
+//product image show on page
+productImgInput.onchange = evt => {
+    const [file] = productImgInput.files
+    if (file) {
+        fimg.src = URL.createObjectURL(file)
+    }
+}

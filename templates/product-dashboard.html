@@ -40,8 +40,8 @@
                     {% for x in products %}
                     <tr>
                         <td>{{forloop.counter}}</td>
-                        <td>img</td>
-                        <td>{{ x.productName }}</td>
+                        <td>{{x.featuredimage}}</td>
+                        <td><a href="/dashboard/products/">{{ x.productName }}</a></td>
                         <td>{{ x.productPrice }}</td>
                         <td>{{ x.productType }}</td>
                         <td>{{ x.created }}</td>
