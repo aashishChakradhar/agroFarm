@@ -41,10 +41,10 @@
                     <tr>
                         <td>{{forloop.counter}}</td>
                         <td>img</td>
-                        <td>{{ x.product_name }}</td>
-                        <td>Price</td>
-                        <td>cat</td>
-                        <td>p</td>
+                        <td>{{ x.productName }}</td>
+                        <td>{{ x.productPrice }}</td>
+                        <td>{{ x.productType }}</td>
+                        <td>{{ x.created }}</td>
                     </tr>
                     {% empty %}
                     <tr><td colspan="6">Sorry, No products found</td></tr>

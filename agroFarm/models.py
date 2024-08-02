@@ -24,6 +24,10 @@ class ExtendedUser(models.Model):
     default = models.BooleanField()
     def __str__(self):
         return self.country
+    
+class Producttype(BaseModel):
+    name = models.CharField(max_length=30, default='uncategorized')
+    description = models.CharField(max_length=100, default='')
 
 class Product(BaseModel):
     sellerId = models.ForeignKey(User, on_delete=models.CASCADE,default=00)
