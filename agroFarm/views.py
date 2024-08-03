@@ -97,6 +97,48 @@ class Signup_View (View):
                 login(request,user) #logins the user
             return redirect ('/')          
 
+class BillingAddress(View):
+    def get(self,request):
+        alert_title = request.session.get('alert_title',False)
+        alert_detail = request.session.get('alert_detail',False)
+        if(alert_title):del(request.session['alert_title'])
+        if(alert_detail):del(request.session['alert_detail'])
+        context = {
+            'alert_title':alert_title,
+            'alert_detail':alert_detail,
+            'page_name': 'billing-address'
+        }
+        return render(request,"billing-address.html",context)
+    
+    def post(self,request):
+        if request.method == 'POST':
+            #thinking of creating a seperate database for storing districts and the municipalities within themselves
+            #for dynamic rendering the form
+            #the values are passed through context
+            if User.is_authenticated and User.is_staff and not User.is_superuser:
+                country = request.POST.get('country')
+                province = request.POST.get('province')
+                district = request.POST.get('district')
+                municipality = request.POST.get('municipality')
+                street = request.POST.get('street')
+                postalCode = request.POST.get('postalCode')
+                landmark = request.POST.get('landmark')
+                billingAddress = BillingAddress(
+                    country=country,
+                    province=province,
+                    district=district,
+                    municipality=municipality,
+                    street=street,
+                    postalCode=postalCode,
+                    landmark=landmark,
+                )
+                billingAddress.save()
+            else:
+                request.session['alert_title'] = "Unauthorized Login"
+                request.session['alert_detail'] = "Please login through valid account"
+                return redirect('agroFarm:login')
+        return redirect ('/') 
+
 
 class Dashboard_view(View):
     def get(self, request):

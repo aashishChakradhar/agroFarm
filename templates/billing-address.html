@@ -1,0 +1,39 @@
+{% include "theme-temp/customer-header.html" %}
+<div class="alert alert-danger d-flex align-items-center" role="alert">
+    <svg
+      class="alert_icon bi flex-shrink-0 me-2"
+      role="img"
+      aria-label="Warning:"
+    >
+      <use xlink:href="#exclamation-triangle-fill" />
+    </svg>
+    <div><strong>{{alert_title}}!</strong> {{alert_detail}}</div>
+  </div>
+<form action="billing-address" method="post">
+    {% csrf_token %}
+    <label for="country">country</label>
+    <select name="country" id="country" required>
+        <option value="nepal" selected>Nepal</option>
+    </select>
+
+    <label for="province">province</label>
+    <input type="text" id="province" name="province" required>
+
+    <label for="district">district</label>
+    <input type="text" id="district" name="district" required>
+
+    <label for="municipality">municipality</label>
+    <input type="text" id="municipality" name="municipality" required>
+
+    <label for="postalcode">postalcode</label>
+    <input type="number" id="postalcode" name="postalcode" required>
+
+    <label for="landmark">landmark</label>
+    <input type="text" id="landmark" name="landmark" required>
+
+    <input type="checkbox" name="shippingAddress" id="shippingAddress">
+    <label for="shippingAddress">Shipping Address</label>
+    <button type="submit">Submit address</button>
+</form>
+
+{% include "theme-temp/customer-footer.html" %}
