@@ -52,3 +52,20 @@ class Product(BaseModel):
     def __str__(self):
         return self.productName
     
+class Country(BaseModel):
+    name = models.CharField(max_length=30 ,default = "nepal")
+    def __str__(self):
+        return self.country
+    
+class District(BaseModel):
+    country = models.ForeignKey(Country,on_delete=models.CASCADE, related_name='districts')
+    name = models.CharField(max_length=30 ,default = "kathmandu")
+    def __str__(self):
+        return self.name
+
+class Municipality(BaseModel):
+    district = models.ForeignKey(Country,on_delete=models.CASCADE, related_name='municipalities')
+    name = models.CharField(max_length=30 ,default = "kathmandu")
+    def __str__(self):
+        return self.name
+    

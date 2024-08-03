@@ -103,10 +103,19 @@ class BillingAddress(View):
         alert_detail = request.session.get('alert_detail',False)
         if(alert_title):del(request.session['alert_title'])
         if(alert_detail):del(request.session['alert_detail'])
+
+        country = Country.objects.all()
+        district = District.objects.filter(district.country_id == country.id)
+        municipality = Municipality.objects.filter(municipality.district_id == district.id)
+
         context = {
             'alert_title':alert_title,
             'alert_detail':alert_detail,
-            'page_name': 'billing-address'
+            'page_name': 'billing-address',
+            'country':country,
+            'district':district,
+            'municipality':municipality,
+
         }
         return render(request,"billing-address.html",context)
     
