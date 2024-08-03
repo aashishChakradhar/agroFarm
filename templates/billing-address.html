@@ -11,6 +11,10 @@
   </div>
 <form action="billing-address" method="post">
     {% csrf_token %}
+    {% comment %} tryout only {% endcomment %}
+    {% for countrys in country  %}
+        {{countrys}}
+    {% endfor %}
     <label for="country">country</label>
     <select name="country" id="country" required>
         <option value="nepal" selected>Nepal</option>

@@ -103,10 +103,14 @@ class BillingAddress(View):
         alert_detail = request.session.get('alert_detail',False)
         if(alert_title):del(request.session['alert_title'])
         if(alert_detail):del(request.session['alert_detail'])
-
+        # not sure how it works
+        # in trial phase
         country = Country.objects.all()
-        district = District.objects.filter(district.country_id == country.id)
-        municipality = Municipality.objects.filter(municipality.district_id == district.id)
+        for countries in country:
+            district = District.objects.filter(country = countries.uid)
+            for districts in district:
+                municipality = Municipality.objects.filter(district = districts.uid)
+
 
         context = {
             'alert_title':alert_title,

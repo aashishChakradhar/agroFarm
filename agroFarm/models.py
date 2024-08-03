@@ -55,7 +55,7 @@ class Product(BaseModel):
 class Country(BaseModel):
     name = models.CharField(max_length=30 ,default = "nepal")
     def __str__(self):
-        return self.country
+        return self.name
     
 class District(BaseModel):
     country = models.ForeignKey(Country,on_delete=models.CASCADE, related_name='districts')
@@ -64,7 +64,7 @@ class District(BaseModel):
         return self.name
 
 class Municipality(BaseModel):
-    district = models.ForeignKey(Country,on_delete=models.CASCADE, related_name='municipalities')
+    district = models.ForeignKey(District,on_delete=models.CASCADE, related_name='municipalities')
     name = models.CharField(max_length=30 ,default = "kathmandu")
     def __str__(self):
         return self.name
