@@ -13,21 +13,33 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-class ExtendedUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    country = models.CharField(max_length=20)
-    province = models.CharField(max_length=20)
-    district = models.CharField(max_length=20)
-    streetName = models.CharField(max_length=20)
-    landMark = models.CharField(max_length=20)
-    postalCode = models.DecimalField(max_digits=6,decimal_places=0)
-    default = models.BooleanField()
-    def __str__(self):
-        return self.country
+# class ExtendedUser(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     country = models.CharField(max_length=20)
+#     province = models.CharField(max_length=20)
+#     district = models.CharField(max_length=20)
+#     streetName = models.CharField(max_length=20)
+#     landMark = models.CharField(max_length=20)
+#     postalCode = models.DecimalField(max_digits=6,decimal_places=0)
+#     default = models.BooleanField()
+#     def __str__(self):
+#         return self.country
     
 class Producttype(BaseModel):
     name = models.CharField(max_length=30, default='uncategorized')
     description = models.CharField(max_length=100, default='')
+
+class BillingAddress(BaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    country = models.CharField(max_length=30,default='unknown')
+    province = models.CharField(max_length=30,default='unknown')
+    district = models.CharField(max_length=30,default='unknown')
+    municipality = models.CharField(max_length=30,default='unknown')
+    street = models.CharField(max_length=30,default='unknown')
+    postalCode = models.DecimalField(max_digits=30,decimal_places=0,default='unknown')
+    landmark = models.CharField(max_length=30,default='unknown')
+    def __str__(self):
+        return self.postalCode
 
 class Product(BaseModel):
     sellerId = models.ForeignKey(User, on_delete=models.CASCADE,default=00)
@@ -39,4 +51,21 @@ class Product(BaseModel):
 
     def __str__(self):
         return self.productName
+    
+class Country(BaseModel):
+    name = models.CharField(max_length=30 ,default = "nepal")
+    def __str__(self):
+        return self.name
+    
+class District(BaseModel):
+    country = models.ForeignKey(Country,on_delete=models.CASCADE, related_name='districts')
+    name = models.CharField(max_length=30 ,default = "kathmandu")
+    def __str__(self):
+        return self.name
+
+class Municipality(BaseModel):
+    district = models.ForeignKey(District,on_delete=models.CASCADE, related_name='municipalities')
+    name = models.CharField(max_length=30 ,default = "kathmandu")
+    def __str__(self):
+        return self.name
     
