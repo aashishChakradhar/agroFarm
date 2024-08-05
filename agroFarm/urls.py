@@ -15,4 +15,5 @@ urlpatterns = [
     path('dashboard/account', views.Account_dash_view.as_view(), name='Account'),
     path('dashboard/products', views.Product_dash_view.as_view(), name='Products'),
     path('dashboard/products/add-new', views.Add_product_view.as_view(), name='Add Products'),
+    path('dashboard/products/edit-product/<int:id>', views.Edit_product_view.as_view(), name='Edit Products'),
 ]
