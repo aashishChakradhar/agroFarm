@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect,HttpResponse
 from django.views import View
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -225,6 +226,7 @@ class Add_product_view(View):
         if request.user.is_superuser or request.user.is_staff:
             try:
                 context = {
+                    'categories': Producttype.objects.all() ,
                     'page_name': 'Add Products'
                 }
                 return render(request, "add-product-dashboard.html" ,context)
@@ -241,9 +243,18 @@ class Add_product_view(View):
                 producttitle = request.POST.get('producttitle')
                 featuredimage = request.FILES.get('featuredimage')
                 price = request.POST.get('price')
-                type = request.POST.getlist('producttype')
+                cat = request.POST.getlist('producttype')
                 description = request.POST.get('editorContent')
                 sellerid = request.user
+
+                types = []
+                for x in cat:
+                    try:
+                        product_type = Producttype.objects.get(name=x)
+                        types.append(product_type)
+                    except Producttype.DoesNotExist:
+                        messages.error(request, f"Product type '{x}' does not exist.")
+                        return render(request, 'add-product-dashboard.html')
 
                 if not producttitle or not price:
                     messages.error(request, "All fields are required.")
@@ -253,11 +264,12 @@ class Add_product_view(View):
                     productName=producttitle,
                     sellerId=sellerid,
                     featuredimage=featuredimage,
-                    productType = type,
                     productPrice = price,
                     productDescription = description
                 )
                 product.save()
+
+                product.productType.set(types)
 
                 messages.success(request, "Your Blog Has Been Successfully Added!")
                 return redirect('/dashboard/products/add-new')  # Redirect to a blog list or success page after adding
@@ -266,3 +278,64 @@ class Add_product_view(View):
                 messages.error(request, str(e))
       
         return render(request, 'add-product-dashboard.html')   
+    
+class Edit_product_view(View):
+    def get(self, request, id):
+        if request.user.is_anonymous:
+            return redirect('/login')
+        
+        if request.user.is_superuser or request.user.is_staff:
+            try:
+                context = {
+                    'product' : get_object_or_404(Product, uid=id),
+                    'categories': Producttype.objects.all() ,
+                    'page_name': 'Edit Products'
+                }
+                return render(request, "edit-product-dashboard.html" ,context)
+            except Exception as e:
+                messages.error(request, str(e))
+                return render(request,"edit-product-dashboard.html")
+            
+        messages.error(request, 'Access Denied')
+        return redirect('/')
+
+    def post(self,request, id):
+        if request.method == 'POST':
+            try:
+                product = get_object_or_404(Product, uid=id)
+
+                producttitle = request.POST.get('producttitle')
+                featuredimage = request.FILES.get('featuredimage')
+                price = request.POST.get('price')
+                cat = request.POST.getlist('producttype')
+                description = request.POST.get('editorContent')
+
+                types = []
+                for x in cat:
+                    try:
+                        product_type = Producttype.objects.get(name=x)
+                        types.append(product_type)
+                    except Producttype.DoesNotExist:
+                        messages.error(request, f"Product type '{x}' does not exist.")
+                        return render(request, 'edit-product-dashboard.html')
+
+                if not producttitle or not price:
+                    messages.error(request, "All fields are required.")
+                    return render(request, 'edit-product-dashboard.html')
+                
+                product.productName=producttitle
+                product.featuredimage=featuredimage
+                product.productPrice = price
+                product.productDescription = description
+
+                product.save()
+
+                product.productType.set(types)
+
+                messages.success(request, "Your Blog Has Been Successfully edited!")
+                return redirect('/dashboard/products/edit-product/' + str(id))  # Redirect to a blog list or success page after editing
+            
+            except Exception as e:
+                messages.error(request, str(e))
+      
+        return render(request, 'edit-product-dashboard.html')   
