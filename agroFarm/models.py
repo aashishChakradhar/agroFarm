@@ -26,8 +26,10 @@ class BaseModel(models.Model):
 #         return self.country
     
 class Producttype(BaseModel):
-    name = models.CharField(max_length=30, default='uncategorized')
+    name = models.CharField(max_length=30, default='')
     description = models.CharField(max_length=100, default='')
+    def __str__(self):
+        return self.name
 
 class BillingAddress(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -44,7 +46,7 @@ class BillingAddress(BaseModel):
 class Product(BaseModel):
     sellerId = models.ForeignKey(User, on_delete=models.CASCADE,default=00)
     productName = models.CharField(max_length=30,default="unknown")
-    productType = models.CharField(max_length=30,default="unknown")
+    productType = models.ManyToManyField(Producttype, default=0)
     featuredimage = models.ImageField(upload_to='uploads/', default=0) 
     productDescription = models.CharField(max_length=100,default="unknown")
     productPrice = models.DecimalField(max_digits=5, decimal_places=2,default="unknown")
