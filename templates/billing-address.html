@@ -69,10 +69,10 @@
 </form>
 <script>
   function provin(value) {
-    for province in province{
-      if(value == {{province.uid}}){
-
-        alert({{province.uid}});
+    alert(value);
+    for (let provinces in province) {
+      if (value == provinces.uid) {
+        alert(value);
       }
     }
   }
