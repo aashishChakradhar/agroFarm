@@ -9,5 +9,6 @@ admin.site.register(BillingAddress)
 
 # for address
 admin.site.register(Country)
+admin.site.register(Province)
 admin.site.register(District)
 admin.site.register(Municipality)
