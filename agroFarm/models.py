@@ -58,9 +58,15 @@ class Country(BaseModel):
     name = models.CharField(max_length=30 ,default = "nepal")
     def __str__(self):
         return self.name
-    
+
+class Province(BaseModel):
+    country = models.ForeignKey(Country,on_delete=models.CASCADE, related_name='provinces')
+    name = models.CharField(max_length=30 ,default = "bagmati")
+    def __str__(self):
+        return self.name
+
 class District(BaseModel):
-    country = models.ForeignKey(Country,on_delete=models.CASCADE, related_name='districts')
+    province = models.ForeignKey(Province,on_delete=models.CASCADE, related_name='districts')
     name = models.CharField(max_length=30 ,default = "kathmandu")
     def __str__(self):
         return self.name

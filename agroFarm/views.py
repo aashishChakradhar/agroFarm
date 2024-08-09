@@ -107,10 +107,9 @@ class BillingAddress(View):
         # not sure how it works
         # in trial phase
         country = Country.objects.all()
-        for countries in country:
-            district = District.objects.filter(country = countries.uid)
-            for districts in district:
-                municipality = Municipality.objects.filter(district = districts.uid)
+        province = Province.objects.all()
+        district = District.objects.all()
+        municipality = Municipality.objects.all()
 
 
         context = {
@@ -118,6 +117,7 @@ class BillingAddress(View):
             'alert_detail':alert_detail,
             'page_name': 'billing-address',
             'country':country,
+            'province':province,
             'district':district,
             'municipality':municipality,
 

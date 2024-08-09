@@ -1,43 +1,80 @@
 {% include "theme-temp/customer-header.html" %}
 <div class="alert alert-danger d-flex align-items-center" role="alert">
-    <svg
-      class="alert_icon bi flex-shrink-0 me-2"
-      role="img"
-      aria-label="Warning:"
-    >
-      <use xlink:href="#exclamation-triangle-fill" />
-    </svg>
-    <div><strong>{{alert_title}}!</strong> {{alert_detail}}</div>
-  </div>
+  <svg
+    class="alert_icon bi flex-shrink-0 me-2"
+    role="img"
+    aria-label="Warning:"
+  >
+    <use xlink:href="#exclamation-triangle-fill" />
+  </svg>
+  <div><strong>{{alert_title}}!</strong> {{alert_detail}}</div>
+</div>
 <form action="billing-address" method="post">
-    {% csrf_token %}
-    {% comment %} tryout only {% endcomment %}
-    {% for countrys in country  %}
-        {{countrys}}
+  {% csrf_token %} {% comment %} tryout only {% endcomment %}
+
+  <label for="country">country</label>
+  <select name="country" id="country" required>
+    {% for countrys in country %}
+    <option
+      value="{{countrys.uid}}"
+      onclick="provin({{countrys.uid}})"
+      selected
+    >
+      {{countrys}}
+    </option>
     {% endfor %}
-    <label for="country">country</label>
-    <select name="country" id="country" required>
-        <option value="nepal" selected>Nepal</option>
-    </select>
+  </select>
+  <br />
 
-    <label for="province">province</label>
-    <input type="text" id="province" name="province" required>
+  <label for="province">province</label>
+  <select name="province" id="province" required>
+    {% for provinces in province %}
+    <option selected onclick="prov({{provinces.uid}})">{{provinces}}</option>
+    {% endfor %}
+  </select>
+  <br />
 
-    <label for="district">district</label>
-    <input type="text" id="district" name="district" required>
+  <label for="district">district</label>
+  <select name="district" id="district" required>
+    {% for districts in district_selected %}
+    <option value="{{districts.uid}}" selected>{{districts}}</option>
+    {% endfor %}
+  </select>
+  <br />
 
-    <label for="municipality">municipality</label>
-    <input type="text" id="municipality" name="municipality" required>
+  <label for="municipality">municipality</label>
+  <select name="municipality" id="municipality" required>
+    {% for municipalitys in municipality %}
+    <option value="{{municipalitys.uid}}" selected>{{municipalitys}}</option>
+    {% endfor %}
+  </select>
+  <br />
 
-    <label for="postalcode">postalcode</label>
-    <input type="number" id="postalcode" name="postalcode" required>
+  <label for="postalcode">postalcode</label>
+  <input type="number" id="postalcode" name="postalcode" required />
+  <br />
 
-    <label for="landmark">landmark</label>
-    <input type="text" id="landmark" name="landmark" required>
+  <label for="landmark">landmark</label>
+  <input type="text" id="landmark" name="landmark" required />
 
-    <input type="checkbox" name="shippingAddress" id="shippingAddress" value='true' checked>
-    <label for="shippingAddress">Use as Shipping Address</label>
-    <button type="submit">Submit address</button>
+  <input
+    type="checkbox"
+    name="shippingAddress"
+    id="shippingAddress"
+    value="true"
+    checked
+  />
+  <label for="shippingAddress">Use as Shipping Address</label>
+  <button type="submit">Submit address</button>
 </form>
+<script>
+  function provin(value) {
+    for province in province{
+      if(value == {{province.uid}}){
 
+        alert({{province.uid}});
+      }
+    }
+  }
+</script>
 {% include "theme-temp/customer-footer.html" %}
