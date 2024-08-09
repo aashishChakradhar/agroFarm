@@ -41,9 +41,13 @@
                     <tr>
                         <td>{{forloop.counter}}</td>
                         <td>{{x.featuredimage}}</td>
-                        <td><a href="/dashboard/products/">{{ x.productName }}</a></td>
+                        <td><a href="/dashboard/products/edit-product/{{x.uid}}">{{ x.productName }}</a></td>
                         <td>{{ x.productPrice }}</td>
-                        <td>{{ x.productType }}</td>
+                        <td>
+                          {% for type in x.productType.all %}
+                            {{ type.name }}{% if not forloop.last %}, {% endif %}
+                          {% endfor %}
+                        </td>
                         <td>{{ x.created }}</td>
                     </tr>
                     {% empty %}
