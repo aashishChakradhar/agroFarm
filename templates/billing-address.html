@@ -9,19 +9,13 @@
   </svg>
   <div><strong>{{alert_title}}!</strong> {{alert_detail}}</div>
 </div>
-<form action="billing-address" method="post">
+<form action="billing-address" method="POST">
   {% csrf_token %} {% comment %} tryout only {% endcomment %}
 
   <label for="country">country</label>
   <select name="country" id="country" required>
     {% for countrys in country %}
-    <option
-      value="{{countrys.uid}}"
-      onclick="provin({{countrys.uid}})"
-      selected
-    >
-      {{countrys}}
-    </option>
+    <option value="{{countrys.uid}}">{{countrys}}</option>
     {% endfor %}
   </select>
   <br />
@@ -29,34 +23,34 @@
   <label for="province">province</label>
   <select name="province" id="province" required>
     {% for provinces in province %}
-    <option selected onclick="prov({{provinces.uid}})">{{provinces}}</option>
+    <option value="{{provinces.uid}}">{{provinces}}</option>
     {% endfor %}
   </select>
   <br />
 
   <label for="district">district</label>
   <select name="district" id="district" required>
-    {% for districts in district_selected %}
-    <option value="{{districts.uid}}" selected>{{districts}}</option>
+    {% for districts in district %}
+    <option value="{{districts.uid}}">{{districts}}</option>
     {% endfor %}
   </select>
   <br />
 
   <label for="municipality">municipality</label>
-  <select name="municipality" id="municipality" required>
-    {% for municipalitys in municipality %}
-    <option value="{{municipalitys.uid}}" selected>{{municipalitys}}</option>
-    {% endfor %}
-  </select>
+  <input type="text" id="municipality" name="municipality" required />
   <br />
 
-  <label for="postalcode">postalcode</label>
-  <input type="number" id="postalcode" name="postalcode" required />
+  <label for="postalCode">postalcode</label>
+  <input type="text" id="postalCode" name="postalCode" required />
+  <br />
+  <label for="street">street</label>
+  <input type="text" id="street" name="street" required />
   <br />
 
   <label for="landmark">landmark</label>
-  <input type="text" id="landmark" name="landmark" required />
-
+  <textarea id="landmark" name="landmark" rows = "4" cols = "40" required />
+  </textarea>
+  <hr>
   <input
     type="checkbox"
     name="shippingAddress"
@@ -67,14 +61,5 @@
   <label for="shippingAddress">Use as Shipping Address</label>
   <button type="submit">Submit address</button>
 </form>
-<script>
-  function provin(value) {
-    alert(value);
-    for (let provinces in province) {
-      if (value == provinces.uid) {
-        alert(value);
-      }
-    }
-  }
-</script>
+
 {% include "theme-temp/customer-footer.html" %}
