@@ -1,7 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator,MaxValueValidator,RegexValidator,validate_email
-from tinymce.models import HTMLField
 
 # from datetime import date
 
@@ -61,9 +59,4 @@ class BillingAddress(BaseModel):
     def __str__(self):
         return self.postalCode
 
-# class Municipality(BaseModel):
-#     district = models.ForeignKey(District,on_delete=models.CASCADE, related_name='municipalities')
-#     name = models.CharField(max_length=30 ,default = "kathmandu")
-#     def __str__(self):
-#         return self.name
     
