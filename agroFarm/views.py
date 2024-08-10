@@ -51,8 +51,7 @@ class Logout_view(View):
         logout(request)
         return redirect('/')
 
-#signup and login page ko lagi function from kiran
-# @login_required(login_url = 'login')    
+
 class Signup_View (View):
     def get(self,request):
         alert_title = request.session.get('alert_title',False)
@@ -125,10 +124,7 @@ class BillingAddress_View(View):
     @method_decorator(login_required)
     def post(self,request):
         if request.method == 'POST':
-            #thinking of creating a seperate database for storing districts and the municipalities within themselves
-            #for dynamic rendering the form
-            #the values are passed through context 
-
+            
             country_id = request.POST.get('country')
             province_id = request.POST.get('province')
             district_id = request.POST.get('district')
