@@ -5,7 +5,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from agroFarm.models import *
-from agroFarm.form import SignupForm
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 # from django.template import loader
 # from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -50,8 +51,7 @@ class Logout_view(View):
         logout(request)
         return redirect('/')
 
-#signup and login page ko lagi function from kiran
-# @login_required(login_url = 'login')    
+
 class Signup_View (View):
     def get(self,request):
         alert_title = request.session.get('alert_title',False)
@@ -98,59 +98,58 @@ class Signup_View (View):
                 login(request,user) #logins the user
             return redirect ('/')          
 
-class BillingAddress(View):
+class BillingAddress_View(View):
+    @method_decorator(login_required)
     def get(self,request):
         alert_title = request.session.get('alert_title',False)
         alert_detail = request.session.get('alert_detail',False)
         if(alert_title):del(request.session['alert_title'])
         if(alert_detail):del(request.session['alert_detail'])
-        # not sure how it works
-        # in trial phase
-        country = Country.objects.all()
-        for countries in country:
-            district = District.objects.filter(country = countries.uid)
-            for districts in district:
-                municipality = Municipality.objects.filter(district = districts.uid)
 
+        country = Country.objects.all()
+        province = Province.objects.all()
+        district = District.objects.all()
 
         context = {
             'alert_title':alert_title,
             'alert_detail':alert_detail,
             'page_name': 'billing-address',
             'country':country,
+            'province':province,
             'district':district,
-            'municipality':municipality,
 
         }
         return render(request,"billing-address.html",context)
     
+    @method_decorator(login_required)
     def post(self,request):
         if request.method == 'POST':
-            #thinking of creating a seperate database for storing districts and the municipalities within themselves
-            #for dynamic rendering the form
-            #the values are passed through context
-            if User.is_authenticated and User.is_staff and not User.is_superuser:
-                country = request.POST.get('country')
-                province = request.POST.get('province')
-                district = request.POST.get('district')
-                municipality = request.POST.get('municipality')
-                street = request.POST.get('street')
-                postalCode = request.POST.get('postalCode')
-                landmark = request.POST.get('landmark')
-                billingAddress = BillingAddress(
-                    country=country,
-                    province=province,
-                    district=district,
-                    municipality=municipality,
-                    street=street,
-                    postalCode=postalCode,
-                    landmark=landmark,
-                )
-                billingAddress.save()
-            else:
-                request.session['alert_title'] = "Unauthorized Login"
-                request.session['alert_detail'] = "Please login through valid account"
-                return redirect('agroFarm:login')
+            
+            country_id = request.POST.get('country')
+            province_id = request.POST.get('province')
+            district_id = request.POST.get('district')
+            municipality = request.POST.get('municipality')
+            street = request.POST.get('street')
+            postalCode = request.POST.get('postalCode')
+            landmark = request.POST.get('landmark')
+
+            # Fetch the related objects from the database
+            country = Country.objects.get(uid=country_id)
+            province = Province.objects.get(uid=province_id)
+            district = District.objects.get(uid=district_id)
+
+            billingAddress = BillingAddress.objects.create(
+                user = request.user,
+                country=country,
+                province=province,
+                district=district,
+                municipality=municipality,
+                street=street,
+                postalCode=postalCode,
+                landmark=landmark
+            )
+            billingAddress.save()
+            
         return redirect ('/') 
 
 
