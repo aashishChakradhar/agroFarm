@@ -1,3 +1,5 @@
 agro_venv
-/agroFarm/__pycache__/
-/config/__pycache__/
+myenv
+__pycache__/
+migrations
+*.sqlite3
