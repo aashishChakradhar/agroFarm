@@ -29,6 +29,6 @@ admin.site.index_title = "AgroFarm"
 
 urlpatterns = [
     path('admin/', admin.site.urls,name='admin'), #app for admin page
-    path('',include(('agroFarm.urls','agroFarm'),namespace = 'agroFarm')), # app for customer page
+    path('',include(('customer.urls','customer'),namespace = 'customer')), # app for customer page
     path('merchant/',include(('merchant.urls','merchant'),namespace = 'merchant')), # app for seller page
 ]

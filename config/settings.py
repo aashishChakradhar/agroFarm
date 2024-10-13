@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    'agroFarm.apps.AgrofarmConfig',
+    'customer.apps.CustomerConfig',
     'merchant.apps.MerchantConfig',
 
     'django.contrib.admin',
