@@ -33,7 +33,8 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     'customer.apps.CustomerConfig',
     'merchant.apps.MerchantConfig',
-
+    'phonenumber_field',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
