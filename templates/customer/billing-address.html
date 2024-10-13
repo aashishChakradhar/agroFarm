@@ -1,0 +1,65 @@
+{% include "customer/theme-temp/customer-header.html" %}
+<div class="alert alert-danger d-flex align-items-center" role="alert">
+  <svg
+    class="alert_icon bi flex-shrink-0 me-2"
+    role="img"
+    aria-label="Warning:"
+  >
+    <use xlink:href="#exclamation-triangle-fill" />
+  </svg>
+  <div><strong>{{alert_title}}!</strong> {{alert_detail}}</div>
+</div>
+<form action="billing-address" method="POST">
+  {% csrf_token %} {% comment %} tryout only {% endcomment %}
+
+  <label for="country">country</label>
+  <select name="country" id="country" required>
+    {% for countrys in country %}
+    <option value="{{countrys.uid}}">{{countrys}}</option>
+    {% endfor %}
+  </select>
+  <br />
+
+  <label for="province">province</label>
+  <select name="province" id="province" required>
+    {% for provinces in province %}
+    <option value="{{provinces.uid}}">{{provinces}}</option>
+    {% endfor %}
+  </select>
+  <br />
+
+  <label for="district">district</label>
+  <select name="district" id="district" required>
+    {% for districts in district %}
+    <option value="{{districts.uid}}">{{districts}}</option>
+    {% endfor %}
+  </select>
+  <br />
+
+  <label for="municipality">municipality</label>
+  <input type="text" id="municipality" name="municipality" required />
+  <br />
+
+  <label for="postalCode">postalcode</label>
+  <input type="text" id="postalCode" name="postalCode" required />
+  <br />
+  <label for="street">street</label>
+  <input type="text" id="street" name="street" required />
+  <br />
+
+  <label for="landmark">landmark</label>
+  <textarea id="landmark" name="landmark" rows = "4" cols = "40" required />
+  </textarea>
+  <hr>
+  <input
+    type="checkbox"
+    name="shippingAddress"
+    id="shippingAddress"
+    value="true"
+    checked
+  />
+  <label for="shippingAddress">Use as Shipping Address</label>
+  <button type="submit">Submit address</button>
+</form>
+
+{% include "customer/theme-temp/customer-footer.html" %}

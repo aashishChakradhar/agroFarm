@@ -1,0 +1,30 @@
+{% include 'customer/theme-temp/dashboard-header.html' %}
+
+<section class="dashboard-page">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-2">
+        <div class="dashboard-nav-wrapper container">
+          {% include 'customer/template-parts/dashboard-nav.html' %}
+        </div>
+      </div>
+      <div class="col-md-10">
+        <div class="order-wrappper">
+            <div class="">
+                <table>
+                    <thead>
+                        <th>S.N</th>
+                        <th>Order ID</th>
+                        <th>Product Name</th>
+                        <th>Customer ID</th>
+                        <th>Status</th>
+                        <th>Ordered Date</th>
+                    </thead>
+                </table>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% include 'theme-temp/dashboard-footer.html' %}
