@@ -3,6 +3,11 @@ from django.views import View
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
+
+from django.core.validators import EmailValidator
+from django.core.exceptions import ValidationError
+from django.http import HttpResponseBadRequest
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -22,7 +27,7 @@ class Index(View):
             "page_name":"Home"
         }
         return render(request,f'{app_name}/index.html',context)
-      
+
 class Login_view(View):
     def get(self,request):
         alert_title = request.session.get('alert_title',False)
@@ -42,7 +47,7 @@ class Login_view(View):
         user = authenticate(username = username, password = password)
         if user is not None:# checks if the user is logged in or not?
             login(request,user) #logins the user
-            return redirect ('/dashboard')
+            return redirect ('/')
         else:
             request.session['alert_title'] = "Invalid Login Attempt"
             request.session['alert_detail'] = "Please enter valid login credential."
@@ -69,38 +74,54 @@ class Signup_View (View):
         return render(request,f"{app_name}/signup.html",context)
         
     def post(self,request):
-        if request.method == 'POST':
-            firstName = request.POST.get('firstName')
-            lastName = request.POST.get('lastName')
-            username = request.POST.get('username')
-            email = request.POST.get('email') #validation required
-            password = request.POST.get('password')
-            status = request.POST.get('status')
+        firstName = request.POST.get('firstName')
+        lastName = request.POST.get('lastName')
+        username = request.POST.get('username')
+        email = request.POST.get('email') #validation required
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm-password')
+        address = request.POST.get('address')
+        mobile = request.POST.get('mobile')
+        status = request.POST.get('status')
 
-            #determine type of user
-            if status == 'admin':
-                is_superuser = True 
-                is_staff = True
-            elif status == 'seller':
-                is_superuser == False
-                is_staff = True
-            elif status =='customer':
-                is_staff = False
-                is_superuser = False
+        email_validator = EmailValidator()
+        try:
+            email_validator(email)
+        except ValidationError:
+            request.session['alert_title'] = "Invalid Email"
+            request.session['alert_detail'] = "Please enter valid email."
+            return redirect(request.path)
 
-                
-            user = User.objects.create_user(username , email, password,is_superuser=is_superuser,is_staff = is_staff)
-            user.save()
+        #determine type of user
+        if status == 'admin':
+            is_superuser = True 
+            is_staff = True
+        elif status == 'merchant':
+            is_superuser == False
+            is_staff = True
+        elif status =='customer':
+            is_staff = False
+            is_superuser = False
 
-            #additional user details
-            user.first_name=firstName
-            user.last_name=lastName
-            user.save()
-            user = authenticate(username = username, password = password)
-            if user is not None:# checks if the user is logged in or not?
-                login(request,user) #logins the user
-            return redirect ('/')          
+        try:
+            user = User.objects.create_user(username=username, email=email, password=password)
+        except Exception:
+            request.session['alert_title'] = "Invalid username"
+            request.session['alert_detail'] = "Please enter different username"
+            return redirect(request.path)
+        user.is_superuser = is_superuser
+        user.is_staff = is_staff
+        user.first_name = firstName
+        user.last_name = lastName
+        user.save()
 
+        ExtraDetails.objects.create(user=user, mobile=mobile, address=address)
+
+        user = authenticate(username = username, password = password)
+        if user is not None:# checks if the user is logged in or not?
+            login(request,user) #logins the user
+        return redirect ('/')          
+"""     
 class BillingAddress_View(View):
     @method_decorator(login_required)
     def get(self,request):
@@ -340,4 +361,4 @@ class Edit_product_view(View):
             except Exception as e:
                 messages.error(request, str(e))
       
-        return render(request, f'{app_name}/edit-product-dashboard.html')   
+        return render(request, f'{app_name}/edit-product-dashboard.html')   """
