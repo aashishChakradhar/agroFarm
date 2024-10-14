@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    
+    <link rel="stylesheet" href="{% static 'css/all.css' %}">
+    
+    <title>login</title>
+  </head>
+  <body>
+    <div class='vh-100 d-flex align-items-center justify-content-center'>
+      <div class="p-0">
+        <div >
+          {% if messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              {% for message in messages %}
+                <p><strong>Holy guacamole!</strong> {{message}}</p>
+              {% endfor %}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endif %}
+        </div>
+
+        <form action="{% url "merchant:login" %}" method="POST">
+          {% csrf_token %}
+            <div class="justify-content-center my-4">
+              <div class="input-group input-group-lg ">
+                <span class="input-group-text w-30" id="inputGroup-sizing-lg addon-wrapping">username</span>
+                <input type="text" name = 'username' class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping" required>
+              </div>
+            </div>
+              
+            <div class="justify-content-center my-4">
+              <div class="input-group input-group-lg  ">
+                <span class="input-group-text w-30" id="inputGroup-sizing-lg addon-wrapping">password</span>
+                <input type="password" name = 'password' class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping" required>
+              </div>
+            </div>
+
+            <div class="justify-content-center my-4">
+              <div class="w-100 text-center">
+                <input type="submit" class='btn btn-primary w-50' value='Submit'>
+              </div>
+            </div>
+            
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

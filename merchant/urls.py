@@ -14,23 +14,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+from merchant import views
 from django.urls import path,include
-from django.conf import settings
-from django.conf.urls.static import static
-
-
-admin.site.site_header = "AgroFarm Admin"
-admin.site.site_title = "Admin Portal"
-admin.site.index_title = "AgroFarm"
 
 
 '''
     namespace is assigned for dynamic routing
 '''
 
+app_name = 'merchant'
+
 urlpatterns = [
-    path('admin/', admin.site.urls,name='admin'), #app for admin page
-    path('',include(('agroFarm.urls','agroFarm'),namespace = 'agroFarm')), # app for customer page
-    path('merchant/',include(('merchant.urls','merchant'),namespace = 'merchant')), # app for seller page
-]
+    path('', views.Index.as_view(), name='home'),
+    path('home/', views.Index.as_view(), name='home'),
+    path('login/', views.Login.as_view(), name='login'),
+    path('logout/', views.Logout.as_view(), name='logout'),
+]       
