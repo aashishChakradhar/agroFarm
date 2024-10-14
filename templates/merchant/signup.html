@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>agroFarm| signup</title>
+    <title>signup | agroFarm-merchant</title>
     {% load static %}
       
     {% load bootstrap5 %}
@@ -30,8 +30,8 @@
         {% endif %}
       </div>
 
-      <div class="form_title">Create Account</div>
-      <form action={% url 'customer:signup' %} method="POST">
+      <div class="form_title">Become a Merchant</div>
+      <form action={% url 'merchant:signup' %} method="POST">
         {% csrf_token %}
         <input
         type="hidden"
@@ -39,7 +39,7 @@
         id="status"
         aria-describedby="teztHelp"
         name="status"
-        value = "customer"
+        value = "merchant"
         required
         />
         <div class = 'row'>
@@ -139,8 +139,8 @@
         <button type="submit" class="button btn btn-primary ">
           Signup
         </button> 
-        <a href="{% url 'customer:login' %}">Already have an account</a>
-        <a href="{% url 'merchant:signup' %}">Become a Merchant</a>
+        <a href="{% url 'merchant:login' %}">Already have an account</a>
+        <a href="{% url 'customer:login' %}">Buy some veggies</a>
       </form>
     </div>
   </body>

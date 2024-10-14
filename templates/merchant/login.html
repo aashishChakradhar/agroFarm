@@ -3,54 +3,79 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login | agroFarm-merchant</title>
     {% load static %}
-    
-    {% load bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
-    
-    <link rel="stylesheet" href="{% static 'css/all.css' %}">
-    
-    <title>login</title>
+      
+      {% load bootstrap5 %}
+      {% bootstrap_css %}
+      {% bootstrap_javascript %}
+      
+      <link rel="stylesheet" href="{% static 'css/all.css' %}">
+      <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+      <link rel="stylesheet" href="{% static 'css/form.css' %}"/>
+      <link rel="stylesheet" href="{% static 'css/main.css' %}">
+      <link rel="stylesheet" href="{% static 'css/splide.main.css' %}">
+      
   </head>
   <body>
-    <div class='vh-100 d-flex align-items-center justify-content-center'>
-      <div class="p-0">
-        <div >
-          {% if messages %}
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-              {% for message in messages %}
-                <p><strong>Holy guacamole!</strong> {{message}}</p>
-              {% endfor %}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-          {% endif %}
+    <div class="container">
+      <div class="row">
+        <div class="col p-0">
+          <div class = "auth-cont">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis id perferendis veniam. Natus, suscipit tenetur? Quod, quisquam, quas odio cum fugit, aperiam porro aut beatae eaque corporis quam corrupti? Numquam.
         </div>
-
-        <form action="{% url "merchant:login" %}" method="POST">
-          {% csrf_token %}
-            <div class="justify-content-center my-4">
-              <div class="input-group input-group-lg ">
-                <span class="input-group-text w-30" id="inputGroup-sizing-lg addon-wrapping">username</span>
-                <input type="text" name = 'username' class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping" required>
-              </div>
-            </div>
-              
-            <div class="justify-content-center my-4">
-              <div class="input-group input-group-lg  ">
-                <span class="input-group-text w-30" id="inputGroup-sizing-lg addon-wrapping">password</span>
-                <input type="password" name = 'password' class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping" required>
-              </div>
-            </div>
-
-            <div class="justify-content-center my-4">
-              <div class="w-100 text-center">
-                <input type="submit" class='btn btn-primary w-50' value='Submit'>
-              </div>
-            </div>
-            
-        </form>
       </div>
+          <div class="col p-0">
+
+    <div class="auth-form">
+      <div class = "message" >
+        {% if messages %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+              <p><strong>Holy guacamole!</strong> {{message}}</p>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endif %}
+      </div>
+    
+      <div class="form_title">
+        Welcome Back Merchant
+      </div>
+
+      <form action="{% url 'merchant:login' %}" method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            class="form-control auth-input"
+            id="username"
+            aria-describedby="teztHelp"
+            name="username"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control auth-input"
+            id="password"
+            name="password"
+            required
+          />
+        </div>
+        <div class="d-grid gap-2">
+          <button type="submit" class="button btn btn-primary">
+            Login
+          </button>
+        </div>
+        <a href = {%url 'merchant:signup'%}>Don't have an account</a>
+      </form>
     </div>
+</div>
+</div>
+</div>
   </body>
 </html>
