@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect,HttpResponse
 from django.views import View
+from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
@@ -14,6 +15,7 @@ from django.utils.decorators import method_decorator
 
 from .models import *
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.template import loader
 # from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 # from django.contrib.auth.decorators import login_required
@@ -21,22 +23,33 @@ from .models import *
 
 app_name = 'customer'
 
-class Index(View):
-    def get(self, request):
-        context = {
-            "page_name":"Home"
-        }
-        return render(request,f'{app_name}/index.html',context)
+class BaseView(LoginRequiredMixin, View): #to check login or not
+    login_url = '/login/'
+    redirect_field_name = ''
 
+    def dispatch(self, request, *args, **kwargs):
+        # Check if the user is authenticated
+        if not request.user.is_authenticated:
+            messages.error(request, 'Please Login First')
+            return redirect(self.login_url)  # Redirect to login if not authenticated
+        
+        # Check if the user is a superuser or staf
+        if (request.user.is_superuser or request.user.is_staff):
+            messages.error(request, 'Seems Like You Were in Wrong Portal')
+            return redirect('merchant:login') # Redirect to the merchant login URL
+        
+        
+        return super().dispatch(request, *args, **kwargs)
+
+class Logout_view(BaseView):
+    def get(self,request):
+        logout(request)
+        messages.success(request, 'You have been logged out successfully.')  # Add success message
+        return redirect(reverse('customer:login'))  # Use reverse for URL resolution
+           
 class Login_view(View):
     def get(self,request):
-        alert_title = request.session.get('alert_title',False)
-        alert_detail = request.session.get('alert_detail',False)
-        if(alert_title):del(request.session['alert_title'])
-        if(alert_detail):del(request.session['alert_detail'])
         context = {
-            'alert_title': alert_title,
-            'alert_detail': alert_detail,
             'page_name': 'Login'
         }
         return render(request,f"{app_name}/login.html",context)
@@ -49,27 +62,13 @@ class Login_view(View):
             login(request,user) #logins the user
             return redirect ('/')
         else:
-            request.session['alert_title'] = "Invalid Login Attempt"
-            request.session['alert_detail'] = "Please enter valid login credential."
+            messages.error(request, "Invalid username or password. Please try again.")
             return redirect(request.path)
-        
-class Logout_view(View):
-    def get(self,request):
-        request.session.clear()
-        logout(request)
-        return redirect('/')
-
 
 class Signup_View (View):
     def get(self,request):
-        alert_title = request.session.get('alert_title',False)
-        alert_detail = request.session.get('alert_detail',False)
-        if(alert_title):del(request.session['alert_title'])
-        if(alert_detail):del(request.session['alert_detail'])
         context = {
-            'alert_title':alert_title,
-            'alert_detail':alert_detail,
-            'page_name': 'Signup'
+            'page_name': 'signup'
         }
         return render(request,f"{app_name}/signup.html",context)
         
@@ -88,10 +87,14 @@ class Signup_View (View):
         try:
             email_validator(email)
         except ValidationError:
-            request.session['alert_title'] = "Invalid Email"
-            request.session['alert_detail'] = "Please enter valid email."
+            messages.error(request,"Please enter valid email.")
             return redirect(request.path)
-
+        
+        # check if passwords match
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect(request.path)
+        
         #determine type of user
         if status == 'admin':
             is_superuser = True 
@@ -105,10 +108,10 @@ class Signup_View (View):
 
         try:
             user = User.objects.create_user(username=username, email=email, password=password)
-        except Exception:
-            request.session['alert_title'] = "Invalid username"
-            request.session['alert_detail'] = "Please enter different username"
+        except Exception as e:
+            messages.error(request, f"Error creating user: {e}")
             return redirect(request.path)
+        
         user.is_superuser = is_superuser
         user.is_staff = is_staff
         user.first_name = firstName
@@ -120,23 +123,24 @@ class Signup_View (View):
         user = authenticate(username = username, password = password)
         if user is not None:# checks if the user is logged in or not?
             login(request,user) #logins the user
-        return redirect ('/')          
-"""     
-class BillingAddress_View(View):
-    @method_decorator(login_required)
-    def get(self,request):
-        alert_title = request.session.get('alert_title',False)
-        alert_detail = request.session.get('alert_detail',False)
-        if(alert_title):del(request.session['alert_title'])
-        if(alert_detail):del(request.session['alert_detail'])
+            return redirect('/')
+        
+        messages.error(request, "Error logging in. Please try again.")
+        return redirect(request.path) 
+            
+class Index(BaseView):
+    def get(self, request):
+        context = {
+            "page_name":"home"
+        }
+        return render(request,f'{app_name}/index.html',context)
 
+class BillingAddress_View(BaseView):
+    def get(self,request):
         country = Country.objects.all()
         province = Province.objects.all()
         district = District.objects.all()
-
         context = {
-            'alert_title':alert_title,
-            'alert_detail':alert_detail,
             'page_name': 'billing-address',
             'country':country,
             'province':province,
@@ -144,221 +148,30 @@ class BillingAddress_View(View):
 
         }
         return render(request,f"{app_name}/billing-address.html",context)
-    
-    @method_decorator(login_required)
+
     def post(self,request):
-        if request.method == 'POST':
-            
-            country_id = request.POST.get('country')
-            province_id = request.POST.get('province')
-            district_id = request.POST.get('district')
-            municipality = request.POST.get('municipality')
-            street = request.POST.get('street')
-            postalCode = request.POST.get('postalCode')
-            landmark = request.POST.get('landmark')
+        country_id = request.POST.get('country')
+        province_id = request.POST.get('province')
+        district_id = request.POST.get('district')
+        municipality = request.POST.get('municipality')
+        street = request.POST.get('street')
+        postalCode = request.POST.get('postalCode')
+        landmark = request.POST.get('landmark')
 
-            # Fetch the related objects from the database
-            country = Country.objects.get(uid=country_id)
-            province = Province.objects.get(uid=province_id)
-            district = District.objects.get(uid=district_id)
+        # Fetch the related objects from the database
+        country = Country.objects.get(uid=country_id)
+        province = Province.objects.get(uid=province_id)
+        district = District.objects.get(uid=district_id)
 
-            billingAddress = BillingAddress.objects.create(
-                user = request.user,
-                country=country,
-                province=province,
-                district=district,
-                municipality=municipality,
-                street=street,
-                postalCode=postalCode,
-                landmark=landmark
-            )
-            billingAddress.save()
-            
+        billingAddress = BillingAddress.objects.create(
+            user = request.user,
+            country=country,
+            province=province,
+            district=district,
+            municipality=municipality,
+            street=street,
+            postalCode=postalCode,
+            landmark=landmark
+        )
+        billingAddress.save()
         return redirect ('/') 
-
-
-class Dashboard_view(View):
-    def get(self, request):
-        if request.user.is_anonymous:
-            return redirect('/login')
-        
-        if request.user.is_superuser or request.user.is_staff:
-            try:
-                current_user = request.user
-                context = {
-                    'user' : current_user,
-                    'page_name': 'Dashboard'
-                }
-                return render(request, f"{app_name}/dashboard.html" ,context)
-            except Exception as e:
-                messages.error(request, str(e))
-                return render(request,f"{app_name}/dashboard.html")
-        
-        messages.error(request, 'Access Denied')
-        return redirect('/')
-            
-class Account_dash_view(View):
-    def get(self, request):
-        if request.user.is_anonymous:
-            return redirect('/login')
-        
-        if request.user.is_superuser or request.user.is_staff:
-            try:
-                current_user = request.user
-                context = {
-                    'user' : current_user,
-                    'page_name': 'My Account'
-                }
-                return render(request, f"{app_name}/account-dashboard.html" ,context)
-            except Exception as e:
-                messages.error(request, str(e))
-                return render(request,f"{app_name}/account-dashboard.html")
-            
-        messages.error(request, 'Access Denied')
-        return redirect('/')
-            
-class Product_dash_view(View):
-    def get(self, request):
-        if request.user.is_anonymous:
-            return redirect('/login')
-        
-        if request.user.is_superuser or request.user.is_staff:
-            if request.user.is_superuser:
-                products = Product.objects.all().order_by('-created')
-            else:
-                products = Product.objects.filter(sellerId=request.user).order_by('-created')
-            
-            try:
-                context = {
-                    'products' : products,
-                    'page_name': 'Products'
-                }
-                return render(request, f"{app_name}/product-dashboard.html" ,context)
-            except Exception as e:
-                messages.error(request, str(e))
-                return render(request,f"{app_name}/product-dashboard.html")
-            
-        messages.error(request, 'Access Denied')
-        return redirect('/')
-            
-class Add_product_view(View):
-    def get(self, request):
-        if request.user.is_anonymous:
-            return redirect('/login')
-        
-        if request.user.is_superuser or request.user.is_staff:
-            try:
-                context = {
-                    'categories': Producttype.objects.all() ,
-                    'page_name': 'Add Products'
-                }
-                return render(request, f"{app_name}/add-product-dashboard.html" ,context)
-            except Exception as e:
-                messages.error(request, str(e))
-                return render(request,f"{app_name}/add-product-dashboard.html")
-            
-        messages.error(request, 'Access Denied')
-        return redirect('/')
-
-    def post(self,request):
-        if request.method == 'POST':
-            try:
-                producttitle = request.POST.get('producttitle')
-                featuredimage = request.FILES.get('featuredimage')
-                price = request.POST.get('price')
-                cat = request.POST.getlist('producttype')
-                description = request.POST.get('editorContent')
-                sellerid = request.user
-
-                types = []
-                for x in cat:
-                    try:
-                        product_type = Producttype.objects.get(name=x)
-                        types.append(product_type)
-                    except Producttype.DoesNotExist:
-                        messages.error(request, f"Product type '{x}' does not exist.")
-                        return render(request, f'{app_name}/add-product-dashboard.html')
-
-                if not producttitle or not price:
-                    messages.error(request, "All fields are required.")
-                    return render(request, f'{app_name}/add-product-dashboard.html')
-                
-                product = Product(
-                    productName=producttitle,
-                    sellerId=sellerid,
-                    featuredimage=featuredimage,
-                    productPrice = price,
-                    productDescription = description
-                )
-                product.save()
-
-                product.productType.set(types)
-
-                messages.success(request, "Your Blog Has Been Successfully Added!")
-                return redirect('/dashboard/products/add-new')  # Redirect to a blog list or success page after adding
-            
-            except Exception as e:
-                messages.error(request, str(e))
-      
-        return render(request, f'{app_name}/add-product-dashboard.html')   
-    
-class Edit_product_view(View):
-    def get(self, request, id):
-        if request.user.is_anonymous:
-            return redirect('/login')
-        
-        if request.user.is_superuser or request.user.is_staff:
-            try:
-                context = {
-                    'product' : get_object_or_404(Product, uid=id),
-                    'categories': Producttype.objects.all() ,
-                    'page_name': 'Edit Products'
-                }
-                return render(request, f"{app_name}/edit-product-dashboard.html" ,context)
-            except Exception as e:
-                messages.error(request, str(e))
-                return render(request,f"{app_name}/edit-product-dashboard.html")
-            
-        messages.error(request, 'Access Denied')
-        return redirect('/')
-
-    def post(self,request, id):
-        if request.method == 'POST':
-            try:
-                product = get_object_or_404(Product, uid=id)
-
-                producttitle = request.POST.get('producttitle')
-                featuredimage = request.FILES.get('featuredimage')
-                price = request.POST.get('price')
-                cat = request.POST.getlist('producttype')
-                description = request.POST.get('editorContent')
-
-                types = []
-                for x in cat:
-                    try:
-                        product_type = Producttype.objects.get(name=x)
-                        types.append(product_type)
-                    except Producttype.DoesNotExist:
-                        messages.error(request, f"Product type '{x}' does not exist.")
-                        return render(request, f'{app_name}/edit-product-dashboard.html')
-
-                if not producttitle or not price:
-                    messages.error(request, "All fields are required.")
-                    return render(request, f'{app_name}/edit-product-dashboard.html')
-                
-                product.productName=producttitle
-                product.featuredimage=featuredimage
-                product.productPrice = price
-                product.productDescription = description
-
-                product.save()
-
-                product.productType.set(types)
-
-                messages.success(request, "Your Blog Has Been Successfully edited!")
-                return redirect('/dashboard/products/edit-product/' + str(id))  # Redirect to a blog list or success page after editing
-            
-            except Exception as e:
-                messages.error(request, str(e))
-      
-        return render(request, f'{app_name}/edit-product-dashboard.html')   """
