@@ -28,5 +28,15 @@ urlpatterns = [
     path('', views.Index.as_view(), name='home'),
     path('home/', views.Index.as_view(), name='home'),
     path('login/', views.Login.as_view(), name='login'),
+    path('signup/', views.SignupView.as_view(), name='signup'),
     path('logout/', views.Logout.as_view(), name='logout'),
+    path('products/add-new/', views.AddProductView.as_view(), name='add-products'),#for merchant
+    path('products/', views.ProductView.as_view(), name='products'),
+    path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
+    path('account/', views.AccountView.as_view(), name='account'),
+    path('order/', views.OrderView.as_view(), name='order'),
+    # path('edit-product/<int:id>', views.EditProductView.as_view(), name='edit-products'),#for merchant
+
+    # path('billing-address', views.BillingAddress_View.as_view(), name='billing-address'),#on working phase
+    
 ]       
