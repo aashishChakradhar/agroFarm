@@ -31,7 +31,7 @@ To set up this project locally, follow these steps:
 1. **Clone the repository:**
     ```bash
     git clone https://github.com/aashishChakradhar/agroFarm.git
-    cd AgroFarm
+    cd agroFarm
     ```
 
 2. **Create a virtual environment and activate it:**
@@ -47,6 +47,7 @@ To set up this project locally, follow these steps:
 
 4. **Apply migrations:**
     ```bash
+    python manage.py makemigtations [app_name]
     python manage.py migrate
     ```
 
