@@ -30,6 +30,16 @@
     <div class="container">
         <div class="row">
             <div class="col-md m-5 px-5">
+                <div class = "message" >
+                    {% if messages %}
+                      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {% for message in messages %}
+                          <p><strong>Holy guacamole!</strong> {{message}}</p>
+                        {% endfor %}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                    {% endif %}
+                  </div>
                 {% block body %}
                 
                 {% endblock body %}
