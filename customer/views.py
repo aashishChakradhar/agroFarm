@@ -3,23 +3,31 @@ from django.views import View
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
+
+from django.core.validators import EmailValidator
+from django.core.exceptions import ValidationError
+from django.http import HttpResponseBadRequest
+
 from django.contrib import messages
-from agroFarm.models import *
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+
+from .models import *
 
 # from django.template import loader
 # from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 # from django.contrib.auth.decorators import login_required
 # from django.urls import reverse_lazy
 
+app_name = 'customer'
+
 class Index(View):
     def get(self, request):
         context = {
             "page_name":"Home"
         }
-        return render(request,'index.html',context)
-      
+        return render(request,f'{app_name}/index.html',context)
+
 class Login_view(View):
     def get(self,request):
         alert_title = request.session.get('alert_title',False)
@@ -31,7 +39,7 @@ class Login_view(View):
             'alert_detail': alert_detail,
             'page_name': 'Login'
         }
-        return render(request,"login.html",context)
+        return render(request,f"{app_name}/login.html",context)
     
     def post(self,request):
         username = request.POST.get("username")
@@ -39,7 +47,7 @@ class Login_view(View):
         user = authenticate(username = username, password = password)
         if user is not None:# checks if the user is logged in or not?
             login(request,user) #logins the user
-            return redirect ('/dashboard')
+            return redirect ('/')
         else:
             request.session['alert_title'] = "Invalid Login Attempt"
             request.session['alert_detail'] = "Please enter valid login credential."
@@ -63,41 +71,57 @@ class Signup_View (View):
             'alert_detail':alert_detail,
             'page_name': 'Signup'
         }
-        return render(request,"signup.html",context)
+        return render(request,f"{app_name}/signup.html",context)
         
     def post(self,request):
-        if request.method == 'POST':
-            firstName = request.POST.get('firstName')
-            lastName = request.POST.get('lastName')
-            username = request.POST.get('username')
-            email = request.POST.get('email') #validation required
-            password = request.POST.get('password')
-            status = request.POST.get('status')
+        firstName = request.POST.get('firstName')
+        lastName = request.POST.get('lastName')
+        username = request.POST.get('username')
+        email = request.POST.get('email') #validation required
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm-password')
+        address = request.POST.get('address')
+        mobile = request.POST.get('mobile')
+        status = request.POST.get('status')
 
-            #determine type of user
-            if status == 'admin':
-                is_superuser = True 
-                is_staff = True
-            elif status == 'seller':
-                is_superuser == False
-                is_staff = True
-            elif status =='customer':
-                is_staff = False
-                is_superuser = False
+        email_validator = EmailValidator()
+        try:
+            email_validator(email)
+        except ValidationError:
+            request.session['alert_title'] = "Invalid Email"
+            request.session['alert_detail'] = "Please enter valid email."
+            return redirect(request.path)
 
-                
-            user = User.objects.create_user(username , email, password,is_superuser=is_superuser,is_staff = is_staff)
-            user.save()
+        #determine type of user
+        if status == 'admin':
+            is_superuser = True 
+            is_staff = True
+        elif status == 'merchant':
+            is_superuser == False
+            is_staff = True
+        elif status =='customer':
+            is_staff = False
+            is_superuser = False
 
-            #additional user details
-            user.first_name=firstName
-            user.last_name=lastName
-            user.save()
-            user = authenticate(username = username, password = password)
-            if user is not None:# checks if the user is logged in or not?
-                login(request,user) #logins the user
-            return redirect ('/')          
+        try:
+            user = User.objects.create_user(username=username, email=email, password=password)
+        except Exception:
+            request.session['alert_title'] = "Invalid username"
+            request.session['alert_detail'] = "Please enter different username"
+            return redirect(request.path)
+        user.is_superuser = is_superuser
+        user.is_staff = is_staff
+        user.first_name = firstName
+        user.last_name = lastName
+        user.save()
 
+        ExtraDetails.objects.create(user=user, mobile=mobile, address=address)
+
+        user = authenticate(username = username, password = password)
+        if user is not None:# checks if the user is logged in or not?
+            login(request,user) #logins the user
+        return redirect ('/')          
+"""     
 class BillingAddress_View(View):
     @method_decorator(login_required)
     def get(self,request):
@@ -119,7 +143,7 @@ class BillingAddress_View(View):
             'district':district,
 
         }
-        return render(request,"billing-address.html",context)
+        return render(request,f"{app_name}/billing-address.html",context)
     
     @method_decorator(login_required)
     def post(self,request):
@@ -165,10 +189,10 @@ class Dashboard_view(View):
                     'user' : current_user,
                     'page_name': 'Dashboard'
                 }
-                return render(request, "dashboard.html" ,context)
+                return render(request, f"{app_name}/dashboard.html" ,context)
             except Exception as e:
                 messages.error(request, str(e))
-                return render(request,"dashboard.html")
+                return render(request,f"{app_name}/dashboard.html")
         
         messages.error(request, 'Access Denied')
         return redirect('/')
@@ -185,10 +209,10 @@ class Account_dash_view(View):
                     'user' : current_user,
                     'page_name': 'My Account'
                 }
-                return render(request, "account-dashboard.html" ,context)
+                return render(request, f"{app_name}/account-dashboard.html" ,context)
             except Exception as e:
                 messages.error(request, str(e))
-                return render(request,"account-dashboard.html")
+                return render(request,f"{app_name}/account-dashboard.html")
             
         messages.error(request, 'Access Denied')
         return redirect('/')
@@ -209,10 +233,10 @@ class Product_dash_view(View):
                     'products' : products,
                     'page_name': 'Products'
                 }
-                return render(request, "product-dashboard.html" ,context)
+                return render(request, f"{app_name}/product-dashboard.html" ,context)
             except Exception as e:
                 messages.error(request, str(e))
-                return render(request,"product-dashboard.html")
+                return render(request,f"{app_name}/product-dashboard.html")
             
         messages.error(request, 'Access Denied')
         return redirect('/')
@@ -228,10 +252,10 @@ class Add_product_view(View):
                     'categories': Producttype.objects.all() ,
                     'page_name': 'Add Products'
                 }
-                return render(request, "add-product-dashboard.html" ,context)
+                return render(request, f"{app_name}/add-product-dashboard.html" ,context)
             except Exception as e:
                 messages.error(request, str(e))
-                return render(request,"add-product-dashboard.html")
+                return render(request,f"{app_name}/add-product-dashboard.html")
             
         messages.error(request, 'Access Denied')
         return redirect('/')
@@ -253,11 +277,11 @@ class Add_product_view(View):
                         types.append(product_type)
                     except Producttype.DoesNotExist:
                         messages.error(request, f"Product type '{x}' does not exist.")
-                        return render(request, 'add-product-dashboard.html')
+                        return render(request, f'{app_name}/add-product-dashboard.html')
 
                 if not producttitle or not price:
                     messages.error(request, "All fields are required.")
-                    return render(request, 'add-product-dashboard.html')
+                    return render(request, f'{app_name}/add-product-dashboard.html')
                 
                 product = Product(
                     productName=producttitle,
@@ -276,7 +300,7 @@ class Add_product_view(View):
             except Exception as e:
                 messages.error(request, str(e))
       
-        return render(request, 'add-product-dashboard.html')   
+        return render(request, f'{app_name}/add-product-dashboard.html')   
     
 class Edit_product_view(View):
     def get(self, request, id):
@@ -290,10 +314,10 @@ class Edit_product_view(View):
                     'categories': Producttype.objects.all() ,
                     'page_name': 'Edit Products'
                 }
-                return render(request, "edit-product-dashboard.html" ,context)
+                return render(request, f"{app_name}/edit-product-dashboard.html" ,context)
             except Exception as e:
                 messages.error(request, str(e))
-                return render(request,"edit-product-dashboard.html")
+                return render(request,f"{app_name}/edit-product-dashboard.html")
             
         messages.error(request, 'Access Denied')
         return redirect('/')
@@ -316,11 +340,11 @@ class Edit_product_view(View):
                         types.append(product_type)
                     except Producttype.DoesNotExist:
                         messages.error(request, f"Product type '{x}' does not exist.")
-                        return render(request, 'edit-product-dashboard.html')
+                        return render(request, f'{app_name}/edit-product-dashboard.html')
 
                 if not producttitle or not price:
                     messages.error(request, "All fields are required.")
-                    return render(request, 'edit-product-dashboard.html')
+                    return render(request, f'{app_name}/edit-product-dashboard.html')
                 
                 product.productName=producttitle
                 product.featuredimage=featuredimage
@@ -337,4 +361,4 @@ class Edit_product_view(View):
             except Exception as e:
                 messages.error(request, str(e))
       
-        return render(request, 'edit-product-dashboard.html')   
+        return render(request, f'{app_name}/edit-product-dashboard.html')   """

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from phonenumber_field.modelfields import PhoneNumberField
 
 # from datetime import date
 
@@ -10,7 +11,14 @@ class BaseModel(models.Model):
     modified = models.DateField(auto_now= True)
     class Meta:
         abstract = True
-    
+
+class ExtraDetails(BaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    mobile = PhoneNumberField()
+    address = models.CharField(max_length=225, default='')
+    def __str__(self):
+        return self.user.username
+
 class Producttype(BaseModel):
     name = models.CharField(max_length=30, default='')
     description = models.CharField(max_length=100, default='')
