@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login | agroFarm-merchant</title>
+    <title>login</title>
     {% load static %}
       
       {% load bootstrap5 %}
@@ -40,10 +40,10 @@
       </div>
     
       <div class="form_title">
-        Welcome Back Merchant
+        Welcome Back
       </div>
 
-      <form action="{% url 'merchant:login' %}" method="POST">
+      <form action="{% url 'customer:login' %}" method="POST">
         {% csrf_token %}
         <div class="mb-3">
           <label for="username">Username</label>
@@ -71,7 +71,7 @@
             Login
           </button>
         </div>
-        <a href = {%url 'merchant:signup'%}>Don't have an account</a>
+        <a href = {%url 'customer:signup'%}>Don't have an account</a>
       </form>
     </div>
 </div>
