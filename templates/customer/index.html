@@ -1,5 +1,6 @@
-{% include 'theme-temp/customer-header.html' %}
-
+{% extends "customer/temp/base.html" %}
+{% block body %}
+  
 <section>
   <div class="container">
     <div id="carouselExampleFade" class="carousel slide carousel-fade">
@@ -24,4 +25,5 @@
       </button>    
     </div>
 </section>
-{% include "theme-temp/customer-footer.html" %}
+{% endblock body %}
+

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -9,24 +9,44 @@
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-
-    <link rel="stylesheet" href="css/all.css">
+    
+    <link rel="stylesheet" href="{% static 'css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/form.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    
+    <link rel="stylesheet" href="static/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
     <title>
-        agroFarm | 
         {% block title %}
             {{page_name}}
         {% endblock title %}
+        | agroFarm-merchant
     </title>
 
     {% block head %}{% endblock head %}
+  </head>
+  <body>
+    {% include "merchant/temp/header_merchant.html" %}
+    {% comment %} {% include "merchant/temp/merchant_nav.html" %} {% endcomment %}
 
-</head>
-<body>
-    {% include "merchant/temp/header.html" %}
-    {% block body %}
+    <section class="dashboard-page">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-2">
+              <div class="dashboard-nav-wrapper container">
+                {% include "merchant/temp/nav_merchant.html" %}
+              </div>
+            </div>
+            <div class="col-md-10">
+                {% block body %}
     
-    {% endblock body %}
-    {% include "merchant/temp/header.html" %}
-    
-</body>
+                {% endblock body %}
+            </div>
+          </div>
+        </div>
+      </section>
+    {% include "merchant/temp/footer_merchant.html" %}
+      
+  </body>
 </html>
