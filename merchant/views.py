@@ -148,7 +148,7 @@ class AddProductView(BaseView):
     def post(self,request):
         try:
             producttitle = request.POST.get('producttitle')
-            featuredimage = request.FILES.get('featuredimage')
+            featuredimage = request.POST.get('productimg')
             price = request.POST.get('price')
             cat = request.POST.getlist('producttype')
             description = request.POST.get('editorContent')
