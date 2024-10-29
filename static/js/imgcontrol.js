@@ -40,7 +40,8 @@ if (profileImgInput) {
 productImgInput.onchange = evt => {
     const [file] = productImgInput.files
     if (file) {
-        fimg.src = URL.createObjectURL(file)
+        handleFileInputChange(evt, 30, 'fimg');
+        // fimg.src = URL.createObjectURL(file)
     }
 }
 
