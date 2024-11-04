@@ -21,7 +21,12 @@
         <label class="profile-img" for="productimg">
           Product Featured image 
           <input type="file" style="visibility: hidden;" name="productimg" id="productimg" accept="image/*">
+          {% if product.featuredimage %}
+          <img src="{{product.featuredimage}}" id="fimg" alt="img">
+          {% else %}
           <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg" alt="img">
+          {% endif %}
+
         </label>
         <button id="removeimg">Remove Image</button>
       </div>
