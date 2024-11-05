@@ -14,6 +14,7 @@ class BaseModel(models.Model):
 
 class Producttype(BaseModel):
     name = models.CharField(max_length=30, default='')
+    featuredimage = models.CharField(max_length=1024, default='') 
     description = models.CharField(max_length=100, default='')
     def __str__(self):
         return self.name
