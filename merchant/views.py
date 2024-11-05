@@ -148,7 +148,7 @@ class AddProductView(BaseView):
     def post(self,request):
         try:
             producttitle = request.POST.get('producttitle')
-            featuredimage = request.POST.get('profileimgblob')
+            featuredimage = request.POST.get('productimgblob')
             price = request.POST.get('price')
             cat = request.POST.getlist('producttype')
             description = request.POST.get('editorContent')
@@ -286,3 +286,40 @@ class EditProductView(BaseView):
         
         except Exception as e:
             messages.error(request, str(e))  
+
+class AddProductTypeView(BaseView):
+    def get(self, request):
+        try:
+            context = {
+                'categories': Producttype.objects.all() ,
+                'page_name': 'add-producttype'
+            }
+            return render(request, f"{app_name}/add_producttype.html" ,context)
+        except Exception as e:
+            messages.error(request, str(e))
+            return render(request,f"{app_name}/add_producttype.html")
+
+    def post(self,request):
+        try:
+            producttitle = request.POST.get('producttypetitle')
+            featuredimage = request.POST.get('producttypetitleimgblob')
+            description = request.POST.get('editorContent')
+            
+            if not producttitle:
+                messages.error(request, "All fields are required.")
+                return render(request, f'{app_name}/add_producttype.html')
+            
+            producttype = Producttype(
+                name=producttitle,
+                featuredimage=featuredimage,
+                description = description
+            )
+            producttype.save()
+
+            messages.success(request, "The Category Has Been Successfully Added!")
+            return redirect(request.path) 
+        
+        except Exception as e:
+            messages.error(request, str(e))
+      
+        return render(request, f'{app_name}/add_producttype.html') 
