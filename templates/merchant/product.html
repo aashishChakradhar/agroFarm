@@ -7,7 +7,7 @@
 {% block body %}
 <div class="title">
   <h1>Products</h1>
-  <a href="/dashboard/products/add-new">Add Product</a>
+  <a href="/merchant/products/add-new">Add Product</a>
 </div>
 <div class="dashboard-products-wrapper">
   <table>
@@ -36,8 +36,8 @@
           {% for x in products %}
           <tr>
               <td>{{forloop.counter}}</td>
-              <td>{{x.featuredimage}}</td>
-              <td><a href="/dashboard/products/edit-product/{{x.uid}}">{{ x.productName }}</a></td>
+              <td><img src="{{x.featuredimage}}"></td>
+              <td><a href="/merchant/products/edit-product/{{x.uid}}">{{ x.productName }}</a></td>
               <td>{{ x.productPrice }}</td>
               <td>
                 {% for type in x.productType.all %}

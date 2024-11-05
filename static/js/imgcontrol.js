@@ -1,4 +1,4 @@
-function handleFileInputChange(evt, maxSizeKB, imgElementId) {
+function handleFileInputChange(evt, maxSizeKB, imgElementId, imgfieldelement ='') {
     var input = evt.target;
     var file = input.files[0];
     
@@ -17,6 +17,9 @@ function handleFileInputChange(evt, maxSizeKB, imgElementId) {
             
             reader.onload = function(e) {
                 input.dataset.blob = e.target.result;
+                if(imgfieldelement != ''){
+                    imgfieldelement.value = e.target.result;
+                }
             };
             
             reader.readAsDataURL(file);
@@ -28,6 +31,7 @@ const profileImgInput = document.getElementById('profileimg');
 const productImgInput = document.getElementById('productimg');
 const removeimg = document.getElementById('removeimg');
 const fimg = document.getElementById('fimg')
+const profileimgblob = document.getElementById('profileimgblob');
 
 //profile image show on page on change using blob
 if (profileImgInput) {
@@ -37,10 +41,12 @@ if (profileImgInput) {
 }
 
 //product image show on page
-productImgInput.onchange = evt => {
-    const [file] = productImgInput.files
-    if (file) {
-        fimg.src = URL.createObjectURL(file)
+if(productImgInput){
+    productImgInput.onchange = evt => {
+        const [file] = productImgInput.files
+        if (file) {
+            handleFileInputChange(evt, 30, 'fimg', profileimgblob);
+        }
     }
 }
 
