@@ -25,6 +25,14 @@ class Product(BaseModel):
     featuredimage = models.ImageField(upload_to='uploads/', default=0) 
     productDescription = models.CharField(max_length=100,default="unknown")
     productPrice = models.DecimalField(max_digits=5, decimal_places=2,default="unknown")
-
+    is_availble = models.BooleanField(default=False)
     def __str__(self):
         return self.productName
+    
+class Review(BaseModel):
+    productId = models.ForeignKey(Product,on_delete=models.CASCADE)
+    rating = models.IntegerField(default=1)
+    comment = models.TextField()
+
+    def __str__(self):
+        return self.rating
