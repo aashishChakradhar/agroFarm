@@ -118,7 +118,7 @@ class Signup_View (View):
         user.last_name = lastName
         user.save()
 
-        ExtraDetails.objects.create(user=user, mobile=mobile, address=address)
+        # ExtraDetails.objects.create(user=user, mobile=mobile, address=address)
 
         user = authenticate(username = username, password = password)
         if user is not None:# checks if the user is logged in or not?
