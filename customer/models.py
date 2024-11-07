@@ -1,10 +1,12 @@
-from django.db import models
-from django.contrib.auth.models import User
-from phonenumber_field.modelfields import PhoneNumberField
-from merchant.models import *
+# from django.db import models
+# from django.contrib.auth.models import User
+# from phonenumber_field.modelfields import PhoneNumberField
 # from datetime import date
 
+from merchant.models import *
+
 # Create your models here.
+'''
 class BaseModel(models.Model):
     uid = models.AutoField(primary_key=True, editable=False, unique=True)
     created = models.DateField(auto_now_add = True)
@@ -48,4 +50,4 @@ class BillingAddress(BaseModel):
     def __str__(self):
         return self.postalCode
 
-    
+    '''

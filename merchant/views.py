@@ -9,7 +9,7 @@ from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
 
 from .models import *
-from customer.models import ExtraDetails
+# from customer.models import ExtraDetails
 # from static.pythonfiles.calculations import *
 
 from django.http import JsonResponse
@@ -116,7 +116,7 @@ class SignupView (View):
         user.last_name = lastName
         user.save()
 
-        ExtraDetails.objects.create(user=user, mobile=mobile, address=address)
+        # ExtraDetails.objects.create(user=user, mobile=mobile, address=address)
 
         user = authenticate(username = username, password = password)
         if user is not None:# checks if the user is logged in or not?
