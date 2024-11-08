@@ -77,7 +77,6 @@ class SignupView (View):
         email = request.POST.get('email') #validation required
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm-password')
-        address = request.POST.get('address')
         mobile = request.POST.get('mobile')
         status = request.POST.get('status')
 
@@ -98,7 +97,7 @@ class SignupView (View):
             is_superuser = True 
             is_staff = True
         elif status == 'merchant':
-            is_superuser == False
+            is_superuser = False
             is_staff = True
         elif status =='customer':
             is_staff = False
@@ -116,7 +115,7 @@ class SignupView (View):
         user.last_name = lastName
         user.save()
 
-        # ExtraDetails.objects.create(user=user, mobile=mobile, address=address)
+        ExtraUserDetails.objects.create(userID=user, mobile=mobile)
 
         user = authenticate(username = username, password = password)
         if user is not None:# checks if the user is logged in or not?
@@ -137,7 +136,7 @@ class AddProductView(BaseView):
     def get(self, request):
         try:
             context = {
-                'categories': Producttype.objects.all() ,
+                'categories': Category.objects.all() ,
                 'page_name': 'add-product'
             }
             return render(request, f"{app_name}/add_product.html" ,context)
@@ -157,9 +156,9 @@ class AddProductView(BaseView):
             types = []
             for x in cat:
                 try:
-                    product_type = Producttype.objects.get(name=x)
+                    product_type = Category.objects.get(name=x)
                     types.append(product_type)
-                except Producttype.DoesNotExist:
+                except Category.DoesNotExist:
                     messages.error(request, f"Product type '{x}' does not exist.")
                     return render(request, f'{app_name}/add_product.html')
 
@@ -241,7 +240,7 @@ class EditProductView(BaseView):
         try:
             context = {
                 'product' : get_object_or_404(Product, uid=id),
-                'categories': Producttype.objects.all() ,
+                'categories': Category.objects.all() ,
                 'page_name': 'edit-product'
             }
             return render(request, f"{app_name}/edit_product.html" ,context)
@@ -262,9 +261,9 @@ class EditProductView(BaseView):
             types = []
             for x in cat:
                 try:
-                    product_type = Producttype.objects.get(name=x)
+                    product_type = Category.objects.get(name=x)
                     types.append(product_type)
-                except Producttype.DoesNotExist:
+                except Category.DoesNotExist:
                     messages.error(request, f"Product type '{x}' does not exist.")
                     return render(request, f'{app_name}/edit_product.html')
 
@@ -291,7 +290,7 @@ class AddProductTypeView(BaseView):
     def get(self, request):
         try:
             context = {
-                'categories': Producttype.objects.all() ,
+                'categories': Category.objects.all() ,
                 'page_name': 'add-producttype'
             }
             return render(request, f"{app_name}/add_producttype.html" ,context)
@@ -309,7 +308,7 @@ class AddProductTypeView(BaseView):
                 messages.error(request, "All fields are required.")
                 return render(request, f'{app_name}/add_producttype.html')
             
-            producttype = Producttype(
+            producttype = Category(
                 name=producttitle,
                 featuredimage=featuredimage,
                 description = description
