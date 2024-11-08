@@ -24,9 +24,15 @@ class Address(BaseModel):
 class ExtraUserDetails(BaseModel):
     userID = models.OneToOneField(User, on_delete=models.CASCADE)
     mobile = PhoneNumberField()
-    addressID = models.OneToOneField(Address,on_delete=models.CASCADE)
+    # addressID = models.OneToOneField(Address,on_delete=models.CASCADE, default=0)
     def __str__(self):
         return self.user.username
+
+class User_Address(BaseModel):
+    userID = models.ForeignKey(User, on_delete=models.CASCADE)
+    addressID = models.ForeignKey(Address, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.userID.first_name
 
 class Category(BaseModel):
     title = models.CharField(max_length=30, default='')
