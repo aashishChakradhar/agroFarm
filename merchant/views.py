@@ -231,7 +231,13 @@ class AccountView(BaseView):
     
 class OrderView(BaseView):
     def get(self,request):
+        orders = Order.objects.all().order_by('-created')
+        # if request.user.is_superuser:
+        #     orders = Order.objects.all().order_by('-created')
+        # else:
+        #     orders = Order.objects.filter(sellerId=request.user).order_by('-created')
         context = {
+            'order' : orders,
             'page_name':'order'
         }
         return render(request,f'{app_name}/order.html',context)
