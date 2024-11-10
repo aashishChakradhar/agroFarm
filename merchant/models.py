@@ -29,3 +29,10 @@ class Product(BaseModel):
 
     def __str__(self):
         return self.productName
+    
+class Order(BaseModel):
+    buyerId = models.ForeignKey(User, on_delete=models.CASCADE,default=00)
+    product = models.ManyToManyField(Product, default=0)
+
+    def __str__(self):
+        return self.uid
