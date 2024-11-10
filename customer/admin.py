@@ -1,13 +1,13 @@
 from django.contrib import admin
-from .models import *
+# from .models import *
 
 #  Register your models here.
 
-admin.site.register(ExtraDetails)
-admin.site.register(BillingAddress)
+# admin.site.register(ExtraDetails)
+# admin.site.register(BillingAddress)
 
-# for address
-admin.site.register(Country)
-admin.site.register(Province)
-admin.site.register(District)
+# # for address
+# admin.site.register(Country)
+# admin.site.register(Province)
+# admin.site.register(District)
 # admin.site.register(Municipality)

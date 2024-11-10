@@ -13,7 +13,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-from .models import *
+from customer.models import *
+from merchant.models import *
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.template import loader
@@ -79,7 +80,6 @@ class Signup_View (View):
         email = request.POST.get('email') #validation required
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm-password')
-        address = request.POST.get('address')
         mobile = request.POST.get('mobile')
         status = request.POST.get('status')
 
@@ -118,7 +118,7 @@ class Signup_View (View):
         user.last_name = lastName
         user.save()
 
-        ExtraDetails.objects.create(user=user, mobile=mobile, address=address)
+        ExtraUserDetails.objects.create(userID=user, mobile=mobile)
 
         user = authenticate(username = username, password = password)
         if user is not None:# checks if the user is logged in or not?
@@ -135,43 +135,47 @@ class Index(BaseView):
         }
         return render(request,f'{app_name}/index.html',context)
 
-class BillingAddress_View(BaseView):
-    def get(self,request):
-        country = Country.objects.all()
-        province = Province.objects.all()
-        district = District.objects.all()
-        context = {
-            'page_name': 'billing-address',
-            'country':country,
-            'province':province,
-            'district':district,
+# class BillingAddress_View(BaseView):
+#     def get(self,request):
+#         country = Country.objects.all()
+#         province = Province.objects.all()
+#         district = District.objects.all()
+#         context = {
+#             'page_name': 'billing-address',
+#             'country':country,
+#             'province':province,
+#             'district':district,
 
-        }
-        return render(request,f"{app_name}/billing-address.html",context)
+#         }
+#         return render(request,f"{app_name}/billing-address.html",context)
 
-    def post(self,request):
-        country_id = request.POST.get('country')
-        province_id = request.POST.get('province')
-        district_id = request.POST.get('district')
-        municipality = request.POST.get('municipality')
-        street = request.POST.get('street')
-        postalCode = request.POST.get('postalCode')
-        landmark = request.POST.get('landmark')
+#     def post(self,request):
+#         country_id = request.POST.get('country')
+#         province_id = request.POST.get('province')
+#         district_id = request.POST.get('district')
+#         municipality = request.POST.get('municipality')
+#         street = request.POST.get('street')
+#         postalCode = request.POST.get('postalCode')
+#         landmark = request.POST.get('landmark')
 
-        # Fetch the related objects from the database
-        country = Country.objects.get(uid=country_id)
-        province = Province.objects.get(uid=province_id)
-        district = District.objects.get(uid=district_id)
+#         # Fetch the related objects from the database
+#         country = Country.objects.get(uid=country_id)
+#         province = Province.objects.get(uid=province_id)
+#         district = District.objects.get(uid=district_id)
 
-        billingAddress = BillingAddress.objects.create(
-            user = request.user,
-            country=country,
-            province=province,
-            district=district,
-            municipality=municipality,
-            street=street,
-            postalCode=postalCode,
-            landmark=landmark
-        )
-        billingAddress.save()
-        return redirect ('/') 
+#         billingAddress = BillingAddress.objects.create(
+#             user = request.user,
+#             country=country,
+#             province=province,
+#             district=district,
+#             municipality=municipality,
+#             street=street,
+#             postalCode=postalCode,
+#             landmark=landmark
+#         )
+#         billingAddress.save()
+#         return redirect ('/') 
+
+
+# class Add_Address(BaseView):
+#     def get
