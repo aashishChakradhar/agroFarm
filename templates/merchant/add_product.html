@@ -33,7 +33,7 @@
       <label>Categories</label>
       {% for x in categories %}
         <div>
-          <input type="checkbox" id="type{{forloop.counter}}" name="producttype" value="{{x}}" checked />
+          <input type="checkbox" id="type{{forloop.counter}}" name="producttype" value="{{x}}" />
           <label for="type{{forloop.counter}}">{{x}}</label>
         </div>
       {% endfor %}
