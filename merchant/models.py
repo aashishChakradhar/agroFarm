@@ -35,10 +35,12 @@ class User_Address(BaseModel):
         return self.userID.first_name
 
 class Category(BaseModel):
-    title = models.CharField(max_length=30, default='')
+    merchantID = models.ForeignKey(User, on_delete=models.CASCADE,default=00)
+    name = models.CharField(max_length=30, default='')
+    featuredimage = models.CharField(max_length=1024, default='') 
     description = models.CharField(max_length=100, default='')
     def __str__(self):
-        return self.title
+        return self.name
 
 class Tag(BaseModel):
     title = models.CharField(max_length=30, default='')
@@ -67,13 +69,13 @@ class Review(BaseModel):
     userID = models.ForeignKey(User,on_delete=models.CASCADE)
     productId = models.ForeignKey(Product,on_delete=models.CASCADE)
     rating = models.IntegerField(default=1)
-    comment = models.TextField()
+    comment = models.TextField(default="")
     def __str__(self):
         return self.rating
 
 class Store(BaseModel):
     userID = models.ForeignKey(User, on_delete=models.CASCADE)
-    addressID = models.ForeignKey(Address, on_delete=models.CASCADE)
+    addressID = models.ForeignKey(Address, on_delete=models.CASCADE, default='')
     name = models.CharField(max_length=50, default='Unknown')
     pan = models.CharField(max_length=15, default='Unknown')
     def __str__(self):
@@ -82,7 +84,7 @@ class Store(BaseModel):
 class Order(BaseModel):
     userID = models.ForeignKey(User, on_delete=models.CASCADE)
     productID = models.ForeignKey(Product, on_delete=models.CASCADE)
-    addressID = models.ForeignKey(Address, on_delete=models.CASCADE)
+    addressID = models.ForeignKey(Address, on_delete=models.CASCADE, default='')
     quantity = models.DecimalField(max_digits=4, decimal_places=0, default='Unknown')
     rate = models.DecimalField(max_digits=10, decimal_places=2, default='Unknown')
     amount = models.DecimalField(max_digits=10, decimal_places=2, default='Unknown')
