@@ -17,6 +17,8 @@ class Address(BaseModel):
     country = models.CharField(max_length=25, default='Unknown')
     state  = models.CharField(max_length=25, default='Unknown')
     district = models.CharField(max_length=25, default='Unknown')
+    municipality = models.CharField(max_length=30, default='Unknown')
+    zip_code = models.CharField(max_length=25, default='Unknown')
     street = models.CharField(max_length=25, default='Unknown')
     def __str__(self):
         return self.street

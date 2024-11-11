@@ -22,6 +22,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.contrib.auth.decorators import login_required
 # from django.urls import reverse_lazy
 
+import myutility
+
 app_name = 'customer'
 
 class BaseView(LoginRequiredMixin, View): #to check login or not
@@ -135,47 +137,48 @@ class Index(BaseView):
         }
         return render(request,f'{app_name}/index.html',context)
 
-# class BillingAddress_View(BaseView):
-#     def get(self,request):
-#         country = Country.objects.all()
-#         province = Province.objects.all()
-#         district = District.objects.all()
-#         context = {
-#             'page_name': 'billing-address',
-#             'country':country,
-#             'province':province,
-#             'district':district,
+class AddAddress_View(BaseView):
+    def get(self,request):
+        address_data = myutility.address()
+        countrys = address_data['country']
+        provinces = address_data['province']
+        districts = address_data['district']
+        context = {
+            'page_name': 'billing-address',
+            'countrys':countrys,
+            'provinces':provinces,
+            'districts':districts,
 
-#         }
-#         return render(request,f"{app_name}/billing-address.html",context)
+        }
+        return render(request,f"{app_name}/add-address.html",context)
 
-#     def post(self,request):
-#         country_id = request.POST.get('country')
-#         province_id = request.POST.get('province')
-#         district_id = request.POST.get('district')
-#         municipality = request.POST.get('municipality')
-#         street = request.POST.get('street')
-#         postalCode = request.POST.get('postalCode')
-#         landmark = request.POST.get('landmark')
+    def post(self,request):
+        country = request.POST.get('country')
+        province = request.POST.get('province')
+        district = request.POST.get('district')
+        municipality = request.POST.get('municipality')
+        street = request.POST.get('street')
+        postalCode = request.POST.get('postalCode')
+        landmark = request.POST.get('landmark')
 
-#         # Fetch the related objects from the database
-#         country = Country.objects.get(uid=country_id)
-#         province = Province.objects.get(uid=province_id)
-#         district = District.objects.get(uid=district_id)
+        # Fetch the related objects from the database
 
-#         billingAddress = BillingAddress.objects.create(
-#             user = request.user,
-#             country=country,
-#             province=province,
-#             district=district,
-#             municipality=municipality,
-#             street=street,
-#             postalCode=postalCode,
-#             landmark=landmark
-#         )
-#         billingAddress.save()
-#         return redirect ('/') 
+        address = Address.objects.create(
+            country=country,
+            state=province,
+            district=district,
+            # municipality=municipality,
+            street=street,
+            # postalCode=postalCode,
+            # landmark=landmark
+        )
+        address.save()
+        return redirect ('/') 
 
 
 # class Add_Address(BaseView):
-#     def get
+#     def get(self,request):
+#         context = {
+#             'page_name' : 'add-address',
+#         }
+#         return render(request, f"{app_name}/billing-address.html", context)
