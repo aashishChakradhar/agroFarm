@@ -290,7 +290,24 @@ class EditProductView(BaseView):
             return redirect('/dashboard/products/edit-product/' + str(id))  # Redirect to a blog list or success page after editing
         
         except Exception as e:
-            messages.error(request, str(e))  
+            messages.error(request, str(e)) 
+
+class ProductTypeView(BaseView):
+    def get(self, request):
+        if request.user.is_superuser:
+            category = Category.objects.all().order_by('-created')
+        else:
+            category = Category.objects.filter(merchantID=request.user).order_by('-created')
+        
+        try:
+            context = {
+                'categories' : category,
+                'page_name': 'productcategory'
+            }
+            return render(request, f"{app_name}/producttype.html" ,context)
+        except Exception as e:
+            messages.error(request, str(e))
+            return render(request,f"{app_name}/producttype.html")  
 
 class AddProductTypeView(BaseView):
     def get(self, request):
@@ -309,12 +326,14 @@ class AddProductTypeView(BaseView):
             producttitle = request.POST.get('producttypetitle')
             featuredimage = request.POST.get('producttypetitleimgblob')
             description = request.POST.get('editorContent')
+            merchantID = request.user
             
             if not producttitle:
                 messages.error(request, "All fields are required.")
                 return render(request, f'{app_name}/add_producttype.html')
             
             producttype = Category(
+                merchantID=merchantID,
                 name=producttitle,
                 featuredimage=featuredimage,
                 description = description
