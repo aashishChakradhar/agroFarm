@@ -17,14 +17,14 @@
     {% csrf_token %}
     <input type="text" name="producttypetitle" id="producttypetitle" placeholder="Name">
     <div class="form-field user-profile-image">
-      <label class="profile-img" for="producttypetitleimg">
+      <label class="profile-img" for="producttypeimg">
         Featured Image
-        <input type="file" style="visibility: hidden;" name="producttypetitleimg" id="producttypetitleimg" accept="image/*">
+        <input type="file" style="visibility: hidden;" name="producttypeimg" id="producttypeimg" accept="image/*">
         <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg" alt="img">
       </label>
       <button id="removeimg">Remove Image</button>
     </div>
-    <textarea name="producttypetitleimgblob" id="producttypetitleimgblob" class="d-none"></textarea>
+    <textarea name="producttypeimgblob" id="producttypeimgblob" class="d-none"></textarea>
     <div id="editor"></div>
     <input type="hidden" name="editorContent" id="editorContent">
     <div>
