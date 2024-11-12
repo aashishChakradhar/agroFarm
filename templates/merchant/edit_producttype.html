@@ -1,9 +1,4 @@
 {% extends "merchant/temp/base.html" %}
-
-{% block title %}
-  {{page_name}}
-{% endblock title %}
-
 {% block body %}
 <div class="title">
   <h1>Product Category</h1>
@@ -13,29 +8,24 @@
   {{message}}
 {% endfor %}
 <div class="form-wrap">
-  <form method="post" id="addproducttypeform">
+  <form method="post" id="editproducttypeform">
     {% csrf_token %}
-    <input type="text" name="producttypetitle" id="producttypetitle" placeholder="Name">
+    <input type="text" name="producttypetitle" id="producttypetitle" placeholder="Name" value="{{ category.name }}">
     <div class="form-field user-profile-image">
       <label class="profile-img" for="producttypeimg">
         Featured Image
         <input type="file" style="visibility: hidden;" name="producttypeimg" id="producttypeimg" accept="image/*">
-        <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg" alt="img">
+        {% if product.featuredimage %}
+          <img src="{{ category.featuredimage}}" id="fimg" alt="img">
+        {% else %}
+          <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg" alt="img">
+        {% endif %}
       </label>
       <button id="removeimg">Remove Image</button>
     </div>
-    <textarea name="producttypeimgblob" id="producttypeimgblob" class="d-none"></textarea>
+    <textarea name="producttypeimgblob" id="producttypeimgblob" class="d-none" value="{{ category.description }}"></textarea>
     <div id="editor"></div>
     <input type="hidden" name="editorContent" id="editorContent">
-    <div>
-      <label>Parent Category</label>
-      <select name="parentproducttype">
-        <option value="" >Select parent</option>
-        {% for x in categories %}
-        <option value="{{x}}">{{x}}</option>
-        {% endfor %}
-      </select>
-    </div>
     <input type="submit" value="Publish">
   </form>
 </div>

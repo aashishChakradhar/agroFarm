@@ -37,10 +37,10 @@
           <tr>
               <td>{{forloop.counter}}</td>
               <td><img src="{{x.featuredimage}}"></td>
-              <td><a href="/merchant/products/edit-product/{{x.uid}}">{{ x.productName }}</a></td>
-              <td>{{ x.productPrice }}</td>
+              <td><a href="/merchant/products/edit-product/{{x.uid}}">{{ x.name }}</a></td>
+              <td>{{ x.rate }}</td>
               <td>
-                {% for type in x.productType.all %}
+                {% for type in x.categoryID.all %}
                   {{ type.name }}{% if not forloop.last %}, {% endif %}
                 {% endfor %}
               </td>
