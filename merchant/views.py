@@ -167,15 +167,15 @@ class AddProductView(BaseView):
                 return render(request, f'{app_name}/add_product.html')
             
             product = Product(
-                productName=producttitle,
-                sellerId=sellerid,
+                name=producttitle,
+                merchantID=sellerid,
                 featuredimage=featuredimage,
-                productPrice = price,
-                productDescription = description
+                rate = price,
+                description = description
             )
             product.save()
 
-            product.productType.set(types)
+            product.categoryID.set(types)
 
             messages.success(request, "Your Product Has Been Successfully Added!")
             return redirect(request.path) 
@@ -259,7 +259,7 @@ class EditProductView(BaseView):
             product = get_object_or_404(Product, uid=id)
 
             producttitle = request.POST.get('producttitle')
-            featuredimage = request.FILES.get('featuredimage')
+            featuredimage = request.POST.get('productimgblob')
             price = request.POST.get('price')
             cat = request.POST.getlist('producttype')
             description = request.POST.get('editorContent')
@@ -323,18 +323,18 @@ class AddProductTypeView(BaseView):
 
     def post(self,request):
         try:
-            producttitle = request.POST.get('producttypetitle')
-            featuredimage = request.POST.get('producttypetitleimgblob')
+            categorytitle = request.POST.get('producttypetitle')
+            featuredimage = request.POST.get('producttypeimgblob')
             description = request.POST.get('editorContent')
             merchantID = request.user
             
-            if not producttitle:
+            if not categorytitle:
                 messages.error(request, "All fields are required.")
                 return render(request, f'{app_name}/add_producttype.html')
             
             producttype = Category(
                 merchantID=merchantID,
-                name=producttitle,
+                name=categorytitle,
                 featuredimage=featuredimage,
                 description = description
             )
@@ -347,3 +347,38 @@ class AddProductTypeView(BaseView):
             messages.error(request, str(e))
       
         return render(request, f'{app_name}/add_producttype.html') 
+    
+class EditProductTypeView(BaseView):
+    def get(self, request, id):
+        try:
+            context = {
+                'category' : get_object_or_404(Category, uid=id),
+                'page_name': 'edit-product'
+            }
+            return render(request, f"{app_name}/edit_producttype.html" ,context)
+        except Exception as e:
+            messages.error(request, str(e))
+            return render(request,f"{app_name}/edit_producttype.html")
+
+    def post(self,request, id):
+        try:
+            category = get_object_or_404(Category, uid=id)
+
+            producttitle = request.POST.get('producttypetitle')
+            featuredimage = request.POST.get('producttypeimgblob')
+            description = request.POST.get('editorContent')
+
+            types = []
+            
+            category.productName=producttitle
+            category.featuredimage=featuredimage
+            category.productDescription = description
+
+            category.save()
+
+            messages.success(request, "Your Blog Has Been Successfully edited!")
+            return redirect('/dashboard/products/edit-producttype/' + str(id))  # Redirect to a blog list or success page after editing
+        
+        except Exception as e:
+            messages.error(request, str(e)) 
+            return render(request,f"{app_name}/edit_product.html")
