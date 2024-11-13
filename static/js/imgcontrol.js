@@ -34,11 +34,12 @@ const removeimg = document.getElementById('removeimg');
 const fimg = document.getElementById('fimg')
 const profileimgblob = document.getElementById('profileimgblob');
 const productimgblob = document.getElementById('productimgblob');
+const producttypeimgblob = document.getElementById('producttypeimgblob');
 
 //profile image show on page on change using blob
 if (profileImgInput) {
     profileImgInput.onchange = function(evt) {
-        handleFileInputChange(evt, 30, 'fimg', 'productimgblob');
+        handleFileInputChange(evt, 30, 'fimg', profileimgblob);
     };
 }
 
@@ -47,7 +48,16 @@ if(productImgInput){
     productImgInput.onchange = evt => {
         const [file] = productImgInput.files
         if (file) {
-            handleFileInputChange(evt, 30, 'fimg', profileimgblob);
+            handleFileInputChange(evt, 30, 'fimg', productimgblob);
+        }
+    }
+}
+
+if(producttypeImgInput){
+    producttypeImgInput.onchange = evt => {
+        const [file] = producttypeImgInput.files
+        if (file) {
+            handleFileInputChange(evt, 30, 'fimg', producttypeimgblob);
         }
     }
 }
@@ -61,6 +71,10 @@ if(removeimg){
         }
         if(productImgInput){
             productImgInput.value = '';
+            document.getElementById('fimg').setAttribute('src', 'http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png');
+        }
+        if(producttypeimgblob){
+            producttypeimgblob.value = '';
             document.getElementById('fimg').setAttribute('src', 'http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png');
         }
     });
