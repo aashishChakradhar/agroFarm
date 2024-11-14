@@ -13,7 +13,7 @@
     {{message}}
   {% endfor %}
   <div class="form-wrap">
-    <form method="post" id="addproducttypeform">
+    <form method="post" id="addproducttypeform" class="productforms">
       {% csrf_token %}
       <input type="text" name="producttypetitle" id="producttypetitle" placeholder="Name">
       <div class="form-field user-profile-image">
@@ -31,12 +31,5 @@
     </form>
   </div>
 </div>
-<script>
-  document.getElementById('addproducttypeform').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const qlcontent = document.querySelector('#editor .ql-editor').innerHTML;
-    document.getElementById('editorContent').value = qlcontent;
-  })
-</script>
-{% comment %} {% include 'customer/theme-temp/dashboard-footer.html' %} {% endcomment %}
+{% comment %} {% include 'merchant/theme-temp/dashboard-footer.html' %} {% endcomment %}
 {% endblock body %}
