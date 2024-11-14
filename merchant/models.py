@@ -40,7 +40,7 @@ class Category(BaseModel):
     merchantID = models.ForeignKey(User, on_delete=models.CASCADE,default=00)
     name = models.CharField(max_length=30, default='')
     featuredimage = models.CharField(max_length=1024, default='') 
-    description = models.CharField(max_length=100, default='')
+    description = models.CharField(max_length=1024, default='')
     def __str__(self):
         return self.name
 
@@ -55,7 +55,7 @@ class Product(BaseModel):
     tagID = models.ManyToManyField(Tag)
     name = models.CharField(max_length=30,default="unknown")
     featuredimage = models.CharField(max_length=1024, default='') 
-    description = models.CharField(max_length=100,default="unknown")
+    description = models.CharField(max_length=1024,default="unknown")
     rate = models.DecimalField(max_digits=5, decimal_places=2,default="unknown")
     is_availble = models.BooleanField(default=False)
     def __str__(self):

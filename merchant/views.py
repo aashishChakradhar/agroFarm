@@ -278,17 +278,17 @@ class EditProductView(BaseView):
                 messages.error(request, "All fields are required.")
                 return render(request, f'{app_name}/edit_product.html')
             
-            product.productName=producttitle
+            product.name=producttitle
             product.featuredimage=featuredimage
-            product.productPrice = price
-            product.productDescription = description
+            product.rate = price
+            product.description = description
 
             product.save()
 
-            product.productType.set(types)
+            product.categoryID.set(types)
 
-            messages.success(request, "Your Blog Has Been Successfully edited!")
-            return redirect('/dashboard/products/edit-product/' + str(id))  # Redirect to a blog list or success page after editing
+            messages.success(request, "Your Product Has Been Updated!")
+            return redirect('/merchant/products/edit-product/' + str(id))  # Redirect to a blog list or success page after editing
         
         except Exception as e:
             messages.error(request, str(e)) 
@@ -368,17 +368,15 @@ class EditProductTypeView(BaseView):
             producttitle = request.POST.get('producttypetitle')
             featuredimage = request.POST.get('producttypeimgblob')
             description = request.POST.get('editorContent')
-
-            types = []
             
-            category.productName=producttitle
+            category.name=producttitle
             category.featuredimage=featuredimage
-            category.productDescription = description
+            category.description = description
 
             category.save()
 
-            messages.success(request, "Your Blog Has Been Successfully edited!")
-            return redirect('/dashboard/products/edit-producttype/' + str(id))  # Redirect to a blog list or success page after editing
+            messages.success(request, "Your Category Has Been Updated!")
+            return redirect('/merchant/products/edit-producttype/' + str(id))  # Redirect to a blog list or success page after editing
         
         except Exception as e:
             messages.error(request, str(e)) 
