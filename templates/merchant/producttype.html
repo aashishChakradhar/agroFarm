@@ -1,5 +1,12 @@
 {% extends "merchant/temp/base.html" %}
 {% block body %}
+
+{% for message in messages %}
+    <div clas="message">
+        {{message}}
+    </div>
+  {% endfor %}
+
 <div class="title">
   <h1>Product Category</h1>
   <a href="/merchant/products/add-producttype">Add Product Category</a>
