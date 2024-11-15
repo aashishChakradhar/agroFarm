@@ -14,7 +14,7 @@
   {{message}}
 {% endfor %}
 <div class="form-wrap">
-  <form method="post" id="addproductform">
+  <form method="post" id="addproductform" class="productforms">
     {% csrf_token %}
     <input type="text" name="producttitle" id="producttitle" placeholder="Product Title">
     <div class="form-field user-profile-image">
@@ -42,5 +42,5 @@
   </form>
 </div>
 </div>
-{% comment %} {% include 'customer/theme-temp/dashboard-footer.html' %} {% endcomment %}
+{% comment %} {% include 'merchant/theme-temp/dashboard-footer.html' %} {% endcomment %}
 {% endblock body %}

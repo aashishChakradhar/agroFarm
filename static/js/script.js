@@ -20,3 +20,10 @@
 //     }
 //   }
 // });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    if(document.getElementById('editorContent') && document.querySelector('#editor .ql-editor')){
+        document.querySelector('#editor .ql-editor').innerHTML = document.getElementById('editorContent').value;
+    }
+});

@@ -8,17 +8,21 @@
         placeholder: 'Product Description',
         theme: 'snow'
     });
-    var form = document.getElementById('addproductform');
+    formids = ['addproductform', 'editproductform', 'editproducttypeform', 'addproducttypeform'];
 
-    // Add a submit event listener to the form
-    if(form){
-        form.onsubmit = function() {
-            // Get the content from the Quill editor
-            var editorContent = quill.root.innerHTML;
+    formids.forEach(formid => {
+        var form = document.getElementById(formid);
 
-            // Set the hidden input field's value to the editor content
-            document.getElementById('editorContent').value = editorContent;
-        };
-    }
+        // Add a submit event listener to the form
+        if(form){
+            form.onsubmit = function() {
+                // Get the content from the Quill editor
+                var editorContent = quill.root.innerHTML;
+
+                // Set the hidden input field's value to the editor content
+                document.getElementById('editorContent').value = editorContent;
+            };
+        }
+    });
 </script>
 <script type="text/javascript" src="{% static 'js/script.js' %}"></script>

@@ -1,8 +1,15 @@
 {% extends "merchant/temp/base.html" %}
 {% block body %}
+
+{% for message in messages %}
+    <div clas="message">
+        {{message}}
+    </div>
+  {% endfor %}
+
 <div class="title">
   <h1>Product Category</h1>
-  <a href="/merchant/products/add-new">Add Product Category</a>
+  <a href="/merchant/products/add-producttype">Add Product Category</a>
 </div>
 <div class="dashboard-products-wrapper">
   <table>
@@ -22,24 +29,16 @@
               </defs>
               </svg>
           </th>
-          <th>Product Name</th>
-          <th>Price</th>
-          <th>Category</th>
+          <th>Category Name</th>
           <th>Published Date</th>
       </thead>
       <tbody>
-          {% for x in products %}
+          {% for cat in categories %}
           <tr>
               <td>{{forloop.counter}}</td>
-              <td><img src="{{x.featuredimage}}"></td>
-              <td><a href="/merchant/products/edit-product/{{x.uid}}">{{ x.productName }}</a></td>
-              <td>{{ x.productPrice }}</td>
-              <td>
-                {% for type in x.productType.all %}
-                  {{ type.name }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-              </td>
-              <td>{{ x.created }}</td>
+              <td><img src="{{cat.featuredimage}}"></td>
+              <td><a href="/merchant/products/edit-producttype/{{cat.uid}}">{{ cat.name }}</a></td>
+              <td>{{ cat.created }}</td>
           </tr>
           {% empty %}
           <tr><td colspan="6">Sorry, No products found</td></tr>
