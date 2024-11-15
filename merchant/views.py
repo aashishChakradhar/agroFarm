@@ -205,9 +205,15 @@ class ProductView(BaseView):
     
 class DashboardView(BaseView):
     def get(self, request):
+        if request.user.is_superuser:
+            orders = Order.objects.all().order_by('-created')
+        else:
+            orders = Order.objects.filter(sellerId=request.user).order_by('-created')
+
         try:
             current_user = request.user
             context = {
+                'orders' : orders,
                 'user' : current_user,
                 'page_name': 'Dashboard'
             }
@@ -292,6 +298,20 @@ class EditProductView(BaseView):
         
         except Exception as e:
             messages.error(request, str(e)) 
+
+class DeleteProductView(View):
+    def get(self, request, id):
+        if request.user.is_anonymous:
+            return redirect('/login')
+        
+        try:
+            delobj = get_object_or_404(Product, uid=id)
+            delobj.delete()
+            messages.success(request, "Deletion Successful")
+            return redirect('/merchant/products/')
+        except Exception as e:
+            messages.error(request, "Deletion Unsuccessful")
+            return redirect('/merchant/products/')
 
 class ProductTypeView(BaseView):
     def get(self, request):
@@ -381,3 +401,17 @@ class EditProductTypeView(BaseView):
         except Exception as e:
             messages.error(request, str(e)) 
             return render(request,f"{app_name}/edit_product.html")
+
+class DeleteCategoryView(View):
+    def get(self, request, id):
+        if request.user.is_anonymous:
+            return redirect('/login')
+        
+        try:
+            delobj = get_object_or_404(Category, uid=id)
+            delobj.delete()
+            messages.success(request, "Deletion Successful")
+            return redirect('/merchant/products/producttype/')
+        except Exception as e:
+            messages.error(request, "Deletion Unsuccessful")
+            return redirect('/merchant/products/producttype/')
