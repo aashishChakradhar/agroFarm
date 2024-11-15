@@ -8,12 +8,11 @@
   >
     <use xlink:href="#exclamation-triangle-fill" />
   </svg>
-  <div><strong>{{alert_title}}!</strong> {{alert_detail}}</div>
+  <div><strong>{{alert_title}}</strong> {{alert_detail}}</div>
 </div>
 
 <form action={% url 'customer:add-address' %} method="POST">
-  {% csrf_token %} {% comment %} tryout only {% endcomment %}
-
+  {% csrf_token %}
   <label for="country">Country</label>
   <select name="country" id="country" required>
     {% for country in countrys %}
