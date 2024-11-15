@@ -22,7 +22,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.contrib.auth.decorators import login_required
 # from django.urls import reverse_lazy
 
-import myutility
+from myutility import *
+from static.pythonFiles.automate_data_entry import automate_data_entry as automatic
 
 app_name = 'customer'
 
@@ -139,7 +140,7 @@ class Index(BaseView):
 
 class AddAddress_View(BaseView):
     def get(self,request):
-        address_data = myutility.address()
+        address_data = address()
         countrys = address_data['country']
         provinces = address_data['province']
         districts = address_data['district']
@@ -175,6 +176,10 @@ class AddAddress_View(BaseView):
         address.save()
         return redirect ('/') 
 
+class Automate_Data_Entry(BaseView):
+    def get(self,request):
+        automatic()
+        return redirect('/')
 
 # class Add_Address(BaseView):
 #     def get(self,request):
