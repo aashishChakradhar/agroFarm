@@ -4,12 +4,10 @@
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script> -->
 <script type="text/javascript" src="{% static 'js/imgcontrol.js' %}"></script>
 <script>
-    if(document.getElementById('#editor')){
-        const quill = new Quill('#editor', {
-            placeholder: 'Product Description',
-            theme: 'snow'
-        });
-    }
+    const quill = new Quill('#editor', {
+        placeholder: 'Product Description',
+        theme: 'snow'
+    });
     formids = ['addproductform', 'editproductform', 'editproducttypeform', 'addproducttypeform'];
 
     formids.forEach(formid => {

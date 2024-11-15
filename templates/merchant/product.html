@@ -5,6 +5,10 @@
 {% endblock title %}
 
 {% block body %}
+
+{% for message in messages %}
+  {{message}}
+{% endfor %}
 <div class="title">
   <h1>Products</h1>
   <a href="/merchant/products/add-new">Add Product</a>
