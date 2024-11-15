@@ -168,7 +168,7 @@ class AddProductView(BaseView):
             
             product = Product(
                 productName=producttitle,
-                sellerId=sellerid,
+                merchantID=sellerid,
                 featuredimage=featuredimage,
                 productPrice = price,
                 productDescription = description
