@@ -234,6 +234,29 @@ class AccountView(BaseView):
         except Exception as e:
             messages.error(request, str(e))
             return render(request,f"{app_name}/account.html")
+        
+    def post(self,request):
+        try:
+            user =  request.user
+
+            firstname = request.POST.get('firstname')
+            lastname = request.POST.get('lastname')
+            # profileimg = request.POST.get('profileimg')
+            # email = request.POST.get('email')
+            # username = request.POST.get('username')
+            # # password = request.POST.get('password')
+            # biotext = request.POST.get('biotext')
+
+            user.first_name=firstname
+            user.last_name=lastname
+
+            user.save()
+
+            # messages.success(request, "Your Product Has Been Updated!")
+            # return redirect('/merchant/account/')  # Redirect to a blog list or success page after editing
+        
+        except Exception as e:
+            messages.error(request, str(e)) 
     
 class OrderView(BaseView):
     def get(self,request):
