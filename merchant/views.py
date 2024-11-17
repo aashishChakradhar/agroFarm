@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
+from django.db import transaction
 
 from .models import *
 # from customer.models import ExtraDetails
@@ -236,27 +237,44 @@ class AccountView(BaseView):
             return render(request,f"{app_name}/account.html")
         
     def post(self,request):
+        user = request.user
+
+        firstname = request.POST.get('firstname', user.first_name)
+        lastname = request.POST.get('lastname', user.last_name)
+        phone = request.POST.get('phone')
+        featuredimage = request.POST.get('productimgblob')
+        biotext = request.POST.get('biotext')
+
         try:
-            user =  request.user
+            with transaction.atomic():
+                # Update or create ExtraUserDetails
+                extrauserfields, created = ExtraUserDetails.objects.get_or_create(
+                    userID=user.id,
+                    defaults={
+                        'mobile': phone,
+                        'profileimg': featuredimage,
+                        'bio': biotext,
+                    }
+                )
+                if not created:
+                    extrauserfields.mobile = phone
+                    extrauserfields.profileimg = featuredimage
+                    extrauserfields.bio = biotext
+                    extrauserfields.save()
 
-            firstname = request.POST.get('firstname')
-            lastname = request.POST.get('lastname')
-            # profileimg = request.POST.get('profileimg')
-            # email = request.POST.get('email')
-            # username = request.POST.get('username')
-            # # password = request.POST.get('password')
-            # biotext = request.POST.get('biotext')
+                # Update User fields
+                user.first_name = firstname
+                user.last_name = lastname
+                user.save()
 
-            user.first_name=firstname
-            user.last_name=lastname
+                messages.success(request, "Your profile has been successfully updated!")
+                return redirect('/merchant/account/')
 
-            user.save()
-
-            # messages.success(request, "Your Product Has Been Updated!")
-            # return redirect('/merchant/account/')  # Redirect to a blog list or success page after editing
-        
         except Exception as e:
-            messages.error(request, str(e)) 
+            messages.error(request, f"An error occurred: {str(e)}")
+            return redirect('/merchant/account/')
+      
+        return render(request, f'{app_name}/account.html') 
     
 class OrderView(BaseView):
     def get(self,request):
