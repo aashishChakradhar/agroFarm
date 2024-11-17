@@ -17,6 +17,7 @@
       </label>
       <button id="removeimg">Remove Image</button>
     </div>
+    <textarea name="profileimgblob" id="profileimgblob" class="d-none"></textarea>
     <div class="form-field user-first-name">
       <label>First Name</label>
       <input type="text" name="firstname" value={{user.first_name}}>
@@ -90,7 +91,9 @@
   })
 
   confirmpassword.addEventListener('input', (e)=>{
-    console.log(e.target.value);
+    if(newpassword.value === e.target.value){
+      e.classList.add('passwordmatch');
+    }
   })
 
   function checkPasswordStrength(password) {
