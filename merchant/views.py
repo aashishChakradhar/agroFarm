@@ -239,36 +239,36 @@ class AccountView(BaseView):
     def post(self,request):
         user = request.user
 
-        firstname = request.POST.get('firstname', user.first_name)
-        lastname = request.POST.get('lastname', user.last_name)
+        firstname = request.POST.get('firstname')
+        lastname = request.POST.get('lastname')
         phone = request.POST.get('phone')
         featuredimage = request.POST.get('productimgblob')
         biotext = request.POST.get('biotext')
 
         try:
-            with transaction.atomic():
-                # Update or create ExtraUserDetails
-                extrauserfields, created = ExtraUserDetails.objects.get_or_create(
-                    userID=user.id,
-                    defaults={
-                        'mobile': phone,
-                        'profileimg': featuredimage,
-                        'bio': biotext,
-                    }
-                )
-                if not created:
-                    extrauserfields.mobile = phone
-                    extrauserfields.profileimg = featuredimage
-                    extrauserfields.bio = biotext
-                    extrauserfields.save()
+            # Update User fields
+            user.first_name = firstname
+            user.last_name = lastname
+            user.save()
 
-                # Update User fields
-                user.first_name = firstname
-                user.last_name = lastname
-                user.save()
+            #Update or create ExtraUserDetails
+            extrauserfields, created = ExtraUserDetails.objects.get_or_create(
+                userID=user.id,
+                defaults={
+                    'mobile': phone,
+                    'profileimg': featuredimage,
+                    'bio': biotext,
+                }
+            )
 
-                messages.success(request, "Your profile has been successfully updated!")
-                return redirect('/merchant/account/')
+            if not created:
+                extrauserfields.mobile = phone
+                extrauserfields.profileimg = featuredimage
+                extrauserfields.bio = biotext
+                extrauserfields.save()
+
+            messages.success(request, "Your profile has been successfully updated!")
+            return redirect('/merchant/account/')
 
         except Exception as e:
             messages.error(request, f"An error occurred: {str(e)}")
