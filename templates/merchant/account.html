@@ -17,13 +17,14 @@
       </label>
       <button id="removeimg">Remove Image</button>
     </div>
+    <textarea name="profileimgblob" id="profileimgblob" class="d-none"></textarea>
     <div class="form-field user-first-name">
       <label>First Name</label>
-      <input type="text" name="firstname" value={{user.firstname}}>
+      <input type="text" name="firstname" value={{user.first_name}}>
     </div>
     <div class="form-field user-last-name">
       <label>Last Name</label>
-      <input type="text" name="lastname" value={{user.lastname}}>
+      <input type="text" name="lastname" value={{user.last_name}}>
     </div>
     <div class="form-field user-name">
       <label>Username</label>
@@ -32,6 +33,28 @@
     <div class="form-field user-email">
       <label>Email</label>
       <input type="text" name="email" value={{user.email}} disabled>
+    </div>
+    <div class="form-field">
+      <button id="setPassword">Set New Password</button>
+    </div>
+    <div class="password-fields d-none">
+      <div class="form-field user-password">
+        <label>New Password</label>
+        <input type="password" name="newpassword" id="newpassword">
+        <div class="newpasswordstrength"></div>
+      </div>
+      <div class="form-field user-password">
+        <label>Confirm Password</label>
+        <input type="password" name="confirmpassword" id="confirmpassword">
+      </div>
+
+      <div class="cancel-btn-wrap">
+        <button id="cancelBtn">Cancel</button>
+      </div>
+    </div>
+    <div class="form-field user-phone">
+      <label>Phone</label>
+      <input type="text" name="phone" value={{user.phone}}>
     </div>
     <div class="form-field user-bio">
       <label>Bio</label>
@@ -42,5 +65,56 @@
     </div>
   </form>
 </div>
+
+<script>
+  const newpassword = document.getElementById('newpassword');
+  const confirmpassword = document.getElementById('confirmpassword');
+  const passwordField = document.querySelector('.password-fields');
+  const newpasswordstrength = document.querySelector('.newpasswordstrength');
+
+  document.getElementById('setPassword').addEventListener('click', (e)=>{
+    e.preventDefault();
+    passwordField.classList.remove('d-none');
+  });
+
+  document.getElementById('cancelBtn').addEventListener('click', (e)=>{
+    e.preventDefault();
+    passwordField.classList.add('d-none');
+  });
+
+  newpassword.addEventListener('input', (e)=>{
+    let password = e.target.value;
+    const strength = checkPasswordStrength(e.target.value);
+    newpasswordstrength.innerHTML = strength;
+    newpasswordstrength.classList.remove('weak', 'medium', 'strong');
+    newpasswordstrength.classList.add(strength);
+  })
+
+  confirmpassword.addEventListener('input', (e)=>{
+    if(newpassword.value === e.target.value){
+      e.classList.add('passwordmatch');
+    }
+  })
+
+  function checkPasswordStrength(password) {
+    const minLength = /.{8,}/;
+    const hasUpperCase = /[A-Z]/;
+    const hasLowerCase = /[a-z]/;
+    const hasNumber = /\d/;
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
+
+    let score = 0;
+
+    if (minLength.test(password)) score++;
+    if (hasUpperCase.test(password)) score++;
+    if (hasLowerCase.test(password)) score++;
+    if (hasNumber.test(password)) score++;
+    if (hasSpecialChar.test(password)) score++;
+
+    if (score >= 4) return 'strong';
+    if (score === 3) return 'medium';
+    return 'weak';
+  }
+</script>
 {% endblock body %}
 

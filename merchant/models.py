@@ -26,6 +26,8 @@ class Address(BaseModel):
 class ExtraUserDetails(BaseModel):
     userID = models.OneToOneField(User, on_delete=models.CASCADE)
     mobile = PhoneNumberField()
+    profileimg = models.CharField(max_length=1024, default='') 
+    bio = models.CharField(max_length=1024, default='') 
     # addressID = models.OneToOneField(Address,on_delete=models.CASCADE, default=0)
     def __str__(self):
         return self.user.username

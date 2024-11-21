@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
+from django.db import transaction
 
 from .models import *
 # from customer.models import ExtraDetails
@@ -234,6 +235,46 @@ class AccountView(BaseView):
         except Exception as e:
             messages.error(request, str(e))
             return render(request,f"{app_name}/account.html")
+        
+    def post(self,request):
+        user = request.user
+
+        firstname = request.POST.get('firstname')
+        lastname = request.POST.get('lastname')
+        phone = request.POST.get('phone')
+        featuredimage = request.POST.get('productimgblob')
+        biotext = request.POST.get('biotext')
+
+        try:
+            # Update User fields
+            user.first_name = firstname
+            user.last_name = lastname
+            user.save()
+
+            #Update or create ExtraUserDetails
+            extrauserfields, created = ExtraUserDetails.objects.get_or_create(
+                userID=user.id,
+                defaults={
+                    'mobile': phone,
+                    'profileimg': featuredimage,
+                    'bio': biotext,
+                }
+            )
+
+            if not created:
+                extrauserfields.mobile = phone
+                extrauserfields.profileimg = featuredimage
+                extrauserfields.bio = biotext
+                extrauserfields.save()
+
+            messages.success(request, "Your profile has been successfully updated!")
+            return redirect('/merchant/account/')
+
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+            return redirect('/merchant/account/')
+      
+        return render(request, f'{app_name}/account.html') 
     
 class OrderView(BaseView):
     def get(self,request):
