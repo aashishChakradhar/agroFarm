@@ -178,9 +178,15 @@ class AddAddress_View(BaseView):
 
 class Automate_Data_Entry(BaseView):
     def get(self,request):
+        context = {
+            'page_name' : 'automate-data',
+            'app_name' : app_name,
+        }
         automatic()
-        return redirect('/')
-
+        return render(request,f"{app_name}/automate.html",context)
+    def post(self,request):
+        automatic()
+        return redirect(request.path)
 # class Add_Address(BaseView):
 #     def get(self,request):
 #         context = {
