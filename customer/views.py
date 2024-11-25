@@ -22,7 +22,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.contrib.auth.decorators import login_required
 # from django.urls import reverse_lazy
 
-import myutility
+from myutility import *
+from static.pythonFiles.automate_data_entry import automate_data_entry as automatic
 
 app_name = 'customer'
 
@@ -133,13 +134,14 @@ class Signup_View (View):
 class Index(BaseView):
     def get(self, request):
         context = {
-            "page_name":"home"
+            "page_name":"home",
+            "rangelist" : [1,2,3,4] 
         }
         return render(request,f'{app_name}/index.html',context)
 
 class AddAddress_View(BaseView):
     def get(self,request):
-        address_data = myutility.address()
+        address_data = address()
         countrys = address_data['country']
         provinces = address_data['province']
         districts = address_data['district']
@@ -175,7 +177,21 @@ class AddAddress_View(BaseView):
         address.save()
         return redirect ('/') 
 
+class Product_Detail_View(BaseView):
+    def get(self,request):
+        return HttpResponse("You are here")
 
+class Automate_Data_Entry(BaseView):
+    def get(self,request):
+        context = {
+            'page_name' : 'automate-data',
+            'app_name' : app_name,
+        }
+        automatic()
+        return render(request,f"{app_name}/automate.html",context)
+    def post(self,request):
+        automatic()
+        return redirect(request.path)
 # class Add_Address(BaseView):
 #     def get(self,request):
 #         context = {
