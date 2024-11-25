@@ -134,7 +134,8 @@ class Signup_View (View):
 class Index(BaseView):
     def get(self, request):
         context = {
-            "page_name":"home"
+            "page_name":"home",
+            "rangelist" : [1,2,3,4] 
         }
         return render(request,f'{app_name}/index.html',context)
 
@@ -175,6 +176,10 @@ class AddAddress_View(BaseView):
         )
         address.save()
         return redirect ('/') 
+
+class Product_Detail_View(BaseView):
+    def get(self,request):
+        return HttpResponse("You are here")
 
 class Automate_Data_Entry(BaseView):
     def get(self,request):
