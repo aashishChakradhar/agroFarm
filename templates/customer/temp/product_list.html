@@ -1,0 +1,19 @@
+<div class="card m-3 p-3" style="width: 18rem;">
+    <img src="https://img.freepik.com/premium-photo/fresh-carrots-with-green-leaves-rustic-wooden-table-selective-focus_1108670-510.jpg?size=626&ext=jpg" class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title">Name{{name}}</h5>
+        <div class = 'container'>
+            <div class = 'row'>
+                <div class = 'col-8 p-0 m-0'>
+                    <h5> Rate: Rs. 500{{rate}}</h5>
+                </div>
+                <div class = 'col-4'>
+                     sale
+                </div>
+                
+            </div>
+        </div>
+        <h6>Rating</h6>
+        <a href="{% url 'customer:product-detail' %}" class="btn btn-primary">Check Out</a>
+    </div>
+</div>
