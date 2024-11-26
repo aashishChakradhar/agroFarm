@@ -12,5 +12,6 @@ urlpatterns = [
     path('signup/', views.Signup_View.as_view(), name='signup'),
     path('add-address/', views.AddAddress_View.as_view(), name='add-address'),
     path('product-detail/', views.Product_Detail_View.as_view(), name='product-detail'),
+    path('order-detail/', views.Order_Detail_View.as_view(), name='order-detail'),
     path('add-data/', views.Automate_Data_Entry.as_view(), name='add-data'),
 ]
