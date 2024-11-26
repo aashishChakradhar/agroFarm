@@ -25,13 +25,14 @@
             </div>
         </div>
         <div class = 'row'>
-            <form action={% url 'customer:home' %} method = 'POST'>
+            <form action={% url 'customer:product-detail' %} method = 'POST'>
                 {% csrf_token %}
                 <label for="quantity">
                     Quantity: 
                 </label>
                 <input name='quantity' id='quantity' type="number" placeholder = "10">
-                <button>Buy Now</button>
+                <input type="submit" name = 'action' value="Buy Now" class = "btn btn-primary">
+                <input type="submit" name = 'action' value="Add to Cart" class = "btn btn-secondary">
             </form>
         </div>
     </div>
