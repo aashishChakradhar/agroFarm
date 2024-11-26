@@ -5,6 +5,9 @@
 {% endblock title %}
 
 {% block body %}
+{% for message in messages %}
+  {{message}}
+{% endfor %}
 <div class="dashboard-content-wrapper">
   <h2>Profile</h2>
   <form method="post" id="accountdetail" class="accountdetailform">
@@ -13,7 +16,11 @@
       <label class="profile-img" for="profileimg">
         Profile image 
         <input type="file" style="visibility: hidden;" name="profileimg" id="profileimg" accept="image/*">
+        {% if extrafields.profileimg %}
+        <img src="{{extrafields.profileimg}}" id="fimg" alt="img">
+        {% else %}
         <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg" alt="img">
+        {% endif %}
       </label>
       <button id="removeimg">Remove Image</button>
     </div>
@@ -54,11 +61,11 @@
     </div>
     <div class="form-field user-phone">
       <label>Phone</label>
-      <input type="text" name="phone" value={{user.phone}}>
+      <input type="text" name="phone" value={{extrafields.mobile}}>
     </div>
     <div class="form-field user-bio">
       <label>Bio</label>
-      <textarea id="biotext" name="biotext" rows="4" cols="50"></textarea>
+      <textarea id="biotext" name="biotext" rows="4" cols="50">{{extrafields.bio}}</textarea>
     </div>
     <div class="form-field submit-button">
       <input type="submit" value="Update Profile">
