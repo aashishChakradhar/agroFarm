@@ -39,16 +39,18 @@ const producttypeimgblob = document.getElementById('producttypeimgblob');
 //profile image show on page on change using blob
 if (profileImgInput) {
     profileImgInput.onchange = function(evt) {
-        handleFileInputChange(evt, 30, 'fimg', profileimgblob);
+        const [file] = profileImgInput.files
+        if (file){
+            handleFileInputChange(evt, 300, 'fimg', profileimgblob);
+        }
     };
 }
-
 //product image show on page
 if(productImgInput){
     productImgInput.onchange = evt => {
         const [file] = productImgInput.files
         if (file) {
-            handleFileInputChange(evt, 30, 'fimg', productimgblob);
+            handleFileInputChange(evt, 300, 'fimg', productimgblob);
         }
     }
 }
@@ -57,7 +59,7 @@ if(producttypeImgInput){
     producttypeImgInput.onchange = evt => {
         const [file] = producttypeImgInput.files
         if (file) {
-            handleFileInputChange(evt, 30, 'fimg', producttypeimgblob);
+            handleFileInputChange(evt, 300, 'fimg', producttypeimgblob);
         }
     }
 }
