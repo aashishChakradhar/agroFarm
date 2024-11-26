@@ -1,0 +1,42 @@
+{% extends "customer/temp/base.html" %}
+{% block body %}
+<div>
+    <div class = 'container p-0 mx-5' >
+        <div class = 'row' style="background-color: red; min-height:35rem">
+            <div class = 'col-3 p-4' style = " border: 1rem solid black;">
+                <img src="https://img.freepik.com/premium-photo/fresh-organic-vegetable_114106-1589.jpg?size=626&ext=jpg&ga=GA1.1.1306462682.1721826994&semt=sph" style="height: " alt="">
+            </div>
+            <div class = 'col-6 p-4' style = " border: 1rem solid black;">
+                <h1>
+                    name{{name}}
+                </h1>
+                <h5>
+                    description {{description}}
+                </h5>
+                <h4>
+                    price {{rate}}
+                </h4>
+                <h5>
+                    Review {{rating}}
+                </h5>
+            </div>
+            <div class = 'col-3 p-4' style = " border: 1rem solid black;">
+                address
+            </div>
+        </div>
+        <div class = 'row'>
+            <form action={% url 'customer:home' %} method = 'POST'>
+                {% csrf_token %}
+                <label for="quantity">
+                    Quantity: 
+                </label>
+                <input name='quantity' id='quantity' type="number" placeholder = "10">
+                <button>Buy Now</button>
+            </form>
+        </div>
+    </div>
+    
+        
+        
+</div>
+{% endblock body %}
