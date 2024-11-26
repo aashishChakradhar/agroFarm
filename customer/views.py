@@ -183,6 +183,26 @@ class Product_Detail_View(BaseView):
             "page_name":"product", 
         }
         return render(request,f'{app_name}/product_detail.html',context)
+    
+    def post(self,request):
+        quantity = request.POST.get('quantity')
+        action = request.POST.get('action')
+        if action == 'Buy Now':
+            # Handle the Buy Now action
+            messages.success(request, f"Buying {quantity} items now!")
+            return redirect('customer:my-cart')  # Redirect to the desired page after action
+        elif action == 'Add to Cart':
+            # Handle the Add to Cart action
+            messages.success(request, f"Adding {quantity} items to the cart!")
+            return redirect('customer:my-cart')  # Redirect to the desired page after action
+
+        # Default action (in case something goes wrong)
+        messages.error(request, "Invalid action.")
+        return redirect(request.path)
+
+class Cart_View(BaseView):
+    def get(self,request):
+        return HttpResponse('This is cart page')
 
 class Order_Detail_View(View):
     def get(self,request):
