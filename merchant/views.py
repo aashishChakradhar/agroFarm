@@ -229,6 +229,7 @@ class AccountView(BaseView):
             current_user = request.user
             context = {
                 'user' : current_user,
+                'extrafields' : get_object_or_404(ExtraUserDetails, userID=current_user.id),
                 'page_name': 'my-account'
             }
             return render(request, f"{app_name}/account.html" ,context)
@@ -242,7 +243,7 @@ class AccountView(BaseView):
         firstname = request.POST.get('firstname')
         lastname = request.POST.get('lastname')
         phone = request.POST.get('phone')
-        featuredimage = request.POST.get('productimgblob')
+        featuredimage = request.POST.get('profileimgblob') if request.POST.get('profileimgblob') else ''
         biotext = request.POST.get('biotext')
 
         try:
@@ -251,21 +252,25 @@ class AccountView(BaseView):
             user.last_name = lastname
             user.save()
 
-            #Update or create ExtraUserDetails
-            extrauserfields, created = ExtraUserDetails.objects.get_or_create(
-                userID=user.id,
-                defaults={
-                    'mobile': phone,
-                    'profileimg': featuredimage,
-                    'bio': biotext,
-                }
-            )
-
-            if not created:
-                extrauserfields.mobile = phone
-                extrauserfields.profileimg = featuredimage
-                extrauserfields.bio = biotext
+            try:
+                extrauserfields = ExtraUserDetails.objects.get(userID=user.id)
+                extrauserfields.mobile=phone
+                extrauserfields.profileimg=featuredimage
+                extrauserfields.bio=biotext
                 extrauserfields.save()
+            except:
+                ExtraUserDetails.objects.create(
+                    userID=user, 
+                    mobile=phone, 
+                    profileimg=featuredimage, 
+                    bio=biotext
+                )
+
+            # if not created:
+            #     extrauserfields.mobile = phone
+            #     extrauserfields.profileimg = featuredimage
+            #     extrauserfields.bio = biotext
+            #     extrauserfields.save()
 
             messages.success(request, "Your profile has been successfully updated!")
             return redirect('/merchant/account/')
