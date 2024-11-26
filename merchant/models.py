@@ -12,7 +12,6 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-
 class Address(BaseModel):
     country = models.CharField(max_length=25, default='Unknown')
     state  = models.CharField(max_length=25, default='Unknown')
@@ -21,7 +20,7 @@ class Address(BaseModel):
     zip_code = models.CharField(max_length=25, default='Unknown')
     street = models.CharField(max_length=25, default='Unknown')
     def __str__(self):
-        return self.street
+        return self.district
 
 class ExtraUserDetails(BaseModel):
     userID = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -92,8 +91,21 @@ class Order(BaseModel):
     quantity = models.DecimalField(max_digits=4, decimal_places=0, default='Unknown')
     rate = models.DecimalField(max_digits=10, decimal_places=2, default='Unknown')
     amount = models.DecimalField(max_digits=10, decimal_places=2, default='Unknown')
+    def __str__(self):
+        return self.uid
+    
+class OrderStatus(BaseModel):
+    orderID = models.ForeignKey(Order,on_delete=models.CASCADE)
     is_pending = models.BooleanField(default='True')
+    is_accepted = models.BooleanField(default='False')
     is_complete = models.BooleanField(default='False')
     is_cancelled = models.BooleanField(default='False')
+    def __str__(self):
+        return self.orderID
+
+class PaymentMethod(BaseModel):
+    orderID = models.ForeignKey(Order,on_delete=models.CASCADE)
     is_cashOnDelivery = models.BooleanField(default='True')
     is_online = models.BooleanField(default='False')
+    def __str__(self):
+        return self.orderID
