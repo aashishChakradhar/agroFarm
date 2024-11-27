@@ -1,19 +1,39 @@
 <div class="card m-3 p-3" style="width: 18rem;">
-    <img src="https://img.freepik.com/premium-photo/fresh-carrots-with-green-leaves-rustic-wooden-table-selective-focus_1108670-510.jpg?size=626&ext=jpg" class="card-img-top" alt="...">
+    <img src="{{ details.featuredimage }}" class="card-img-top" alt="{{ name }}">
     <div class="card-body">
-        <h5 class="card-title">Name{{name}}</h5>
-        <div class = 'container'>
-            <div class = 'row'>
-                <div class = 'col-8 p-0 m-0'>
-                    <h5> Rate: Rs. 500{{rate}}</h5>
+        <h4 class="card-title">{{ name }}</h4>
+        <div class='container'>
+            <div class='row'>
+                <div class='col-8 p-0 m-0'>
+                    <h5>Rs. {{ details.price }}</h5>
                 </div>
-                <div class = 'col-4'>
-                     sale
+                <div class='col-4'>
+                    Sale
                 </div>
-                
+            </div>
+            <div class='row'>
+                {% if details.is_available %}
+                    <h6>Available</h6>
+                {% else %}
+                    <h6>Out of Stock</h6>
+                {% endif %}
+            </div>
+            <div class='row'>
+                <h6>{{ details.rating }}</h6>
+                {{details.id}}
+            </div>
+            <div class='row'>
+                <div class='col-6 px-0 mx-0'>
+                    {% comment %} <a href="{% url 'customer:product-detail' %}" class="btn btn-primary px-1 mx-0">Check Out</a> {% endcomment %}
+                </div>
+                <div class='col-3 px-0 mx-0'>
+                    <a href="/product-detail/{{details.id}}" class="btn btn-primary px-1 mx-0">Check Out</a>
+                </div>
+                {% comment %} 
+                <div class='col-3 px-0 mx-0'>
+                    <a href="{% url 'customer:product-detail' details.id %}" class="btn btn-primary px-1 mx-0">Check Out</a>
+                </div> {% endcomment %}
             </div>
         </div>
-        <h6>Rating</h6>
-        <a href="{% url 'customer:product-detail' %}" class="btn btn-primary">Check Out</a>
     </div>
 </div>
