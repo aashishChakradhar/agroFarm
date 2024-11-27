@@ -8,7 +8,7 @@
             </div>
             <div class = 'col-6 p-4' style = " border: 1rem solid black;">
                 <h1>
-                    name{{name}}
+                    {{product}}
                 </h1>
                 <h5>
                     description {{description}}
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class = 'row'>
-            <form action={% url 'customer:product-detail' %} method = 'POST'>
+            <form  method = 'POST'>
                 {% csrf_token %}
                 <label for="quantity">
                     Quantity: 
@@ -37,7 +37,6 @@
         </div>
     </div>
     
-        
         
 </div>
 {% endblock body %}
