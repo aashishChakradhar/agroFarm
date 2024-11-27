@@ -31,8 +31,8 @@
   <h2>Vegetables</h2>
   <div class='container'>
     <div class = 'row'>
-      {% for x in rangelist %}
-      {% include "customer/temp/product_list.html" with x=x %}
+      {% for product_name, product_details in products.items %}
+        {% include "customer/temp/product_list.html" with name=product_name details=product_details %}
       {% endfor %}
     </div>
   </div>
