@@ -133,9 +133,21 @@ class Signup_View (View):
             
 class Index(BaseView):
     def get(self, request):
+        myvalue = {
+            'Carrot': {
+                'id': 1,
+                'price': 500,
+                'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos porro facere ducimus ratione impedit? Eos neque dolorem quia exercitationem a earum cupiditate similique velit explicabo molestias, unde odit necessitatibus laboriosam?',
+                'is_available': True,
+                'featuredimage': 'https://img.freepik.com/premium-photo/fresh-carrots-with-green-leaves-rustic-wooden-table-selective-focus_1108670-510.jpg?size=626&ext=jpg',
+                'rating': '4.5',
+                'storeID': '12345',
+            }
+        }
         context = {
             "page_name":"home",
-            "rangelist" : [1,2,3,4] 
+            "rangelist" : [1,2,3,4] ,
+            'products' : myvalue
         }
         return render(request,f'{app_name}/index.html',context)
 
@@ -178,13 +190,15 @@ class AddAddress_View(BaseView):
         return redirect ('/') 
 
 class Product_Detail_View(BaseView):
-    def get(self, request):
+    def get(self, request, product_id):
+        product = product_id#get_object_or_404(Product, uid=product_id)
         context = {
-            "page_name":"product", 
+            "page_name": "product",
+            "product": product
         }
-        return render(request,f'{app_name}/product_detail.html',context)
+        return render(request, 'customer/product_detail.html', context)
     
-    def post(self,request):
+    def post(self,request, product_id):
         quantity = request.POST.get('quantity')
         action = request.POST.get('action')
         if action == 'Buy Now':
@@ -199,6 +213,8 @@ class Product_Detail_View(BaseView):
         # Default action (in case something goes wrong)
         messages.error(request, "Invalid action.")
         return redirect(request.path)
+
+
 
 class Cart_View(BaseView):
     def get(self,request):
