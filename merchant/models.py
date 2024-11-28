@@ -58,7 +58,7 @@ class Product(BaseModel):
     featuredimage = models.CharField(max_length=1024, default='') 
     description = models.CharField(max_length=1024,default="unknown")
     rate = models.DecimalField(max_digits=5, decimal_places=2,default="unknown")
-    is_availble = models.BooleanField(default=False)
+    is_available = models.BooleanField(default=False)
     def __str__(self):
         return self.name
 
@@ -70,11 +70,11 @@ class Product(BaseModel):
     
 class Review(BaseModel):
     userID = models.ForeignKey(User,on_delete=models.CASCADE)
-    productId = models.ForeignKey(Product,on_delete=models.CASCADE)
+    productID = models.ForeignKey(Product,on_delete=models.CASCADE)
     rating = models.IntegerField(default=1)
     comment = models.TextField(default="")
     def __str__(self):
-        return self.rating
+        return f'Rating: {self.rating} for Product: {self.productID.name} by User: {self.userID.username}'
 
 class Store(BaseModel):
     userID = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -88,7 +88,7 @@ class Order(BaseModel):
     userID = models.ForeignKey(User, on_delete=models.CASCADE)
     productID = models.ForeignKey(Product, on_delete=models.CASCADE)
     addressID = models.ForeignKey(Address, on_delete=models.CASCADE, default='')
-    quantity = models.DecimalField(max_digits=4, decimal_places=0, default='Unknown')
+    quantity = models.DecimalField(max_digits=7, decimal_places=3, default='Unknown')
     rate = models.DecimalField(max_digits=10, decimal_places=2, default='Unknown')
     amount = models.DecimalField(max_digits=10, decimal_places=2, default='Unknown')
     def __str__(self):
