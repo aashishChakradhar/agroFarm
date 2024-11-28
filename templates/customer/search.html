@@ -1,0 +1,22 @@
+{% extends "customer/temp/base.html" %}
+
+{% block body %}
+<section class="search-result">
+    <div class="container">
+        <div class="search-query">
+            <p>Search result for: {{ query }}</p>
+        </div>
+
+        <div class="search-result-wrap">
+            <div class='row'>
+                {% for product in results %}
+                <div class='col-3'>
+                    {% include "customer/temp/product_list.html" with products=product %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock body %}
