@@ -8,17 +8,24 @@
             </div>
             <div class = 'col-6 p-4' style = " border: 1rem solid black;">
                 <h1>
-                    {{product}}
+                    {{products.uid}}
+                    {{products.name}}
                 </h1>
-                <h5>
-                    description {{description}}
-                </h5>
                 <h4>
-                    price {{rate}}
+                    {{products.rate}}
                 </h4>
                 <h5>
-                    Review {{rating}}
+                    {{products.description}}
                 </h5>
+                
+                {% for review in reviews %}
+                <h3>{{review.userID}}</h3>
+                <h5>
+                    rating: {{review.rating}}
+                    comment: {{review.comment}}
+                </h5>
+                {% endfor %}
+                
             </div>
             <div class = 'col-3 p-4' style = " border: 1rem solid black;">
                 address
@@ -30,13 +37,15 @@
                 <label for="quantity">
                     Quantity: 
                 </label>
+                <input name='uid' value='{{products.uid}}' type="number" id = 'uid' hidden>
                 <input name='quantity' id='quantity' type="number" placeholder = "10">
                 <input type="submit" name = 'action' value="Buy Now" class = "btn btn-primary">
+                
+            </form>
+            <form action="">
                 <input type="submit" name = 'action' value="Add to Cart" class = "btn btn-secondary">
             </form>
         </div>
-    </div>
-    
-        
+    </div>     
 </div>
 {% endblock body %}
