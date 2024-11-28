@@ -1,25 +1,31 @@
 <div class="top-nav">
   <div class="container">
-    <div class="top-nav-content">
-      <a href="{% url 'merchant:home' %}"><i class="fa-solid fa-house"></i> AgroFarm</a>
-    </div>
-    <div class="right-user-info">
-      <div class="nav-item dropdown">
-        <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          {% if extrafields.profileimg %}
-            <img src="{{extrafields.profileimg}}" id="fimg" alt="img">
-          {% else %}
-            <svg width="61" height="61" viewBox="0 0 61 61" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M30.7043 30.9434C34.8465 30.9434 38.2043 27.5855 38.2043 23.4434C38.2043 19.3012 34.8465 15.9434 30.7043 15.9434C26.5622 15.9434 23.2043 19.3012 23.2043 23.4434C23.2043 27.5855 26.5622 30.9434 30.7043 30.9434Z" stroke="#1C274C" stroke-width="3.75"/>
-              <path d="M45.6271 50.9434C45.2294 43.7146 43.0161 38.4434 30.7041 38.4434C18.3924 38.4434 16.1791 43.7146 15.7812 50.9434" stroke="#1C274C" stroke-width="3.75" stroke-linecap="round"/>
-              <path d="M18.2043 9.28791C21.8815 7.16078 26.1508 5.94336 30.7043 5.94336C44.5113 5.94336 55.7043 17.1362 55.7043 30.9434C55.7043 44.7504 44.5113 55.9434 30.7043 55.9434C16.8972 55.9434 5.70435 44.7504 5.70435 30.9434C5.70435 26.3899 6.92177 22.1205 9.0489 18.4434" stroke="#1C274C" stroke-width="3.75" stroke-linecap="round"/>
-              </svg> 
-          {% endif %}               
-        </a>
-        <ul class="dropdown-menu">
-          <li class="dropdown-item text-capitalize">Hello {{user}}</li>
-          <li><a class="dropdown-item" href="/logout">Logout</a></li>
-        </ul>
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="top-nav-content">
+        <a href="{% url 'merchant:home' %}">
+          <svg width="24" height="24" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M27.5 15.2549V17.1563C27.5 22.0323 27.5 24.4704 26.0355 25.9851C24.5711 27.5 22.214 27.5 17.5 27.5H12.5C7.78595 27.5 5.42894 27.5 3.96446 25.9851C2.5 24.4704 2.5 22.0323 2.5 17.1563V15.2549C2.5 12.3944 2.5 10.9641 3.149 9.77843C3.798 8.59276 4.98369 7.85689 7.35504 6.38516L9.85504 4.83359C12.3617 3.27786 13.6151 2.5 15 2.5C16.3849 2.5 17.6382 3.27786 20.145 4.83359L22.645 6.38515C25.0164 7.85689 26.202 8.59276 26.851 9.77843" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path d="M18.75 22.5H11.25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg> AgroFarm</a>
+      </div>
+      <div class="right-user-info">
+        <div class="nav-item">
+          <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {% if extrafields.profileimg %}
+              <img src="{{extrafields.profileimg}}" alt="img">
+            {% else %}
+              <svg width="61" height="61" viewBox="0 0 61 61" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M30.7043 30.9434C34.8465 30.9434 38.2043 27.5855 38.2043 23.4434C38.2043 19.3012 34.8465 15.9434 30.7043 15.9434C26.5622 15.9434 23.2043 19.3012 23.2043 23.4434C23.2043 27.5855 26.5622 30.9434 30.7043 30.9434Z" stroke="#1C274C" stroke-width="3.75"/>
+                <path d="M45.6271 50.9434C45.2294 43.7146 43.0161 38.4434 30.7041 38.4434C18.3924 38.4434 16.1791 43.7146 15.7812 50.9434" stroke="#1C274C" stroke-width="3.75" stroke-linecap="round"/>
+                <path d="M18.2043 9.28791C21.8815 7.16078 26.1508 5.94336 30.7043 5.94336C44.5113 5.94336 55.7043 17.1362 55.7043 30.9434C55.7043 44.7504 44.5113 55.9434 30.7043 55.9434C16.8972 55.9434 5.70435 44.7504 5.70435 30.9434C5.70435 26.3899 6.92177 22.1205 9.0489 18.4434" stroke="#1C274C" stroke-width="3.75" stroke-linecap="round"/>
+                </svg> 
+            {% endif %}               
+          </a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item text-capitalize">Hello {{user}}</li>
+            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
