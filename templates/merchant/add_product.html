@@ -1,46 +1,78 @@
-{% extends "merchant/temp/base.html" %}
 
+{% extends "merchant/temp/base.html" %}
+{% load static %}
 {% block title %}
-  {{page_name}}
+{{page_name}}
 {% endblock title %}
 
 {% block body %}
-<div class="title">
-  <h1>Products</h1>
-  <a href="{% url 'merchant:add-products' %}">Add Product</a>
-</div>
-<div class="dashboard-products-wrapper">
-{% for message in messages %}
-  {{message}}
-{% endfor %}
-<div class="form-wrap">
-  <form method="post" id="addproductform" class="productforms">
-    {% csrf_token %}
-    <input type="text" name="producttitle" id="producttitle" placeholder="Product Title">
-    <div class="form-field user-profile-image">
-      <label class="profile-img" for="productimg">
-        Product Featured image 
-        <input type="file" style="visibility: hidden;" name="productimg" id="productimg" accept="image/*">
-        <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg" alt="img">
-      </label>
-      <button id="removeimg">Remove Image</button>
+<div class="dashboard-product">
+    <div class="title">
+        <h1>Products</h1>
+        <a href="{% url 'merchant:add-products' %}">Add Product</a>
     </div>
-    <textarea name="productimgblob" id="productimgblob" class="d-none"></textarea>
-    <input type="text" name="price" id="price" placeholder="Price">
-    <div id="editor"></div>
-    <input type="hidden" name="editorContent" id="editorContent">
-    <div>
-      <label>Categories</label>
-      {% for x in categories %}
-        <div>
-          <input type="checkbox" id="type{{forloop.counter}}" name="producttype" value="{{x}}" />
-          <label for="type{{forloop.counter}}">{{x}}</label>
+    <div class="dashboard-products-wrapper">
+        {% for message in messages %}
+        {{message}}
+        {% endfor %}
+        <div class="form-wrap">
+            <form method="post" id="addproductform" class="productforms">
+                {% csrf_token %}
+                <div class="add-form-layout row">
+                    <div class="col-md-8">
+                        <div class="left-field">
+                            <div class="input-field">
+                                <input type="text" name="producttitle" id="producttitle" placeholder="Product Title">
+                            </div>
+                            <div class="description-field">
+                                <div id="editor"></div>
+                                <input type="hidden" name="editorContent" id="editorContent">
+                            </div>
+                            <div class="input-field">
+                                <label><span>Product Price</span>
+                                    <input type="text" name="price" id="price" placeholder="Price">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="right-bar">
+                            <div class="publish-button">
+                                <h3>Publish</h3>
+                                <div class="publish-box text-end">
+                                    <input type="submit" value="Publish">
+                                </div>
+                            </div>
+                            <div class="form-field user-profile-image">
+                                <span>Product Featured image</span>
+                                <label class="profile-img" for="productimg">
+                                    <input type="file" style="display: none;" name="productimg" id="productimg"
+                                        accept="image/*">
+                                    <img src="{% static 'image/default.png' %}" id="fimg"
+                                        alt="img">
+                                </label>
+                                <div class="button-wrapper text-end">
+                                    <button id="removeimg">Remove Image</button>
+                                </div>
+                                <textarea name="productimgblob" id="productimgblob" class="d-none"></textarea>  
+                            </div>
+                            <div class="category-box">
+                                <span>Categories</span>
+                                <ul>
+                                    {% for x in categories %}
+                                    <li>
+                                        <input type="checkbox" id="type{{forloop.counter}}" name="producttype" value="{{x}}" />
+                                        <label for="type{{forloop.counter}}">{{x}}</label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-      {% endfor %}
     </div>
-    <input type="submit" value="Publish">
-  </form>
-</div>
 </div>
 {% comment %} {% include 'merchant/theme-temp/dashboard-footer.html' %} {% endcomment %}
 {% endblock body %}
