@@ -10,10 +10,11 @@
 
       <div class="col-md-6">
         <div class="search-form-wrapper">
-          <form id="searchform" method="get">
+          <form id="searchform" method="get" action="{% url 'customer:search_products' %}" class="search-form">
             <div class="d-flex">
               <div class="col-md-12">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <input type="text" name="query" placeholder="Search..." value="{{ request.GET.query|default_if_none:'' }}">
+                  <button type="submit">Search</button>
               </div>
             </div>
           </form>

@@ -30,18 +30,16 @@
     {% comment %} {% include "merchant/temp/merchant_nav.html" %} {% endcomment %}
 
     <section class="dashboard-page">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-2">
-              <div class="dashboard-nav-wrapper container">
-                {% include "merchant/temp/nav_merchant.html" %}
-              </div>
+        <div class="row gx-0">
+          <div class="col-md-2">
+            <div class="dashboard-nav-wrapper">
+              {% include "merchant/temp/nav_merchant.html" %}
             </div>
-            <div class="col-md-10">
-                {% block body %}
-    
-                {% endblock body %}
-            </div>
+          </div>
+          <div class="col-md-10 px-4" style="background-color: #f9f9f9;">
+              {% block body %}
+  
+              {% endblock body %}
           </div>
         </div>
       </section>

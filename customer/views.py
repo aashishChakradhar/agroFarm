@@ -321,3 +321,10 @@ class Automate_Data_Entry(BaseView):
 #             'page_name' : 'add-address',
 #         }
 #         return render(request, f"{app_name}/billing-address.html", context)
+
+def search_product(request):
+    query = request.GET.get('query', '')
+    results = []
+    if query:
+        results = Product.objects.filter(name__icontains=query) 
+    return render(request, f'{app_name}/search.html', {'query': query, 'results': results})

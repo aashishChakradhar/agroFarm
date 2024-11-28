@@ -1,5 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root{
+    --primary-color: #66A931;
+}
+
 body{
-    font-family: 'poppins';
+    font-family: "Inter", sans-serif;
 }
 
 .container{
@@ -11,7 +17,7 @@ body{
 }
 
 .top-nav{
-    background:#22a776;
+    background:var(--primary-color);
     padding: 5px 20px ;
     color: #fff;
 }
@@ -23,16 +29,30 @@ body{
 .right-user-info{
     display: inline-block;
 }
-
+.right-user-info svg{
+    width: 30px ;
+    height: 30px ;
+}
+.right-user-info .nav-link{
+    padding: 10px 0;
+}
+.top-nav-content a{
+    font-size: 24px;
+}
+.right-user-info  .nav-link img{
+    width: 30px;
+}
 .top-nav a, .dashboard-nav-wrapper a{
     text-decoration: none;
-    color: #000;
+    color: #fff;
 }
 
 .dashboard-nav-wrapper{
-    padding: 20px 0px;
-    background: #57e6b2;
+    /* padding: 20px 0px; */
+    background: var(--primary-color);
     height: 100vh;
+    position: sticky;
+    top: 0;
 }
 
 .dashboard-nav-wrapper ul{
@@ -55,16 +75,8 @@ body{
     width: 30px;
 }
 
-.dashboard-nav-wrapper svg path{
-    stroke: #000;
-}
-
 #profileimg{
     display: none;
-}
-
-#fimg{
-    width: 60px;
 }
 
 #removeimg{
@@ -74,4 +86,151 @@ body{
 .dashboard-products-wrapper table{
     width: 100%;
     max-width: 100%;
+}
+
+.dashboard-nav-wrapper ul{
+    padding: 0;
+    margin: 0;
+}
+.dashboard-nav-wrapper ul li a{
+    padding: 10px 20px;
+}
+.dashboard-nav-wrapper ul ul a{
+    padding-left: 50px;
+}
+.dashboard-nav-wrapper ul li a:hover{
+    background-color: #000000;
+}
+
+.dashboard-product{
+    margin-top: 30px;
+}
+.dashboard-product > .title{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 50px;
+}
+.dashboard-product > .title h1{
+    margin: 0;
+    font-size: 28px;
+}
+.dashboard-product > .title a{
+    display: inline-block;
+    padding: 5px 20px;
+    background-color: #f0f0f1;
+    border: 1px solid #cccccc;
+    border-radius: 2px;
+    text-decoration: none;
+    color: #333333;
+    position: relative;
+    top: 2px;
+}
+.dashboard-products-wrapper table :is(img,svg){
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    padding: 5px;
+}
+.dashboard-products-wrapper table tr th{
+    background-color: #f6f7f9;
+}
+.dashboard-products-wrapper table tr:nth-child(odd){
+    background-color: #ececec;
+}
+.dashboard-products-wrapper table tr :is(th,td):first-child{
+    text-align: center;
+}
+.dashboard-products-wrapper table tr td a{
+    color: inherit;
+    text-decoration: none;
+}
+.dashboard-products-wrapper table tr td a:hover{
+    color: var(--primary-color);
+}
+
+
+.add-form-layout .left-field{
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+}
+.add-form-layout label{
+    display: block;
+}
+.add-form-layout label span{
+    font-size: 18px;
+    font-weight: 600;
+}
+.add-form-layout .input-field input{
+    width: 100%;
+    padding: 10px 20px;
+    border: 1px solid #cccccc;
+    border-radius: 2px;
+}
+
+.add-form-layout .category-box,
+.add-form-layout  .user-profile-image,
+.add-form-layout .publish-button{
+    background-color: #ffffff;
+    border-radius: 4px;
+    border: 1px solid #cccccc;
+}
+.add-form-layout .category-box span,
+.add-form-layout  .user-profile-image span,
+.add-form-layout .publish-button h3{
+    font-size: 18px;
+    font-weight: 600;
+    padding: 15px;
+    border-bottom: 1px solid #cccccc;
+    display: block;
+}
+
+.add-form-layout .publish-button .publish-box{
+    padding: 15px;
+}
+.add-form-layout .user-profile-image #removeimg,
+.add-form-layout .publish-button input[type="submit"]{
+    display: inline-block;
+    padding: 5px 20px;
+    background-color: #f0f0f1;
+    border: 1px solid #cccccc;
+    border-radius: 2px;
+    text-decoration: none;
+    color: #333333;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+}
+.right-bar{
+    display: flex;
+    flex-direction: column;
+    row-gap: 40px;
+}
+.add-form-layout  .user-profile-image label{
+    display: block;
+    margin: 15px;
+}
+.add-form-layout  .user-profile-image img{
+    width: 100% ;
+    object-fit: contain;
+    object-position: center;
+    background-color: #cccccc;
+}
+
+.add-form-layout  .user-profile-image .button-wrapper{
+    padding: 0 15px 15px;
+}
+
+.add-form-layout  .category-box ul{
+    padding: 15px;
+    margin: 0;
+    list-style: none;
+}
+.add-form-layout  .category-box ul li{
+    display: flex;
+    gap: 5px;
+}
+.form-wrap{
+    padding-bottom: 50px;
 }
