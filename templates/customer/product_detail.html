@@ -1,0 +1,51 @@
+{% extends "customer/temp/base.html" %}
+{% block body %}
+<div>
+    <div class = 'container p-0 mx-5' >
+        <div class = 'row' style="background-color: red; min-height:35rem">
+            <div class = 'col-3 p-4' style = " border: 1rem solid black;">
+                <img src="{{products.featuredimage}}" style="height: " alt="">
+            </div>
+            <div class = 'col-6 p-4' style = " border: 1rem solid black;">
+                <h1>
+                    {{products.uid}}
+                    {{products.name}}
+                </h1>
+                <h4>
+                    {{products.rate}}
+                </h4>
+                <h5>
+                    {{products.description}}
+                </h5>
+                
+                {% for review in reviews %}
+                <h3>{{review.userID}}</h3>
+                <h5>
+                    rating: {{review.rating}}
+                    comment: {{review.comment}}
+                </h5>
+                {% endfor %}
+                
+            </div>
+            <div class = 'col-3 p-4' style = " border: 1rem solid black;">
+                address
+            </div>
+        </div>
+        <div class = 'row'>
+            <form  method = 'POST'>
+                {% csrf_token %}
+                <label for="quantity">
+                    Quantity: 
+                </label>
+                <input name='uid' value='{{products.uid}}' type="number" id = 'uid' hidden>
+                <input name='quantity' id='quantity' type="number" placeholder = "10">
+                <input type="submit" name = 'action' value="Buy Now" class = "btn btn-primary">
+                
+            </form>
+            <form action="">
+                <input type="submit" name = 'action' value="Add to Cart" class = "btn btn-secondary">
+            </form>
+        </div>
+    </div>     
+</div>
+{% endblock body %}

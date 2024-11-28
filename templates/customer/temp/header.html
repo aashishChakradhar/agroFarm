@@ -26,8 +26,13 @@
             <i class="fa-regular fa-user"></i>
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Login</a></li>
-            <li><a class="dropdown-item" href="#">Signup</a></li>
+            {% if request.user.is_authenticated %}
+              <li><a class="dropdown-item" href = {% url "customer:logout" %}>Logout</a></li>
+              <li><a class="dropdown-item" href = {% url "merchant:signup" %}>Become a merchant</a></li>
+              {% else%}
+              <li><a class="dropdown-item" href="{% url 'customer:login '%}">Login</a></li>
+              <li><a class="dropdown-item" href="{% url 'customer:signup '%}">Signup</a></li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -59,6 +64,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href = {% url "customer:add-address" %}>Add Address</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href = {% url "customer:order-detail" %}>My Order</a>
           </li>
           {% comment %} <li class="nav-item">
             <a class="nav-link" href= {% url "customer:dashboard" %}>dashboard</a>
