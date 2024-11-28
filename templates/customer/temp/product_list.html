@@ -4,7 +4,7 @@
         <h4 class="card-title">{{ products.name }}</h4>
         <div class='container'>
             <div class='row'>
-                {{category.name}}
+                {{ category.name }}
             </div>
             <div class='row'>
                 <div class='col-8 p-0 m-0'>
@@ -22,19 +22,23 @@
                 {% endif %}
             </div>
             <div class='row'>
-                {{review.rating}}
+                <!-- Rating can be added if available -->
+                {{ review.rating }}
             </div>
             <div class='row'>
                 <div class='col-6 px-0 mx-0'>
-                    <a href="/product-detail/{{products.uid}}" class="btn btn-danger px-3 mx-0">Buy Now</a>
+                    <a href="/product-detail/{{ products.uid }}" class="btn btn-danger px-3 mx-0">Buy Now</a>
                 </div>
                 <div class='col-3 px-0 mx-0'>
-                    <a href="/product-detail/{{products.uid}}" class="btn btn-primary px-2 mx-0">Cart</a>
+                    <button class="add-to-cart-btn" data-product-uid="{{ products.uid }}">{{products.uid}}Add to Cart</button>
                 </div>
                 <div class='col-3 px-0 mx-0'>
-                    <a href="/product-detail/{{products.uid}}" class="btn btn-warning px-2 mx-0">Wishlist</a>
+                    <a href="/product-detail/{{ products.uid }}" class="btn btn-warning px-2 mx-0">Wishlist</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Success Message (Initially hidden) -->
+<div id="success-message" style="display:none;"></div>
