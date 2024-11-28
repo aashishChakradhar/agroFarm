@@ -133,9 +133,21 @@ class Signup_View (View):
             
 class Index(BaseView):
     def get(self, request):
+        categorys = Category.objects.all()
+        products = Product.objects.all()
+        category = []
+        for categories in categorys:
+            # Check if there is any product that belongs to this category
+            if categories.product_set.exists():  # product_set is the reverse relation for Category
+                category_products = categories.product_set.all()[:4]  # [:4] limits to 4 products
+                category.append({
+                    'category': categories,
+                    'products': category_products
+                })
         context = {
             "page_name":"home",
-            "rangelist" : [1,2,3,4] 
+            "rangelist" : [1,2,3,4] ,
+            "categorys": category
         }
         return render(request,f'{app_name}/index.html',context)
 
@@ -178,13 +190,17 @@ class AddAddress_View(BaseView):
         return redirect ('/') 
 
 class Product_Detail_View(BaseView):
-    def get(self, request):
+    def get(self, request, product_id):
+        product = get_object_or_404(Product, uid=product_id)
+        review = Review.objects.filter(productID = product)
         context = {
-            "page_name":"product", 
+            "page_name": "product",
+            "products": product,
+            "reviews" : review,
         }
-        return render(request,f'{app_name}/product_detail.html',context)
+        return render(request, 'customer/product_detail.html', context)
     
-    def post(self,request):
+    def post(self,request, product_id):
         quantity = request.POST.get('quantity')
         action = request.POST.get('action')
         if action == 'Buy Now':
@@ -199,6 +215,8 @@ class Product_Detail_View(BaseView):
         # Default action (in case something goes wrong)
         messages.error(request, "Invalid action.")
         return redirect(request.path)
+
+
 
 class Cart_View(BaseView):
     def get(self,request):
