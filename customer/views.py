@@ -133,21 +133,21 @@ class Signup_View (View):
             
 class Index(BaseView):
     def get(self, request):
-        myvalue = {
-            'Carrot': {
-                'id': 1,
-                'price': 500,
-                'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos porro facere ducimus ratione impedit? Eos neque dolorem quia exercitationem a earum cupiditate similique velit explicabo molestias, unde odit necessitatibus laboriosam?',
-                'is_available': True,
-                'featuredimage': 'https://img.freepik.com/premium-photo/fresh-carrots-with-green-leaves-rustic-wooden-table-selective-focus_1108670-510.jpg?size=626&ext=jpg',
-                'rating': '4.5',
-                'storeID': '12345',
-            }
-        }
+        categorys = Category.objects.all()
+        products = Product.objects.all()
+        category = []
+        for categories in categorys:
+            # Check if there is any product that belongs to this category
+            if categories.product_set.exists():  # product_set is the reverse relation for Category
+                category_products = categories.product_set.all()[:4]  # [:4] limits to 4 products
+                category.append({
+                    'category': categories,
+                    'products': category_products
+                })
         context = {
             "page_name":"home",
             "rangelist" : [1,2,3,4] ,
-            'products' : myvalue
+            "categorys": category
         }
         return render(request,f'{app_name}/index.html',context)
 
@@ -191,10 +191,12 @@ class AddAddress_View(BaseView):
 
 class Product_Detail_View(BaseView):
     def get(self, request, product_id):
-        product = product_id#get_object_or_404(Product, uid=product_id)
+        product = get_object_or_404(Product, uid=product_id)
+        review = Review.objects.filter(productID = product)
         context = {
             "page_name": "product",
-            "product": product
+            "products": product,
+            "reviews" : review,
         }
         return render(request, 'customer/product_detail.html', context)
     
