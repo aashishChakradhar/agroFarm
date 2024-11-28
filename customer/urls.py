@@ -17,6 +17,6 @@ urlpatterns = [
     path('my-cart/', views.Cart_View.as_view(), name='my-cart'),
     path('add-data/', views.Automate_Data_Entry.as_view(), name='add-data'),
     path('product-detail/<int:product_id>/', views.Product_Detail_View.as_view(), name='product-detail'),
-      path('add-to-cart/<int:product_uid>/', views.AddToCartView.as_view(), name='add-to-cart'),
+    path('add-to-cart/<int:product_uid>/', views.AddToCartView.as_view(), name='add-to-cart'),
 
 ]

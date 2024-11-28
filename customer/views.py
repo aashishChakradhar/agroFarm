@@ -199,7 +199,7 @@ class Product_Detail_View(BaseView):
             "products": product,
             "reviews" : review,
         }
-        return render(request, 'customer/product_detail.html', context)
+        return render(request, f'{app_name}/product_detail.html', context)
     
     def post(self,request, product_id):
         quantity = request.POST.get('quantity')
@@ -246,12 +246,56 @@ class AddToCartView(BaseView):
             'cart_count': CartItem.objects.filter(user=request.user).count(),
         })
 
-
-
-
 class Cart_View(BaseView):
-    def get(self,request):
-        return HttpResponse('This is cart page')
+    def get(self, request):
+        user = request.user
+
+        # Get all cart items for the current user
+        carts = CartItem.objects.filter(user=user)
+
+        # Create a list to hold products corresponding to the cart items
+        products = []
+
+        # Loop through each cart item and get the related product
+        for cart in carts:
+            product = Product.objects.filter(name=cart.product).first()  # Use .first() to get one object or None
+            if product:
+                print(product.uid)  # Debug print statement
+                products.append(product)  # Append the product to the list if it exists
+
+        # Pass the full list of cart items and related products to the context
+        context = {
+            'page_name': 'my-cart',
+            'carts': carts,
+            'products': products,  # Pass the products to the template if needed
+        }
+        return render(request, f'{app_name}/cart.html', context)
+    
+    def post(self,request):
+        action = request.POST.get('action')
+        print(f"{action}:")
+
+        # Get the list of selected product IDs from the POST data
+        selected_product_ids = request.POST.getlist('cart_item')  # 'product' should match the name attribute of your checkboxes
+        print("Selected product IDs:", selected_product_ids)
+
+        products = []
+        for uid in selected_product_ids:
+            selected_products = Product.objects.filter(uid=uid).first()
+            if selected_products:
+                products.append(selected_products)  # Append the product to the list if it exists
+        
+        # Print the IDs for debugging (optional)
+        for product in products:
+            print(f"Product selected: {product.uid}")
+        
+        if action == 'delete':
+            for product in products:
+                print(f'objects deleted: {CartItem.objects.filter(user=request.user, product=product.uid).delete()}')
+               
+        elif action == 'buy':
+            print('objects bought')
+        return redirect(request.path)
 
 class Order_Detail_View(View):
     def get(self,request):
