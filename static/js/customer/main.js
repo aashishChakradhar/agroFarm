@@ -45,3 +45,17 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const selectAllCheckbox = document.getElementById('select');
+    const form = document.getElementById('myForm');
+    const checkboxes = form.querySelectorAll('input[name="cart_item"]');
+
+    selectAllCheckbox.addEventListener('change', function () {
+        const isChecked = this.checked;
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = isChecked;
+        });
+    });
+});
