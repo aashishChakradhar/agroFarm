@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
+from django.http import JsonResponse
 
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
@@ -215,6 +216,36 @@ class Product_Detail_View(BaseView):
         # Default action (in case something goes wrong)
         messages.error(request, "Invalid action.")
         return redirect(request.path)
+
+class AddToCartView(BaseView):
+    def get(self, request, product_uid):
+        # Ensure the product exists
+        product = get_object_or_404(Product, uid=product_uid)
+
+        # Check if the user is authenticated
+        if not request.user.is_authenticated:
+            return JsonResponse({'success': False, 'message': 'Please login to add products to your cart.'}, status=401)
+
+        # Check if the product already exists in the cart
+        cart_item = CartItem.objects.filter(user=request.user, product=product).first()
+        if cart_item:
+            print('already exissts')
+            # Return "already in cart" response
+            return JsonResponse({
+                'success': False,
+                'message': f'{product.name} is already in your cart.'
+            }, status=400)
+
+        # Add the product to the cart if it doesn't exist
+        CartItem.objects.create(user=request.user, product=product)
+
+        # Return success response
+        return JsonResponse({
+            'success': True,
+            'message': f'{product.name} has been added to your cart.',
+            'cart_count': CartItem.objects.filter(user=request.user).count(),
+        })
+
 
 
 
