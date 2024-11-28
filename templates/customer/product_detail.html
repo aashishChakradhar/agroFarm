@@ -1,37 +1,40 @@
 {% extends "customer/temp/base.html" %}
 {% block body %}
 <div>
-    <div class = 'container p-0 mx-5' >
-        <div class = 'row' style="background-color: red; min-height:35rem">
+    <div class = 'container' >
+        <div></div>
+        <div class = 'row mx-5' style="background-color: red; min-height:35rem">
+            <!-- For image -->
             <div class = 'col-3 p-4' style = " border: 1rem solid black;">
-                <img src="{{products.featuredimage}}" style="height: " alt="">
+                <img src="{{products.featuredimage}}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
             </div>
+            <!-- For main body -->
             <div class = 'col-6 p-4' style = " border: 1rem solid black;">
-                <h1>
-                    {{products.uid}}
-                    {{products.name}}
-                </h1>
-                <h4>
-                    {{products.rate}}
-                </h4>
-                <h5>
-                    {{products.description}}
-                </h5>
+                <div class='row'>
+                    <h1>
+                        {{products.name}}
+                    </h1>
+                </div>
+                <div class = 'row'>
+                    <h4>
+                        {{products.rate}}
+                    </h4>
+                </div>
                 
-                {% for review in reviews %}
-                <h3>{{review.userID}}</h3>
-                <h5>
-                    rating: {{review.rating}}
-                    comment: {{review.comment}}
-                </h5>
-                {% endfor %}
-                
+                <div class='row'>
+                    <h5>
+                        {{products.description}}
+                    </h5>
+                </div>
             </div>
+
+            <!-- For Address -->
             <div class = 'col-3 p-4' style = " border: 1rem solid black;">
                 address
             </div>
         </div>
-        <div class = 'row'>
+        <!-- For Ordering -->
+        <div class = 'row mx-5' style="height:10rem; background-color:blue">
             <form  method = 'POST'>
                 {% csrf_token %}
                 <label for="quantity">
@@ -42,9 +45,23 @@
                 <input type="submit" name = 'action' value="Buy Now" class = "btn btn-primary">
                 
             </form>
-            <form action="">
-                <input type="submit" name = 'action' value="Add to Cart" class = "btn btn-secondary">
-            </form>
+            <div class='col-3 px-0 mx-0'>
+                <button class="add-to-cart-btn" data-product-uid="{{ products.uid }}">Add to Cart</button>
+            </div>
+        </div>
+        <!-- For Comments -->
+        <div class='row mx-5' style='height:15rem; background-color:green'>
+            {% if reviews %}
+                {% for review in reviews %}
+                    <h3>{{review.userID}}</h3>
+                    <h5>
+                        rating: {{review.rating}}
+                        comment: {{review.comment}}
+                    </h5>
+                {% endfor %}
+            {%else%}
+            No Review yet
+            {% endif %}
         </div>
     </div>     
 </div>
