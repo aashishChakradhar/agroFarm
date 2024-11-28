@@ -45,9 +45,9 @@
                 <input type="submit" name = 'action' value="Buy Now" class = "btn btn-primary">
                 
             </form>
-            <form action="">
-                <input type="submit" name = 'action' value="Add to Cart" class = "btn btn-secondary">
-            </form>
+            <div class='col-3 px-0 mx-0'>
+                <button class="add-to-cart-btn" data-product-uid="{{ products.uid }}">Add to Cart</button>
+            </div>
         </div>
         <!-- For Comments -->
         <div class='row mx-5' style='height:15rem; background-color:green'>
