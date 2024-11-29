@@ -13,6 +13,7 @@ class BaseModel(models.Model):
         abstract = True
 
 class Address(BaseModel):
+    userID = models.ForeignKey(User,on_delete=models.CASCADE,default=1)
     country = models.CharField(max_length=25, default='Unknown')
     state  = models.CharField(max_length=25, default='Unknown')
     district = models.CharField(max_length=25, default='Unknown')
@@ -87,12 +88,13 @@ class Store(BaseModel):
 class Order(BaseModel):
     userID = models.ForeignKey(User, on_delete=models.CASCADE)
     productID = models.ForeignKey(Product, on_delete=models.CASCADE)
-    addressID = models.ForeignKey(Address, on_delete=models.CASCADE, default='')
-    quantity = models.DecimalField(max_digits=7, decimal_places=3, default='Unknown')
-    rate = models.DecimalField(max_digits=10, decimal_places=2, default='Unknown')
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default='Unknown')
+    addressID = models.ForeignKey(Address, on_delete=models.CASCADE, null=True, blank=True)
+    quantity = models.PositiveIntegerField(default=1)  # Changed to store whole numbers
+    rate = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+
     def __str__(self):
-        return self.uid
+        return str(self.uid)
     
 class OrderStatus(BaseModel):
     orderID = models.ForeignKey(Order,on_delete=models.CASCADE)
