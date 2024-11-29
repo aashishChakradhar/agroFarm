@@ -32,13 +32,13 @@
                 <div class='col-3 px-0 mx-0'>
                     <button class="add-to-cart-btn" data-product-uid="{{ products.uid }}">{{products.uid}}Add to Cart</button>
                 </div>
-                <div class='col-3 px-0 mx-0'>
+                {% comment %} <div class='col-3 px-0 mx-0'>
                     <a href="/product-detail/{{ products.uid }}" class="btn btn-warning px-2 mx-0">Wishlist</a>
-                </div>
+                </div> {% endcomment %}
             </div>
         </div>
     </div>
 </div>
 
 <!-- Success Message (Initially hidden) -->
-<div id="success-message" style="display:none;"></div>
+<div id="success-message" style="display:none;" hidden></div>
