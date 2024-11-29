@@ -179,13 +179,14 @@ class AddAddress_View(BaseView):
         # Fetch the related objects from the database
 
         address = Address.objects.create(
+            userID=request.user,
             country=country,
             state=province,
             district=district,
-            # municipality=municipality,
+            municipality=municipality,
+            zip_code=postalCode,
             street=street,
-            # postalCode=postalCode,
-            # landmark=landmark
+            landmark=landmark
         )
         address.save()
         return redirect ('/') 
