@@ -1,51 +1,94 @@
 {% extends "merchant/temp/base.html" %}
 
 {% block title %}
-  {{page_name}}
+{{page_name}}
 {% endblock title %}
 
 {% block body %}
-<div class="title">
-  <h1>Products</h1>
-  <a href="/dashboard/products/add-new">Add Product</a>
-</div>
-<div class="dashboard-products-wrapper">
-  {% for message in messages %}
-    {{message}}
-  {% endfor %}
-  <div class="form-wrap">
-    <form method="post" id="editproductform" class="productforms">
-      {% csrf_token %}
-      <input type="text" name="producttitle" id="producttitle" value="{{product.name}}">
-      <div class="form-field user-profile-image">
-        <label class="profile-img" for="productimg">
-          Product Featured image 
-          <input type="file" style="visibility: hidden;" name="productimg" id="productimg" accept="image/*">
-          {% if product.featuredimage %}
-          <img src="{{product.featuredimage}}" id="fimg" alt="img">
-          {% else %}
-          <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg" alt="img">
-          {% endif %}
+<div class="dashboard-product">
+    <div class="title">
+        <h1>Products</h1>
+        <a href="/dashboard/products/add-new">Add Product</a>
+    </div>
+    <div class="dashboard-products-wrapper">
+        <span class="error-message">
+            {% for message in messages %}
+            {{message}}
+            {% endfor %}
+        </span>
+        <div class="form-wrap">
+            <form method="post" id="editproductform" class="productforms">
+                {% csrf_token %}
+                <div class="add-form-layout row">
+                    <div class="col-md-8">
+                        <div class="left-field">
+                            <div class="input-field">
+                                <input type="text" name="producttitle" id="producttitle" value="{{product.name}}">
+                            </div>
+                            <div class="description-field">
+                                <div id="editor"></div>
+                                <input type="hidden" name="editorContent" id="editorContent"
+                                    value="{{product.description}}">
+                            </div>
+                            <div class="input-field">
+                                <label><span>Product Price</span>
+                                    <input type="text" name="price" id="price" value="{{product.rate}}">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="right-bar">
+                            <div class="publish-button">
+                                <h3>Publish</h3>
+                                <div class="publish-box">
+                                    <span class="publish-date">
+                                        Publish Date: 2001/09/11
+                                    </span>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <a href="/merchant/products/delete-product/{{product.uid}}" class="delete-btn">Delete Product</a>
+                                        <input type="submit" value="Update" class="green-btn">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field user-profile-image">
+                                <span>Product Featured image</span>
+                                <label class="profile-img" for="product-image">
+                                    <input type="file" style="visibility: hidden;" name="productimg" id="productimg"
+                                        accept="image/*">
+                                    {% if product.featuredimage %}
+                                    <img src="{{product.featuredimage}}" id="fimg" alt="img">
+                                    {% else %}
+                                    <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png"
+                                        id="fimg" alt="img">
+                                    {% endif %}
+                                </label>
+                                <div class="button-wrapper text-end">
+                                    <button id="removeimg" class="delete-btn">Remove Image</button>
+                                </div>
+                                <textarea name="productimgblob" id="productimgblob" class="d-none"></textarea>
+                            </div>
+                            <div class="category-box">
+                                <span>Categories</span>
+                                <ul>
 
-        </label>
-        <button id="removeimg">Remove Image</button>
-      </div>
-      <textarea name="productimgblob" id="productimgblob" class="d-none"></textarea>
-      <input type="text" name="price" id="price" value="{{product.rate}}">
-      <div id="editor"></div>
-      <input type="hidden" name="editorContent" id="editorContent" value="{{product.description}}">
-      <div>
-        <label>Categories</label>
-        {% for x in categories %}
-          <div>
-            <input type="checkbox" id="type{{forloop.counter}}" name="producttype" value="{{x.name}}" {% if x in product.categoryID.all %} checked {% endif %} />
-            <label for="type{{forloop.counter}}">{{x.name}}</label>
-          </div>
-        {% endfor %}
-      </div>
-      <input type="submit" value="Update">
-      <a href="/merchant/products/delete-product/{{product.uid}}">Delete Product</a>
-    </form>
-  </div>
+                                    {% for x in categories %}
+                                    <li>
+                                        <input type="checkbox" id="type{{forloop.counter}}" name="producttype"
+                                            value="{{x.name}}" {% if x in product.categoryID.all %} checked {% endif %} />
+                                        <label for="type{{forloop.counter}}">{{x.name}}</label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock body %}
