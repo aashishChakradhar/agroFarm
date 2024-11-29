@@ -266,12 +266,6 @@ class AccountView(BaseView):
                     bio=biotext
                 )
 
-            # if not created:
-            #     extrauserfields.mobile = phone
-            #     extrauserfields.profileimg = featuredimage
-            #     extrauserfields.bio = biotext
-            #     extrauserfields.save()
-
             messages.success(request, "Your profile has been successfully updated!")
             return redirect('/merchant/account/')
 
