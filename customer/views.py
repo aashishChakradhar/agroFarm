@@ -151,6 +151,16 @@ class Index(BaseView):
             "categorys": category
         }
         return render(request,f'{app_name}/index.html',context)
+    
+    def post(self,request):
+        action = request.POST.get('action')
+        product_ids = request.POST.getlist('uid')
+        print(product_ids)
+        if action == 'buy':
+            request.session['product_ids'] = product_ids  # Save IDs in session
+            return redirect('customer:buy-now')
+        # Default action (in case something goes wrong)
+        return redirect(request.path)
 
 class AddAddress_View(BaseView):
     def get(self,request):
@@ -179,13 +189,14 @@ class AddAddress_View(BaseView):
         # Fetch the related objects from the database
 
         address = Address.objects.create(
+            userID=request.user,
             country=country,
             state=province,
             district=district,
-            # municipality=municipality,
+            municipality=municipality,
+            zip_code=postalCode,
             street=street,
-            # postalCode=postalCode,
-            # landmark=landmark
+            landmark=landmark
         )
         address.save()
         return redirect ('/') 
@@ -194,21 +205,24 @@ class Product_Detail_View(BaseView):
     def get(self, request, product_id):
         product = get_object_or_404(Product, uid=product_id)
         review = Review.objects.filter(productID = product)
+        address = Address.objects.filter(userID = request.user)
         context = {
             "page_name": "product",
             "products": product,
             "reviews" : review,
+            "address":address,
         }
         return render(request, f'{app_name}/product_detail.html', context)
     
     def post(self,request, product_id):
-        quantity = request.POST.get('quantity')
         action = request.POST.get('action')
         product_ids = request.POST.getlist('product_id')
         print(product_ids)
         if action == 'Buy Now':
             request.session['product_ids'] = product_ids  # Save IDs in session
             return redirect('customer:buy-now')
+        elif action=='add to cart':
+            return redirect(request.path)
 
         # Default action (in case something goes wrong)
         return redirect(request.path)
@@ -234,9 +248,13 @@ class BuyNowView(BaseView):
         product_uids = request.POST.getlist('cart_item')  # List of product UIDs
         quantities = request.POST.getlist('quantity')  # List of quantities
 
+        # getting address of loged User
+        address = Address.objects.get(userID = request.user)
+
         # Validate and process each product and its quantity
         if not product_uids or not quantities or len(product_uids) != len(quantities):
-            return HttpResponse('Invalid data submitted.', status=400)
+            messages.error(request, "Invalid data submitted", status=400)
+            return redirect(request.path)
 
         orders = []  # List to store created order objects for further use or confirmation
 
@@ -253,17 +271,27 @@ class BuyNowView(BaseView):
             order = Order.objects.create(
                 userID=request.user,
                 productID=product,
+                addressID = address,
                 quantity=quantity,
                 rate=product.rate,
                 amount=total_price
             )
             orders.append(order)
+            OrderStatus.objects.create(
+                orderID = order,
+                is_pending = True,
+                is_accepted=False,
+                is_complete = False,
+                is_cancelled=False,
+            )
 
             # Delete the item from the cart after processing
             CartItem.objects.filter(user=request.user, product=product).delete()
 
         # Redirect to a confirmation or success page with relevant details
-        return HttpResponse('Orders have been saved and cart items have been removed.')
+        messages.success(request, "Order has been placed")
+
+        return redirect('customer:order-detail')
 
 class AddToCartView(BaseView): #adds items to cart
     def get(self, request, product_uid):
