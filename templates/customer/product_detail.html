@@ -5,9 +5,15 @@
         <div></div>
         <div class = 'row mx-5' style="background-color: red; min-height:35rem">
             <!-- For image -->
-            <div class = 'col-3 p-4' style = " border: 1rem solid black;">
-                <img src="{{products.featuredimage}}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
-            </div>
+            {% if products.featuredimage %}
+                <div class = 'col-3 p-4' style = " border: 1rem solid black;">
+                    <img src="{{products.featuredimage}}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
+                </div>
+            {% else %}
+                <div class = 'col-3 p-4' style = " border: 1rem solid black;">
+                    <img src="{% static "images/default.png" %}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
+                </div>
+            {% endif %}
             <!-- For main body -->
             <div class = 'col-6 p-4' style = " border: 1rem solid black;">
                 <div class='row'>
