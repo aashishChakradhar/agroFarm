@@ -1,4 +1,3 @@
-
 {% extends "merchant/temp/base.html" %}
 {% load static %}
 {% block title %}
@@ -12,9 +11,11 @@
         <a href="{% url 'merchant:add-products' %}">Add Product</a>
     </div>
     <div class="dashboard-products-wrapper">
-        {% for message in messages %}
-        {{message}}
-        {% endfor %}
+        <span class="error-message">
+            {% for message in messages %}
+            {{message}}
+            {% endfor %}
+        </span>
         <div class="form-wrap">
             <form method="post" id="addproductform" class="productforms">
                 {% csrf_token %}
@@ -40,7 +41,9 @@
                             <div class="publish-button">
                                 <h3>Publish</h3>
                                 <div class="publish-box text-end">
-                                    <input type="submit" value="Publish">
+                                    <div class="d-flex justify-content-end align-items-center mt-3">
+                                        <input type="submit" value="Publish" class="green-btn">
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-field user-profile-image">
@@ -52,7 +55,7 @@
                                         alt="img">
                                 </label>
                                 <div class="button-wrapper text-end">
-                                    <button id="removeimg">Remove Image</button>
+                                    <button id="removeimg" class="delete-btn">Remove Image</button>
                                 </div>
                                 <textarea name="productimgblob" id="productimgblob" class="d-none"></textarea>  
                             </div>
