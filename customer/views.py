@@ -221,6 +221,8 @@ class Product_Detail_View(BaseView):
         if action == 'Buy Now':
             request.session['product_ids'] = product_ids  # Save IDs in session
             return redirect('customer:buy-now')
+        elif action=='add to cart':
+            return redirect(request.path)
 
         # Default action (in case something goes wrong)
         return redirect(request.path)
@@ -251,7 +253,8 @@ class BuyNowView(BaseView):
 
         # Validate and process each product and its quantity
         if not product_uids or not quantities or len(product_uids) != len(quantities):
-            return HttpResponse('Invalid data submitted.', status=400)
+            messages.error(request, "Invalid data submitted", status=400)
+            return redirect(request.path)
 
         orders = []  # List to store created order objects for further use or confirmation
 
@@ -274,12 +277,21 @@ class BuyNowView(BaseView):
                 amount=total_price
             )
             orders.append(order)
+            OrderStatus.objects.create(
+                orderID = order,
+                is_pending = True,
+                is_accepted=False,
+                is_complete = False,
+                is_cancelled=False,
+            )
 
             # Delete the item from the cart after processing
             CartItem.objects.filter(user=request.user, product=product).delete()
 
         # Redirect to a confirmation or success page with relevant details
-        return HttpResponse('Orders have been saved and cart items have been removed.')
+        messages.success(request, "Order has been placed")
+
+        return redirect('customer:order-detail')
 
 class AddToCartView(BaseView): #adds items to cart
     def get(self, request, product_uid):
