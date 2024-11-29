@@ -22,7 +22,7 @@ class Address(BaseModel):
     street = models.CharField(max_length=50, default='Unknown')
     landmark = models.CharField(max_length=100,default='Unknown')
     def __str__(self):
-        return f"{self.street}, {self.municipality}, {self.district}, {self.province}, {self.country}"
+        return f"{self.street}, {self.municipality}, {self.district}, {self.state}, {self.country}"
 
 class ExtraUserDetails(BaseModel):
     userID = models.OneToOneField(User, on_delete=models.CASCADE)
