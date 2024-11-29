@@ -189,18 +189,19 @@ body{
 .add-form-layout .publish-button .publish-box{
     padding: 15px;
 }
-.add-form-layout .user-profile-image #removeimg,
 .add-form-layout .publish-button input[type="submit"]{
     display: inline-block;
     padding: 5px 20px;
     background-color: #f0f0f1;
     border: 1px solid #cccccc;
-    border-radius: 2px;
+    border-radius: 4px;
     text-decoration: none;
     color: #333333;
     margin-top: 10px;
     margin-bottom: 10px;
     margin-left: auto;
+    min-width: 130px;
+    transition: all 0.3s ease;
 }
 .right-bar{
     display: flex;
@@ -233,4 +234,87 @@ body{
 }
 .form-wrap{
     padding-bottom: 50px;
+}
+#editor {
+    height: 200px;
+    background-color: #FFFFFF;
+}
+.error-message{
+    color: red;
+}
+.add-form-layout .delete-btn{
+    color: red;
+    border: 1px solid;
+    border-color: rgb(225, 0, 0);
+    display: inline-block !important;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 4px;
+    padding: 5px 20px;
+    transition: all 0.3s ease-in-out;
+    background-color: #ffffff;
+}
+.add-form-layout .delete-btn:hover{
+    color: #ffffff;
+    background-color: rgb(225, 0, 0);
+}
+.green-btn{
+    background-color: #66A931 !important;
+    color: #ffffff !important;
+}
+.add-form-layout .publish-button input[type="submit"]:hover{
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+}
+
+.order-table table{
+    width: 100%;
+}
+.order-table table thead tr{
+    background-color: #ffffff;
+}
+.order-table table tbody tr:nth-child(odd){
+    background-color: #cccccc;
+}
+.order-table table tbody tr:nth-child(even){
+    background-color: #ececec;
+}
+.order-table tr :is(th,td){
+    padding: 5px 20px;
+}
+.order-table tr :is(th,td):first-child{
+    text-align: center;
+    width: 5%;
+}
+.order-table tr :is(th,td):nth-child(2){
+    width: 12%;
+}
+.order-table tr :is(th,td):nth-child(4){
+    width: 12%;
+}
+.order-table tr :is(th,td):nth-child(5){
+    width: 24%;
+    text-align: center;
+}
+.order-table tr :is(th,td):nth-child(6){
+    width: 12%;
+}
+.order-table .status-btn{
+    background-color: var(--bg-color);
+    color: #000000;
+    display: inline-block;
+    width: 130px;
+    text-align: center;
+    padding: 5px 20px;
+    border-radius: 4px;
+}
+.order-table .status-btn.processing-btn{
+    --bg-color: rgb(245, 245, 55);
+}
+.order-table .status-btn.complete-btn{
+    --bg-color: rgb(0, 221, 0);
+}
+.order-table .status-btn.cancelled-btn{
+    --bg-color: rgb(255, 0, 0);
+    color: #ffffff;
 }
