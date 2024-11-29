@@ -13,15 +13,16 @@ class BaseModel(models.Model):
         abstract = True
 
 class Address(BaseModel):
-    userID = models.ForeignKey(User,on_delete=models.CASCADE,default=1)
-    country = models.CharField(max_length=25, default='Unknown')
-    state  = models.CharField(max_length=25, default='Unknown')
-    district = models.CharField(max_length=25, default='Unknown')
-    municipality = models.CharField(max_length=30, default='Unknown')
-    zip_code = models.CharField(max_length=25, default='Unknown')
-    street = models.CharField(max_length=25, default='Unknown')
+    userID = models.OneToOneField(User,on_delete=models.CASCADE,default=1)
+    country = models.CharField(max_length=50, default='Unknown')
+    state  = models.CharField(max_length=50, default='Unknown')
+    district = models.CharField(max_length=50, default='Unknown')
+    municipality = models.CharField(max_length=50, default='Unknown')
+    zip_code = models.CharField(max_length=50, blank=True, null=True)
+    street = models.CharField(max_length=50, default='Unknown')
+    landmark = models.CharField(max_length=100,default='Unknown')
     def __str__(self):
-        return self.district
+        return f"{self.street}, {self.municipality}, {self.district}, {self.province}, {self.country}"
 
 class ExtraUserDetails(BaseModel):
     userID = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -57,7 +58,7 @@ class Product(BaseModel):
     tagID = models.ManyToManyField(Tag)
     name = models.CharField(max_length=30,default="unknown")
     featuredimage = models.CharField(max_length=1024, default='') 
-    description = models.CharField(max_length=1024,default="unknown")
+    description = models.TextField(default="unknown")
     rate = models.DecimalField(max_digits=5, decimal_places=2,default="unknown")
     is_available = models.BooleanField(default=False)
     def __str__(self):
