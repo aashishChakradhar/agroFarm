@@ -151,6 +151,16 @@ class Index(BaseView):
             "categorys": category
         }
         return render(request,f'{app_name}/index.html',context)
+    
+    def post(self,request):
+        action = request.POST.get('action')
+        product_ids = request.POST.getlist('uid')
+        print(product_ids)
+        if action == 'buy':
+            request.session['product_ids'] = product_ids  # Save IDs in session
+            return redirect('customer:buy-now')
+        # Default action (in case something goes wrong)
+        return redirect(request.path)
 
 class AddAddress_View(BaseView):
     def get(self,request):
@@ -205,7 +215,6 @@ class Product_Detail_View(BaseView):
         return render(request, f'{app_name}/product_detail.html', context)
     
     def post(self,request, product_id):
-        quantity = request.POST.get('quantity')
         action = request.POST.get('action')
         product_ids = request.POST.getlist('product_id')
         print(product_ids)
@@ -237,6 +246,9 @@ class BuyNowView(BaseView):
         product_uids = request.POST.getlist('cart_item')  # List of product UIDs
         quantities = request.POST.getlist('quantity')  # List of quantities
 
+        # getting address of loged User
+        address = Address.objects.get(userID = request.user)
+
         # Validate and process each product and its quantity
         if not product_uids or not quantities or len(product_uids) != len(quantities):
             return HttpResponse('Invalid data submitted.', status=400)
@@ -256,6 +268,7 @@ class BuyNowView(BaseView):
             order = Order.objects.create(
                 userID=request.user,
                 productID=product,
+                addressID = address,
                 quantity=quantity,
                 rate=product.rate,
                 amount=total_price
