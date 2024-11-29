@@ -44,5 +44,4 @@ urlpatterns = [
     # path('edit-product/<int:id>', views.EditProductView.as_view(), name='edit-products'),#for merchant
 
     # path('billing-address', views.BillingAddress_View.as_view(), name='billing-address'),#on working phase
-    
 ]       
