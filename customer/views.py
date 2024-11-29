@@ -217,7 +217,7 @@ class Product_Detail_View(BaseView):
         messages.error(request, "Invalid action.")
         return redirect(request.path)
 
-class AddToCartView(BaseView):
+class AddToCartView(BaseView): #adds items to cart
     def get(self, request, product_uid):
         # Ensure the product exists
         product = get_object_or_404(Product, uid=product_uid)
@@ -246,7 +246,7 @@ class AddToCartView(BaseView):
             'cart_count': CartItem.objects.filter(user=request.user).count(),
         })
 
-class Cart_View(BaseView):
+class MyCart_View(BaseView): #show items in my cart
     def get(self, request):
         user = request.user
 

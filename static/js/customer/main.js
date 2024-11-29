@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+//for select all checkbox
 document.addEventListener('DOMContentLoaded', function () {
     const selectAllCheckbox = document.getElementById('select');
     const form = document.getElementById('myForm');
