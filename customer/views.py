@@ -195,10 +195,12 @@ class Product_Detail_View(BaseView):
     def get(self, request, product_id):
         product = get_object_or_404(Product, uid=product_id)
         review = Review.objects.filter(productID = product)
+        address = Address.objects.filter(userID = request.user)
         context = {
             "page_name": "product",
             "products": product,
             "reviews" : review,
+            "address":address,
         }
         return render(request, f'{app_name}/product_detail.html', context)
     
