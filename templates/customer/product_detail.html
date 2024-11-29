@@ -1,13 +1,20 @@
 {% extends "customer/temp/base.html" %}
+{% load static %}
 {% block body %}
 <div>
     <div class = 'container' >
         <div></div>
         <div class = 'row mx-5' style="background-color: red; min-height:35rem">
             <!-- For image -->
-            <div class = 'col-3 p-4' style = " border: 1rem solid black;">
-                <img src="{{products.featuredimage}}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
-            </div>
+            {% if products.featuredimage %}
+                <div class = 'col-3 p-4' style = " border: 1rem solid black;">
+                    <img src="{{products.featuredimage}}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
+                </div>
+            {% else %}
+                <div class = 'col-3 p-4' style = " border: 1rem solid black;">
+                    <img src="{% static "images/default.png" %}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
+                </div>
+            {% endif %}
             <!-- For main body -->
             <div class = 'col-6 p-4' style = " border: 1rem solid black;">
                 <div class='row'>
@@ -30,24 +37,58 @@
 
             <!-- For Address -->
             <div class = 'col-3 p-4' style = " border: 1rem solid black;">
-                address
+                <h2>Address</h2>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <tbody>
+                            {% for address in address %}
+                            <tr>
+                                <td>Country</td>
+                                <td>{{address.country}}</td>
+                            </tr>
+                            <tr>
+                                <td>State</td>
+                                <td>{{address.state}}</td>
+                            </tr>
+                            <tr>
+                                <td>District</td>
+                                <td>{{address.district}}</td>
+                            </tr>
+                            <tr>
+                                <td>Municipality</td>
+                                <td>{{address.municipality}}</td>
+                            </tr>
+                            <tr>
+                                <td>Street</td>
+                                <td>{{address.street}}</td>
+                            </tr>
+                            <tr>
+                                <td>Zip Code</td>
+                                <td>{{address.zip_code}}</td>
+                            </tr>
+                            <tr>
+                                <td>Landmark</td>
+                                <td>{{address.landmark}}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <!-- For Ordering -->
         <div class = 'row mx-5' style="height:10rem; background-color:blue">
-            <form  method = 'POST'>
+            <form method = 'POST'>
                 {% csrf_token %}
                 <label for="quantity">
                     Quantity: 
                 </label>
-                <input name='uid' value='{{products.uid}}' type="number" id = 'uid' hidden>
-                <input name='quantity' id='quantity' type="number" placeholder = "10">
-                <input type="submit" name = 'action' value="Buy Now" class = "btn btn-primary">
-                
+                <input name='product_id' value='{{products.uid}}' type="hidden" id = 'uid'>
+                <button type="submit" name="action" value="Buy Now" class="btn btn-primary">
+                    Buy now
+                </button>               
+                <button class="btn btn-success add-to-cart-btn" value="add to cart" data-product-uid="{{ products.uid }}">Add to Cart</button>
             </form>
-            <div class='col-3 px-0 mx-0'>
-                <button class="add-to-cart-btn" data-product-uid="{{ products.uid }}">Add to Cart</button>
-            </div>
         </div>
         <!-- For Comments -->
         <div class='row mx-5' style='height:15rem; background-color:green'>

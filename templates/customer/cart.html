@@ -1,4 +1,87 @@
-{% extends "templates/customer/temp/base.html" %}
+{% extends "customer/temp/base.html" %}
 {% block body %}
-    this is cart section
+{% if products %}
+    <div class="container">
+        <form action="{% url 'customer:my-cart' %}" method="POST" id="myForm">
+            {% csrf_token %}
+            <div class='row justify-content-center'> <!-- Aligns the column to the right -->
+                <div class='col-4 '> <!-- Corrected the class attribute and text alignment -->
+                    <label for="select">
+                    <input type="checkbox" name="action" id="select">Select All
+                </label>
+                </div>
+                {% comment %} <div class='col-4 d-flex justify-content-end text-center'> <!-- Corrected the class attribute and text alignment -->
+                    <label for="action">Action:</label>
+                    <select name="action" id="action">
+                        <option value="none" disabled selected>-- Choose Action --</option>
+                        <option value="delete">Delete</option>
+                        <option value="buy">Buy</option>
+                    </select>
+                </div> {% endcomment %}
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-8 text-center">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>UID</th>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                    <tr>
+                                        <td>
+                                            <label for="{{ product.uid }}">
+                                                <input type="checkbox" name="cart_item" id="{{ product.uid }}" value="{{ product.uid }}">
+                                                {{ product.uid }}
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label for="{{ product.uid }}">
+                                                {{ product.name }}
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label for="{{ product.uid }}">
+                                                {{ product.rate }}
+                                            </label>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>                
+                </div>
+            </div>
+            <div class='row justify-content-center'>
+                <div class='col-8 d-flex justify-content-end text-center'>
+                    <button class="btn btn-success " type="submit" value="buy" name="action">
+                        Buy Now
+                    </button>
+                    <button class="btn btn-danger " type="submit" value="delete" name="action">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% else %}
+<div class='container'>
+    <div class='row justify-content-center'>
+        <div class='col-6 text-center'>
+            <h1>OOPS!! CART EMPTY</h1>
+            <h2>
+                <a href="{% url "customer:home" %}">Continue shoping...</a>
+            </h2>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+    
 {% endblock body %}

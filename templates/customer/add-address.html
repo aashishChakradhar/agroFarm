@@ -1,65 +1,86 @@
 {% extends "customer/temp/base.html" %}
 {% block body %}
-<div class="alert alert-danger d-flex align-items-center" role="alert">
+{% if alert_detail %}
+<div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
   <svg
     class="alert_icon bi flex-shrink-0 me-2"
     role="img"
     aria-label="Warning:"
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    class="bi bi-exclamation-triangle-fill"
   >
-    <use xlink:href="#exclamation-triangle-fill" />
+    <path d="M8 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 0zm0 12a.5.5 0 0 1 .5.5.5.5 0 0 1-.5.5.5.5 0 0 1-.5-.5.5.5 0 0 1 .5-.5z" />
   </svg>
-  <div><strong>{{alert_title}}</strong> {{alert_detail}}</div>
+  <div><strong>{{ alert_title }}</strong> {{ alert_detail }}</div>
+</div>
+{% endif %}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8 col-sm-12">
+      <form action="{% url 'customer:add-address' %}" method="POST">
+        {% csrf_token %}
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="country" class="form-label">Country</label>
+            <input type='text' name="country" id="country" class="form-control" required>
+            </input>
+          </div>
+          <div class="col-md-6">
+            <label for="province" class="form-label">Province</label>
+            <input type='text' name="province" id="province" class="form-control" required>
+            </input>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="district" class="form-label">District</label>
+            <input type="text" name="district" id="district" class="form-control" required>
+              
+          </input>
+          </div>
+          <div class="col-md-6">
+            <label for="municipality" class="form-label">Municipality</label>
+            <input type="text" id="municipality" name="municipality" class="form-control" required />
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="postalCode" class="form-label">Postal Code</label>
+            <input type="text" id="postalCode" name="postalCode" class="form-control" required />
+          </div>
+          <div class="col-md-6">
+            <label for="street" class="form-label">Street</label>
+            <input type="text" id="street" name="street" class="form-control" required />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="landmark" class="form-label">Landmark</label>
+          <textarea id="landmark" name="landmark" class="form-control" rows="4"></textarea>
+        </div>
+
+        <div class="mb-3 form-check">
+          <input
+            type="checkbox"
+            name="shippingAddress"
+            id="shippingAddress"
+            value="true"
+            class="form-check-input"
+            checked
+          />
+          <label class="form-check-label" for="shippingAddress">Use as Shipping Address</label>
+        </div>
+        <button type="submit" class="btn btn-primary w-50 mx-auto d-block">Submit Address</button>
+      </form>
+    </div>
+  </div>
 </div>
 
-<form action={% url 'customer:add-address' %} method="POST">
-  {% csrf_token %}
-  <label for="country">Country</label>
-  <select name="country" id="country" required>
-    {% for country in countrys %}
-    <option value="{{country}}">{{country}}</option>
-    {% endfor %}
-  </select>
-  <br />
-
-  <label for="province">province</label>
-  <select name="province" id="province" required>
-    {% for province in provinces %}
-    <option value="{{province}}">{{province}}</option>
-    {% endfor %}
-  </select>
-  <br />
-
-  <label for="district">district</label>
-  <select name="district" id="district" required>
-    {% for district in districts %}
-    <option value="{{district}}">{{district}}</option>
-    {% endfor %}
-  </select>
-  <br />
-
-  <label for="municipality">municipality</label>
-  <input type="text" id="municipality" name="municipality" required />
-  <br />
-
-  <label for="postalCode">postalcode</label>
-  <input type="text" id="postalCode" name="postalCode" required />
-  <br />
-  <label for="street">street</label>
-  <input type="text" id="street" name="street" required />
-  <br />
-
-  <label for="landmark">landmark</label>
-  <textarea id="landmark" name="landmark" rows = "4" cols = "40" required />
-  </textarea>
-  <hr>
-  <input
-    type="checkbox"
-    name="shippingAddress"
-    id="shippingAddress"
-    value="true"
-    checked
-  />
-  <label for="shippingAddress">Use as Shipping Address</label>
-  <button type="submit">Submit address</button>
-</form>
 {% endblock body %}

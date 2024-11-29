@@ -45,3 +45,54 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+
+//for select all checkbox
+document.addEventListener('DOMContentLoaded', function () {
+    const selectAllCheckbox = document.getElementById('select');
+    const form = document.getElementById('myForm');
+    const checkboxes = form.querySelectorAll('input[name="cart_item"]');
+
+    selectAllCheckbox.addEventListener('change', function () {
+        const isChecked = this.checked;
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = isChecked;
+        });
+    });
+});
+
+
+// to display price
+document.addEventListener('DOMContentLoaded', function () {
+    const quantityInputs = document.querySelectorAll('input[name="quantity"]');
+    quantityInputs.forEach((input) => {
+        // Set initial price when the page loads
+        const rateCell = input.closest('tr').querySelector('td:nth-child(3)');
+        const priceCell = input.closest('tr').querySelector('td:nth-child(5)');
+
+        const rate = parseFloat(rateCell.textContent);
+        const quantity = parseFloat(input.value);
+
+        if (!isNaN(rate) && !isNaN(quantity)) {
+            const totalPrice = rate * quantity;
+            priceCell.textContent = totalPrice.toFixed(2);
+        }
+
+        // Event listener for quantity change
+        input.addEventListener('input', function () {
+            const updatedQuantity = parseFloat(input.value);
+
+            if (updatedQuantity < 1) {
+                alert("Quantity must be at least 1.");
+                input.value = 1; // Reset to 1 if less than 1
+            }
+
+            if (!isNaN(rate) && !isNaN(updatedQuantity)) {
+                const totalPrice = rate * updatedQuantity;
+                priceCell.textContent = totalPrice.toFixed(2);
+            } else {
+                priceCell.textContent = '';
+            }
+        });
+    });
+});

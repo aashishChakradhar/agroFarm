@@ -1,5 +1,10 @@
+{% load static %}
 <div class="card m-3 p-3" style="width: 18rem; height:24rem; border:#9e9b9b solid 2px;">
-    <img src="{{ products.featuredimage }}" class="card-img-top" alt="{{ products.name }}" style="border:#d7dbe0 solid 2px; height: 10rem; object-fit: scale-down;">
+    {% if products.featuredimage %}
+        <img src="{{products.featuredimage}}" class="card-img-top" alt="{{ products.name }}" style="border:#d7dbe0 solid 2px; height: 10rem; object-fit: scale-down;">
+    {% else %}
+        <img src="{% static "images/default.png" %}" class="card-img-top" alt="{{ products.name }}" style="border:#d7dbe0 solid 2px; height: 10rem; object-fit: scale-down;">
+    {% endif %}
     <div class="card-body">
         <h4 class="card-title">{{ products.name }}</h4>
         <div class='container'>
@@ -25,20 +30,31 @@
                 <!-- Rating can be added if available -->
                 {{ review.rating }}
             </div>
+        </div>
+        <div class="container px-0">
+            
             <div class='row'>
-                <div class='col-6 px-0 mx-0'>
-                    <a href="/product-detail/{{ products.uid }}" class="btn btn-danger px-3 mx-0">Buy Now</a>
-                </div>
                 <div class='col-3 px-0 mx-0'>
-                    <button class="add-to-cart-btn" data-product-uid="{{ products.uid }}">{{products.uid}}Add to Cart</button>
+                    <form action="{% url "customer:home" %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name='action' value='buy'>
+                        <input type="hidden" name='uid' value='{{product.uid}}'>
+                        <button type="submit" class="btn btn-primary" >Buy Now</button>
+                    </form>
                 </div>
-                <div class='col-3 px-0 mx-0'>
+                <div class='col-4 px-0 mx-0'>
+                    <a href="/product-detail/{{ products.uid }}" class="btn btn-danger px-2 mx-0">View Product</a>
+                </div>
+                <div class='col-5 px-0 mx-0'>
+                    <button class="btn btn-success add-to-cart-btn" data-product-uid="{{ products.uid }}">Add to Cart</button>
+                </div>
+                {% comment %} <div class='col-3 px-0 mx-0'>
                     <a href="/product-detail/{{ products.uid }}" class="btn btn-warning px-2 mx-0">Wishlist</a>
-                </div>
+                </div> {% endcomment %}
             </div>
         </div>
     </div>
 </div>
 
 <!-- Success Message (Initially hidden) -->
-<div id="success-message" style="display:none;"></div>
+<div id="success-message" style="display:none;" hidden></div>
