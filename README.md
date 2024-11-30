@@ -47,7 +47,7 @@ To set up this project locally, follow these steps:
 
 4. **Apply migrations:**
     ```bash
-    python manage.py makemigtations [app_name]
+    python manage.py makemigtations merchant
     python manage.py migrate
     ```
 
@@ -79,7 +79,7 @@ To set up this project locally, follow these steps:
 
 ## Technologies Used
 
-- **Frontend:** HTML, CSS, JavaScript
+- **Frontend:** HTML, CSS, JavaScript, Bootstrap5
 - **Backend:** Django
 - **Database:** SQLite (default for Django, can be changed to PostgreSQL, MySQL, etc.)
 - **Version Control:** Git

@@ -41,11 +41,13 @@
             {% endif %}
           </div>
         </div>
-        {% block body %}
-          
-        {% endblock body %}
+        
       </div>
     </div>
+    {% block body %}
+          
+    {% endblock body %}
+    
     {% include "customer/temp/footer.html" %}
     <script src="{% static 'js/customer/main.js' %}"></script>
 </body>
