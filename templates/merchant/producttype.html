@@ -1,4 +1,5 @@
 {% extends "merchant/temp/base.html" %}
+{% load static %}
 {% block body %}
 
 {% for message in messages %}
@@ -37,7 +38,7 @@
           {% for cat in categories %}
           <tr>
               <td>{{forloop.counter}}</td>
-              <td><img src="{{cat.featuredimage}}"></td>
+              <td><img src="{% if cat.featuredimage %}{{cat.featuredimage}}{% else %}{% static 'images/default-nobg.png' %}{% endif %}" alt="{{cat.name}} image"></td>
               <td><a href="/merchant/products/edit-producttype/{{cat.uid}}">{{ cat.name }}</a></td>
               <td>{{ cat.created }}</td>
           </tr>

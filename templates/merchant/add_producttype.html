@@ -1,38 +1,40 @@
 {% extends "merchant/temp/base.html" %}
 
 {% block title %}
-  {{page_name}}
+{{page_name}}
 {% endblock title %}
 
 {% block body %}
 
 <div class="dashboard-product">
-<div class="title">
-  <h1>Product Category</h1>
-</div>
-<div class="dashboard-products-wrapper">
-  {% for message in messages %}
-    {{message}}
-  {% endfor %}
-  <div class="form-wrap">
-    <form method="post" id="addproducttypeform" class="productforms">
-      {% csrf_token %}
-      <input type="text" name="producttypetitle" id="producttypetitle" placeholder="Name">
-      <div class="form-field user-profile-image">
-        <label class="profile-img" for="producttypeimg">
-          Featured Image
-          <input type="file" style="visibility: hidden;" name="producttypeimg" id="producttypeimg" accept="image/*">
-          <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg" alt="img">
-        </label>
-        <button id="removeimg">Remove Image</button>
-      </div>
-      <textarea name="producttypeimgblob" id="producttypeimgblob" class="d-none"></textarea>
-      <div id="editor"></div>
-      <input type="hidden" name="editorContent" id="editorContent">
-      <input type="submit" value="Publish">
-    </form>
-  </div>
-</div>
+    <div class="title">
+        <h1>Product Category</h1>
+    </div>
+    <div class="dashboard-products-wrapper">
+        {% for message in messages %}
+        {{message}}
+        {% endfor %}
+        <div class="form-wrap">
+            <form method="post" id="addproducttypeform" class="productforms">
+                {% csrf_token %}
+                <input type="text" name="producttypetitle" id="producttypetitle" placeholder="Name">
+                <div class="form-field user-profile-image">
+                    <label class="profile-img" for="producttypeimg">
+                        Featured Image
+                        <input type="file" style="visibility: hidden;" name="producttypeimg" id="producttypeimg"
+                            accept="image/*">
+                        <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg"
+                            alt="img">
+                    </label>
+                    <button id="removeimg">Remove Image</button>
+                </div>
+                <textarea name="producttypeimgblob" id="producttypeimgblob" class="d-none"></textarea>
+                <div id="editor"></div>
+                <input type="hidden" name="editorContent" id="editorContent">
+                <input type="submit" value="Publish">
+            </form>
+        </div>
+    </div>
 </div>
 {% comment %} {% include 'merchant/theme-temp/dashboard-footer.html' %} {% endcomment %}
 {% endblock body %}
