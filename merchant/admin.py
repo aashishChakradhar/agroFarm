@@ -5,7 +5,6 @@ from .models import *
 
 admin.site.register(Address)
 admin.site.register(ExtraUserDetails)
-admin.site.register(User_Address)
 admin.site.register(Category)
 admin.site.register(Tag)
 admin.site.register(Product)
