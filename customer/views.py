@@ -132,7 +132,7 @@ class Signup_View (View):
         messages.error(request, "Error logging in. Please try again.")
         return redirect(request.path) 
             
-class Index(BaseView):
+class Index(View):
     def get(self, request):
         categorys = Category.objects.all()
         products = Product.objects.all()
@@ -419,7 +419,7 @@ class MyCart_View(BaseView): #show items in my cart
             return redirect('customer:buy-now')
         return redirect(request.path)
 
-class Order_Detail_View(View):
+class Order_Detail_View(BaseView):
     def get(self,request):
         context = {
             'page_name' : 'myorder',
