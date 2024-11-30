@@ -21,6 +21,7 @@ class Address(BaseModel):
     zip_code = models.CharField(max_length=50, blank=True, null=True)
     street = models.CharField(max_length=50, default='Unknown')
     landmark = models.CharField(max_length=100,default='Unknown')
+    is_deleted = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.street}, {self.municipality}, {self.district}, {self.state}, {self.country}"
 
@@ -60,7 +61,7 @@ class Product(BaseModel):
     featuredimage = models.CharField(max_length=1024, default='') 
     description = models.TextField(default="unknown")
     rate = models.DecimalField(max_digits=5, decimal_places=2,default="unknown")
-    is_available = models.BooleanField(default=False)
+    is_available = models.BooleanField(default=True)
     def __str__(self):
         return self.name
 
@@ -86,10 +87,22 @@ class Store(BaseModel):
     def __str__(self):
         return self.name
 
+class OrderAddress(BaseModel):
+    country = models.CharField(max_length=50, default='Unknown')
+    state  = models.CharField(max_length=50, default='Unknown')
+    district = models.CharField(max_length=50, default='Unknown')
+    municipality = models.CharField(max_length=50, default='Unknown')
+    zip_code = models.CharField(max_length=50, blank=True, null=True)
+    street = models.CharField(max_length=50, default='Unknown')
+    landmark = models.CharField(max_length=100,default='Unknown')
+
+    def __str__(self):
+        return f"{self.street}, {self.municipality}, {self.district}, {self.state}, {self.country}"
+
 class Order(BaseModel):
     userID = models.ForeignKey(User, on_delete=models.CASCADE)
     productID = models.ForeignKey(Product, on_delete=models.CASCADE)
-    addressID = models.ForeignKey(Address, on_delete=models.CASCADE,default=0)
+    addressID = models.ForeignKey(OrderAddress, on_delete=models.CASCADE,default=0)
     quantity = models.PositiveIntegerField(default=1)  # Changed to store whole numbers
     rate = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
