@@ -7,9 +7,9 @@
     --color-bgd: #f9f5eb;
 }
 
-.container{
+/* .container{
     max-width: 100%;
-}
+} */
 
 .navbar {
     padding: 1em 0;
@@ -28,9 +28,15 @@
     font-weight: 700;
     text-decoration: none;
 }
+.brand-name:hover{
+    color: #ffff;
+}
 
 .brand-name span{
-    color: var(--primary-color);
+    color: #ffff;
+}
+.brand-name span:hover{
+    color: var(--secondary-color);
 }
 
 .navbar-brand {
@@ -95,7 +101,13 @@
     display: block;
 }
 
-.btn {
+.carousel-inner img {
+    height: 500px; /* Set a fixed height */
+    object-fit: cover; /* Ensures the image covers the area without stretching */
+    width: 100%; /* Ensures the image takes the full width of the carousel */
+}
+
+/* .btn {
     color: var(--color-bgd);
     border-color: var(--color-bgd);
     margin-right: 1.2em;
@@ -104,7 +116,7 @@
 .btn:hover {
     background-color: var(--primary-color);
     border-color: var(--color-bgd);
-}
+} */
 
 
 /* header section*/
@@ -133,7 +145,7 @@ img{
     background-position: 97% center;
     border-radius: 20px;
     padding: 8px 15px;
-    background-color: #d4d4d4;
+    background-color: #ffff;
 }
 
 .search-form-wrapper form input:focus{
@@ -146,7 +158,7 @@ img{
 }
 
 .login-signup-wrapper a:hover, .login-signup-wrapper a:focus{
-    color: var(--primary-color)
+    color: var(--secondary-color)
 }
 
 .dropdown-menu{
