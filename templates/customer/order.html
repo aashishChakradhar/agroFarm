@@ -1,6 +1,53 @@
 {% extends "customer/temp/base.html" %}
 {% block body %}
-    order staus
-    is accepted
+<div class="container">
+    <div class='row justify-content-center'>
+        <div class='col-8 text-center'>
+            <h2>My Order</h2>
+        </div>
+    </div>
+    <div class='row justify-content-center'>
+        <div class='col-8'>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                    </thead>
+                    <tbody>
+                        {% if orders %}
+                            {% for order in orders %}                               
+                                <tr>
+                                    <td>{{ order.productID.name }}</td>
+                                    <td>{{ order.quantity }}</td>
+                                    <td>Rs. {{ order.rate }}</td>
+                                    <td>Rs. {{ order.amount }}</td>
+                                    <td>{{ order.addressID.street }}, {{ order.addressID.district }}</td>
+
+                                    {% for status in order_status %}
+                                        {% if status.orderID == order %}
+                                        <td>Status:
+                                            {% if status.is_pending  %}Pending
+                                            {% elif status.is_accepted  %}Accepted
+                                            {% elif status.is_complete  %}Complete
+                                            {% elif status.is_cancelled  %}Cancelled{% endif %}
+                                        </td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <p>No orders found.</p>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock body %}
 
