@@ -1,33 +1,44 @@
 {% extends "merchant/temp/base.html" %}
 
 {% block title %}
-  {{page_name}}
+{{page_name}}
 {% endblock title %}
 
 {% block body %}
-<div class="dashboard-content-wrapper">
-  <div class="welcome-msg title mb-4">
-    <h2>Welcome back, <span class="text-capitalize">{{user}}</span>!</h2>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      <div class="latest-orders">
-        <div class="title">
-          <h3>Orders</h3>
-        </div>
-        <ul>
-          <li>Order 1</li>
-        </ul>
-      </div>
+<div class="dashboard-content-wrapper order-page">
+    <div class="welcome-msg title mb-4">
+        <h2>Welcome back, <span class="text-capitalize">{{user}}</span>!</h2>
     </div>
-    <div class="col-md-6">
-      <div class="chart-wrapper">
-        <div class="title">
-          <h3>Sales</h3>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="latest-orders box">
+                <div class="title">
+                    <h3 class="mb-4">Orders</h3>
+                </div>
+                <ul class="ps-0 mb-0">
+                    <li class="d-flex justify-content-between align-items-center px-4 py-2">
+                        <span>Order ID</span>
+                        <span>Issues date</span>
+                    </li>
+                    <li class="d-flex justify-content-between align-items-center px-4 py-2">
+                        <span>Order 1</span>
+                        <span>7/29/24</span>
+                    </li>
+                    <li class="d-flex justify-content-between align-items-center px-4 py-2">
+                        <span>Order 2</span>
+                        <span>7/29/24</span>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
-      </div>
+        <div class="col-md-6">
+            <div class="chart-wrapper box">
+                <div class="title">
+                    <h3 class="mb-4">Sales</h3>
+                </div>
+                <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 {% endblock body %}
