@@ -26,11 +26,16 @@
                     <div class='col-8 p-0 m-0'>
                         <h5>Rs. {{ products.rate }}</h5>
                     </div>
-                    <div class='col-4'>
+                    <div class='col-4' hidden>
                         Sale
                     </div>
                 </div>
                 <div class='row'>
+                    <h6 style='text-justify'>
+                        <strong>Ratings: </strong>{{products.review_average}}
+                    </h6>
+                </div>
+                <div class='row' hidden>
                     {% if products.is_available %}
                         <h6>In stock</h6>
                     {% else %}
