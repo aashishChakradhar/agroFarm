@@ -22,21 +22,27 @@
     padding: 0;
 }
 
-.brand-name{
-    color: var(--secondary-color);
-    font-size: 3em;
+.brand-name {
+    display: inline-flex;
+    font-size: 3em; /* Adjust size as needed */
     font-weight: 700;
     text-decoration: none;
 }
-.brand-name:hover{
-    color: #ffff;
+
+.agro {
+    color: var(--secondary-color); /* Color for "Agro" */
 }
 
-.brand-name span{
-    color: #ffff;
+.farm {
+    color: #fff; /* Color for "Farm" */
 }
-.brand-name span:hover{
-    color: var(--secondary-color);
+
+.brand-name:hover .agro {
+    color: #fff; /* "Agro" color when hovered */
+}
+
+.brand-name:hover .farm {
+    color: var(--secondary-color); /* "Farm" color when hovered */
 }
 
 .navbar-brand {
