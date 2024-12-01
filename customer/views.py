@@ -247,8 +247,8 @@ class BuyNowView(BaseView):
 
         # Fetch all products matching the selected IDs
         products = Product.objects.filter(uid__in=product_ids)
-        if Address.objects.exists():
-            address = Address.objects.get(userID = request.user)
+        if Address.objects.filter(userID = request.user).exists():
+            address = Address.objects.get(userID = request.user).first()
         else:
             address = None
         context = {
@@ -317,16 +317,17 @@ class BuyNowView(BaseView):
                 addressID = order_address,
                 quantity=quantity,
                 rate=product.rate,
-                amount=total_price
+                amount=total_price,
+                order_status = 'pending',
             )
             orders.append(order)
-            OrderStatus.objects.create(
-                orderID = order,
-                is_pending = True,
-                is_accepted=False,
-                is_complete = False,
-                is_cancelled=False,
-            )
+            # OrderStatus.objects.create(
+            #     orderID = order,
+            #     is_pending = True,
+            #     is_accepted=False,
+            #     is_complete = False,
+            #     is_cancelled=False,
+            # )
 
             # Delete the item from the cart after processing
             CartItem.objects.filter(user=request.user, product=product).delete()
@@ -423,11 +424,11 @@ class Order_Detail_View(BaseView):
     def get(self,request):
         orders = Order.objects.filter(userID=request.user).select_related('addressID', 'productID')
         # Fetch order statuses for the user's orders
-        order_status = OrderStatus.objects.filter(orderID__in=orders)
+        # order_status = OrderStatus.objects.filter(orderID__in=orders)
         context = {
             'page_name' : 'myorder',
             'orders': orders,
-            'order_status' : order_status,
+            # 'order_status' : order_status,
         }
         return render(request, f'{app_name}/order.html',context)
     def post(self,request):

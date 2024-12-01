@@ -28,16 +28,7 @@
                                     <td>Rs. {{ order.amount }}</td>
                                     <td>{{ order.addressID.street }}, {{ order.addressID.district }}</td>
 
-                                    {% for status in order_status %}
-                                        {% if status.orderID == order %}
-                                        <td>Status:
-                                            {% if status.is_pending  %}Pending
-                                            {% elif status.is_accepted  %}Accepted
-                                            {% elif status.is_complete  %}Complete
-                                            {% elif status.is_cancelled  %}Cancelled{% endif %}
-                                        </td>
-                                        {% endif %}
-                                    {% endfor %}
+                                    <td>{{order.status}}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
