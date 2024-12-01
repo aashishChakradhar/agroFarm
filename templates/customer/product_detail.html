@@ -24,7 +24,7 @@
                 </div>
                 <div class = 'row'>
                     <h4>
-                        {{products.rate}}
+                        Rs. {{products.rate}}
                     </h4>
                 </div>
                 
@@ -96,21 +96,46 @@
         </div>
         <!-- For Ordering -->
         <!-- For Comments -->
-        <div class='row mx-5 justify-content-center py-5 my-5 ' style='height:100%; background-color:#e0dede; border-radius:6px'>
-            <div class='col-6 d-flex justify-content-center'>
+        <div class="row mx-5 justify-content-center py-5 my-5" style="background-color:#e0dede; border-radius:6px">
+            <div class="col-8">
                 {% if reviews %}
-                {% for review in reviews %}
-                    <h3>{{review.userID}}</h3>
-                    <h5>
-                        rating: {{review.rating}}
-                        comment: {{review.comment}}
-                    </h5>
-                {% endfor %}
-            {%else%}
-            <h2>No Review yet</h2>
-            {% endif %}
+                    <h2 class="text-center mb-4">Reviews</h2>
+                    {% for review in reviews %}
+                    <div class="review mb-4 p-3" style="border: 1px solid #ccc; border-radius: 5px;">
+                        <h4 class="mb-2">{{ review.userID }}</h4>
+                        <p><strong>Rating:</strong> {{ review.rating }}</p>
+                        <p><strong>Comment:</strong> {{ review.comment }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center">
+                        <h2>No Reviews Yet</h2>
+                        <p>Be the first to add a review!</p>
+                        <form action="{% url 'customer:review' %}" method="POST" class="mt-4 mx-auto" style="width: 50%;">
+                            {% csrf_token %}
+                            <input type="hidden" name='product' value='{{products.uid}}'>
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">Rating</label>
+                                <select name="rating" id="rating" class="form-select" required>
+                                    <option value="">Select Rating</option>
+                                    <option value="1">1 - Poor</option>
+                                    <option value="2">2 - Fair</option>
+                                    <option value="3">3 - Good</option>
+                                    <option value="4">4 - Very Good</option>
+                                    <option value="5">5 - Excellent</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="comment" class="form-label">Comment</label>
+                                <textarea name="comment" id="comment" class="form-control" rows="4" placeholder="Write your review..." required></textarea>
+                            </div>
+                            <button class="btn btn-success" type="submit">Add Review</button>
+                        </form>
+                    </div>
+                {% endif %}
             </div>
         </div>
+        
     </div>     
 </div>
 {% endblock body %}
