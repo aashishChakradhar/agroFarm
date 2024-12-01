@@ -2,21 +2,21 @@
 {% load static %}
 {% block body %}
 <div>
-    <div class = 'container' >
-        <div></div>
-        <div class = 'row mx-5' style="background-color: red; min-height:35rem">
+    <div class = 'container' style="width: 1240px;" >
+        
+        <div class = 'row mx-5' style="">
             <!-- For image -->
             {% if products.featuredimage %}
-                <div class = 'col-3 p-4' style = " border: 1rem solid black;">
+                <div class = 'col-6 p-4' style = " ">
                     <img src="{{products.featuredimage}}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
                 </div>
             {% else %}
-                <div class = 'col-3 p-4' style = " border: 1rem solid black;">
-                    <img src="{% static "images/default.png" %}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
+                <div class = 'col-6 p-4' style = " border: 1rem solid black;">
+                    <img src="{% static 'images/default.png' %}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
                 </div>
             {% endif %}
             <!-- For main body -->
-            <div class = 'col-6 p-4' style = " border: 1rem solid black;">
+            <div class = 'col-6'>
                 <div class='row'>
                     <h1>
                         {{products.name}}
@@ -35,8 +35,26 @@
                 </div>
             </div>
 
-            <!-- For Address -->
-            <div class = 'col-3 p-4' style = " border: 1rem solid black;">
+            <div class = 'row justify-content-center'>
+                <div class="col-6">
+                </div>
+                <div class='col-6 d-flex justify-content-start'>
+                    <form method = 'POST'>
+                        {% csrf_token %}
+                        <input name='product_id' value='{{products.uid}}' type="hidden" id = 'uid'>
+                        <button type="submit" name="action" value="Buy Now" class="btn btn-dark">
+                            Buy now
+                        </button>               
+                        <button class="btn btn-success add-to-cart-btn" value="add to cart" data-product-uid="{{ products.uid }}">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6">
+            </div>
+            <div class = 'col-6 py-5' style = "">
                 <h2>Address</h2>
                 <div class="table-responsive">
                     <table class="table table-bordered">
@@ -77,22 +95,10 @@
             </div>
         </div>
         <!-- For Ordering -->
-        <div class = 'row mx-5' style="height:10rem; background-color:blue">
-            <form method = 'POST'>
-                {% csrf_token %}
-                <label for="quantity">
-                    Quantity: 
-                </label>
-                <input name='product_id' value='{{products.uid}}' type="hidden" id = 'uid'>
-                <button type="submit" name="action" value="Buy Now" class="btn btn-primary">
-                    Buy now
-                </button>               
-                <button class="btn btn-success add-to-cart-btn" value="add to cart" data-product-uid="{{ products.uid }}">Add to Cart</button>
-            </form>
-        </div>
         <!-- For Comments -->
-        <div class='row mx-5' style='height:15rem; background-color:green'>
-            {% if reviews %}
+        <div class='row mx-5 justify-content-center py-5 my-5 ' style='height:100%; background-color:#e0dede; border-radius:6px'>
+            <div class='col-6 d-flex justify-content-center'>
+                {% if reviews %}
                 {% for review in reviews %}
                     <h3>{{review.userID}}</h3>
                     <h5>
@@ -101,8 +107,9 @@
                     </h5>
                 {% endfor %}
             {%else%}
-            No Review yet
+            <h2>No Review yet</h2>
             {% endif %}
+            </div>
         </div>
     </div>     
 </div>
