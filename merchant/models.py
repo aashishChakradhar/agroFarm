@@ -58,6 +58,8 @@ class Product(BaseModel):
     rate = models.DecimalField(max_digits=5, decimal_places=2,default="unknown")
     stock_quantity = models.PositiveIntegerField(default=1)
     stock_available = models.PositiveIntegerField(default=1)
+    review_count = models.PositiveIntegerField(default=0)
+    review_average = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
     is_available = models.BooleanField(default=True)
     def __str__(self):
         return self.name

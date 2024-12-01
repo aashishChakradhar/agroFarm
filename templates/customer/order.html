@@ -10,16 +10,16 @@
         <div class='col-8'>
             <div class="table-responsive">
                 <table class="table table-bordered">
-                    <thead>
-                        <th>Name</th>
-                        <th>Quantity</th>
-                        <th>Rate</th>
-                        <th>Amount</th>
-                        <th>Address</th>
-                        <th>Status</th>
-                    </thead>
-                    <tbody>
-                        {% if orders %}
+                    {% if orders %}
+                        <thead>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                            <th>Rate</th>
+                            <th>Amount</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                        </thead>
+                        <tbody>
                             {% for order in orders %}                               
                                 <tr>
                                     <td>{{ order.productID.name }}</td>
@@ -40,10 +40,13 @@
                                     {% endfor %}
                                 </tr>
                             {% endfor %}
+                        </tbody>
                         {% else %}
-                            <p>No orders found.</p>
-                        {% endif %}
-                    </tbody>
+                            <h3 style='text-align:center; margin:5rem 0 0 0'>No orders found.</h3>
+                            <h2 style='text-align:center; margin:2rem 0 2rem 0'>
+                                <a href="{% url "customer:home" %}">Continue shopping...</a>
+                            </h2>
+                    {% endif %}
                 </table>
             </div>
         </div>
