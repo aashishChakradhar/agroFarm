@@ -229,10 +229,10 @@ class Product_Detail_View(BaseView):
         action = request.POST.get('action')
         product_ids = request.POST.getlist('product_id')
         print(product_ids)
-        if action == 'Buy Now':
+        if action == 'buy':
             request.session['product_ids'] = product_ids  # Save IDs in session
             return redirect('customer:buy-now')
-        elif action=='add to cart':
+        elif action=='cart':
             return redirect(request.path)
 
         # Default action (in case something goes wrong)
@@ -450,6 +450,43 @@ class Automate_Data_Entry(BaseView):
 #             'page_name' : 'add-address',
 #         }
 #         return render(request, f"{app_name}/billing-address.html", context)
+
+class Review_View(BaseView):
+    def post(self,request):
+        user = request.user
+        productID = request.POST.get('product')
+        comment = request.POST.get('comment')
+        rating = request.POST.get('rating')
+
+        product = Product.objects.get(uid=productID)
+        product_avg = float(product.review_average)
+        product_count = int(product.review_count) +1
+        new_average = float((product_avg * (product_count - 1)) + int(rating)) / product_count
+        product.review_count = product_count
+        product.review_average = new_average
+        product.save()
+        Review.objects.create(
+            userID = user,
+            productID = product,
+            comment = comment,
+            rating = rating,
+        )
+        return redirect(reverse('customer:product-detail', kwargs={'product_id': productID}))
+
+class DeleteReview_View(BaseView):
+    def post(self,request):
+        user = request.user
+        productID = request.POST.get('productID')
+        product = Product.objects.get(uid=productID)
+        reviewID = request.POST.get('reviewID')
+        print(productID)
+        Review.objects.get(
+            userID = user,
+            productID = product,
+            uid = reviewID,
+        ).delete()
+        return redirect(reverse('customer:product-detail', kwargs={'product_id': productID}))
+
 
 def search_product(request):
     query = request.GET.get('query', '')

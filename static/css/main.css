@@ -22,21 +22,27 @@
     padding: 0;
 }
 
-.brand-name{
-    color: var(--secondary-color);
-    font-size: 3em;
+.brand-name {
+    display: inline-flex;
+    font-size: 3em; /* Adjust size as needed */
     font-weight: 700;
     text-decoration: none;
 }
-.brand-name:hover{
-    color: #ffff;
+
+.agro {
+    color: var(--secondary-color); /* Color for "Agro" */
 }
 
-.brand-name span{
-    color: #ffff;
+.farm {
+    color: #fff; /* Color for "Farm" */
 }
-.brand-name span:hover{
-    color: var(--secondary-color);
+
+.brand-name:hover .agro {
+    color: #fff; /* "Agro" color when hovered */
+}
+
+.brand-name:hover .farm {
+    color: var(--secondary-color); /* "Farm" color when hovered */
 }
 
 .navbar-brand {
@@ -106,6 +112,19 @@
     object-fit: cover; /* Ensures the image covers the area without stretching */
     width: 100%; /* Ensures the image takes the full width of the carousel */
 }
+
+/* Style specific to .product-list-link */
+.product-list-link {
+    color: black; /* Set the text color to black */
+    text-decoration: none; /* Remove the underline */
+}
+
+/* Optional: Add hover effect */
+.product-list-link:hover {
+    color: black; /* Ensure hover color stays black */
+    text-decoration: none; /* Keep underline removed on hover */
+}
+
 
 /* .btn {
     color: var(--color-bgd);
