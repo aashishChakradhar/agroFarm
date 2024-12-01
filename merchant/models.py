@@ -103,18 +103,10 @@ class Order(BaseModel):
     quantity = models.PositiveIntegerField(default=1)  # Changed to store whole numbers
     rate = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    status = models.CharField(max_length=50, default='processing')
 
     def __str__(self):
         return str(self.uid)
-    
-class OrderStatus(BaseModel):
-    orderID = models.ForeignKey(Order,on_delete=models.CASCADE)
-    is_pending = models.BooleanField(default='True')
-    is_accepted = models.BooleanField(default='False')
-    is_complete = models.BooleanField(default='False')
-    is_cancelled = models.BooleanField(default='False')
-    def __str__(self):
-        return self.orderID
 
 class PaymentMethod(BaseModel):
     orderID = models.ForeignKey(Order,on_delete=models.CASCADE)
