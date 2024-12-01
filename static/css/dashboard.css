@@ -18,14 +18,19 @@ body{
 
 .top-nav{
     background:var(--primary-color);
-    padding: 5px 20px ;
+    padding: 5px ;
     color: #fff;
 }
 
 .top-nav-content{
     display: inline-block;
 }
-
+.top-nav-content svg{
+    height: 30px;
+    width: 30px;
+    position: relative;
+    top: -3px;
+}
 .right-user-info{
     display: inline-block;
 }
@@ -96,7 +101,7 @@ body{
     padding: 10px 20px;
 }
 .dashboard-nav-wrapper ul ul a{
-    padding-left: 50px;
+    padding-left: 80px;
 }
 .dashboard-nav-wrapper ul li a:hover{
     background-color: #000000;
@@ -115,6 +120,7 @@ body{
     margin: 0;
     font-size: 28px;
 }
+.default-btn,
 .dashboard-product > .title a{
     display: inline-block;
     padding: 5px 20px;
@@ -158,10 +164,12 @@ body{
 .add-form-layout label{
     display: block;
 }
+.custom-sty-form label,
 .add-form-layout label span{
     font-size: 18px;
     font-weight: 600;
 }
+.custom-sty-form :is(input:not([type="submit"]),textarea),
 .add-form-layout .input-field input{
     width: 100%;
     padding: 10px 20px;
@@ -189,6 +197,7 @@ body{
 .add-form-layout .publish-button .publish-box{
     padding: 15px;
 }
+.custom-sty-form  .submit-button input,
 .add-form-layout .publish-button input[type="submit"]{
     display: inline-block;
     padding: 5px 20px;
@@ -317,4 +326,32 @@ body{
 .order-table .status-btn.cancelled-btn{
     --bg-color: rgb(255, 0, 0);
     color: #ffffff;
+}
+
+
+.profile-img-wrapper > span{
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.profile-img{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.profile-img{
+    flex: 0 0 75px;
+}
+
+
+.order-page .box{
+    padding: 30px;
+    background-color: #ececec;
+    border-radius: 16px;
+}
+
+.order-page .latest-orders ul li:nth-child(odd){
+    background-color: #cccccc;
+}
+.order-page .latest-orders ul li:nth-child(even){
+    background-color: #f6f7f9;
 }
