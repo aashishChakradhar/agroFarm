@@ -101,3 +101,31 @@
     font-weight: bolder;
 }
 
+.btn-close {
+    width: 1rem; /* Adjust width */
+    height: 1rem; /* Adjust height */
+    font-size: 0.8rem; /* Adjust font size */
+    background-color: #eb1d36;
+}
+
+.brand-name {
+    display: inline-flex;
+    font-size: 3em; /* Adjust size as needed */
+    font-weight: 700;
+    text-decoration: none;
+}
+.agro2 {
+    color: var(--secondary-color); /* Color for "Agro" */
+}
+
+.farm2 {
+    color: #a0a0a0; /* Color for "Farm" */
+}
+
+.brand-name:hover .agro2 {
+    color: #a0a0a0; /* "Agro" color when hovered */
+}
+
+.brand-name:hover .farm2 {
+    color: var(--secondary-color); /* "Farm" color when hovered */
+}

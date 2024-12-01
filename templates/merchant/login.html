@@ -22,61 +22,74 @@
       <div class="row">
         <div class="col p-0">
           <div class = "auth-cont">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis id perferendis veniam. Natus, suscipit tenetur? Quod, quisquam, quas odio cum fugit, aperiam porro aut beatae eaque corporis quam corrupti? Numquam.
-        </div>
-      </div>
-          <div class="col p-0">
-
-    <div class="auth-form">
-      <div class = "message" >
-        {% if messages %}
-          <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {% for message in messages %}
-              <p><strong>Holy guacamole!</strong> {{message}}</p>
-            {% endfor %}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class='brand-name'>
+              <span class="agro2">Agro</span><span class="farm2">Farm</span>
+            </div>
           </div>
-        {% endif %}
-      </div>
-    
-      <div class="form_title">
-        Welcome Back Merchant
-      </div>
+        </div>
+        <div class="col p-0">
+          <div class="auth-form">
+            <div class = "message" >
+              {% if messages %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  {% for message in messages %}
+                    <div class='container'>
+                      <div class="row">
+                        <div class="col">
+                          <strong>Holy guacamole!</strong> {{message}}
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="
+                            width: 1px;
+                            height: 1px;
+                            text-size: 3px;
+                            font-size: 10px;
+                            padding: 10px;
+                          "></button>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}                  
+                </div>
+              {% endif %}
+            </div>
+        
+            <div class="form_title">
+              Welcome Back Merchant
+            </div>
 
-      <form action="{% url 'merchant:login' %}" method="POST">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="username">Username</label>
-          <input
-            type="text"
-            class="form-control auth-input"
-            id="username"
-            aria-describedby="teztHelp"
-            name="username"
-            required
-          />
+            <form action="{% url 'merchant:login' %}" method="POST">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="username">Username</label>
+                <input
+                  type="text"
+                  class="form-control auth-input"
+                  id="username"
+                  aria-describedby="teztHelp"
+                  name="username"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="password">Password</label>
+                <input
+                  type="password"
+                  class="form-control auth-input"
+                  id="password"
+                  name="password"
+                  required
+                />
+              </div>
+              <div class="d-grid gap-2">
+                <button type="submit" class="button btn btn-primary">
+                  Login
+                </button>
+              </div>
+              <a href = {%url 'merchant:signup'%}>Don't have an account</a>
+              <a href = {%url 'customer:login'%}>Buy some veggies</a>
+            </form>
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="password">Password</label>
-          <input
-            type="password"
-            class="form-control auth-input"
-            id="password"
-            name="password"
-            required
-          />
-        </div>
-        <div class="d-grid gap-2">
-          <button type="submit" class="button btn btn-primary">
-            Login
-          </button>
-        </div>
-        <a href = {%url 'merchant:signup'%}>Don't have an account</a>
-        <a href = {%url 'customer:login'%}>Buy some veggies</a>
-      </form>
+      </div>
     </div>
-</div>
-</div>
-</div>
   </body>
 </html>
