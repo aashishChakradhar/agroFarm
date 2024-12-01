@@ -248,7 +248,7 @@ class BuyNowView(BaseView):
         # Fetch all products matching the selected IDs
         products = Product.objects.filter(uid__in=product_ids)
         if Address.objects.filter(userID = request.user).exists():
-            address = Address.objects.get(userID = request.user).first()
+            address = Address.objects.get(userID = request.user)
         else:
             address = None
         context = {
