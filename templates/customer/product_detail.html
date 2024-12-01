@@ -12,7 +12,7 @@
                 </div>
             {% else %}
                 <div class = 'col-3 p-4' style = " border: 1rem solid black;">
-                    <img src="{% static "images/default.png" %}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
+                    <img src="{% static 'images/default.png' %}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
                 </div>
             {% endif %}
             <!-- For main body -->
@@ -30,7 +30,7 @@
                 
                 <div class='row'>
                     <h5>
-                        {{products.description}}
+                        {{products.description | safe}}
                     </h5>
                 </div>
             </div>
