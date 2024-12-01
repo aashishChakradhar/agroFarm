@@ -4,29 +4,15 @@
     <div class="container">
         <form action="{% url 'customer:my-cart' %}" method="POST" id="myForm">
             {% csrf_token %}
-            <div class='row justify-content-center'> <!-- Aligns the column to the right -->
-                <div class='col-4 '> <!-- Corrected the class attribute and text alignment -->
-                    <label for="select">
-                    <input type="checkbox" name="action" id="select">Select All
-                </label>
-                </div>
-                {% comment %} <div class='col-4 d-flex justify-content-end text-center'> <!-- Corrected the class attribute and text alignment -->
-                    <label for="action">Action:</label>
-                    <select name="action" id="action">
-                        <option value="none" disabled selected>-- Choose Action --</option>
-                        <option value="delete">Delete</option>
-                        <option value="buy">Buy</option>
-                    </select>
-                </div> {% endcomment %}
-            </div>
-            
             <div class="row justify-content-center">
                 <div class="col-8 text-center">
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>UID</th>
+                                    <th><label for="select">
+                                        <input type="checkbox" name="action" id="select">Select All
+                                    </label></th>
                                     <th>Product</th>
                                     <th>Price</th>
                                 </tr>
@@ -59,7 +45,7 @@
             </div>
             <div class='row justify-content-center'>
                 <div class='col-8 d-flex justify-content-end text-center'>
-                    <button class="btn btn-success " type="submit" value="buy" name="action">
+                    <button class="btn btn-success mx-3" type="submit" value="buy" name="action">
                         Buy Now
                     </button>
                     <button class="btn btn-danger " type="submit" value="delete" name="action">

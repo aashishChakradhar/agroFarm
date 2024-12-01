@@ -132,7 +132,7 @@ class Signup_View (View):
         messages.error(request, "Error logging in. Please try again.")
         return redirect(request.path) 
             
-class Index(BaseView):
+class Index(View):
     def get(self, request):
         categorys = Category.objects.all()
         products = Product.objects.all()
@@ -164,41 +164,52 @@ class Index(BaseView):
 
 class AddAddress_View(BaseView):
     def get(self,request):
-        address_data = address()
-        countrys = address_data['country']
-        provinces = address_data['province']
-        districts = address_data['district']
+        if Address.objects.exists():
+            address = Address.objects.get(userID = request.user)
+        else:
+            address = None
         context = {
             'page_name': 'billing-address',
-            'countrys':countrys,
-            'provinces':provinces,
-            'districts':districts,
-
+            'address' : address,
         }
         return render(request,f"{app_name}/add-address.html",context)
-
+# logical error
     def post(self,request):
+        action = request.POST.get('action')
         country = request.POST.get('country')
-        province = request.POST.get('province')
+        state = request.POST.get('province')
         district = request.POST.get('district')
         municipality = request.POST.get('municipality')
         street = request.POST.get('street')
-        postalCode = request.POST.get('postalCode')
+        zip_code = request.POST.get('postalCode')
         landmark = request.POST.get('landmark')
-
-        # Fetch the related objects from the database
-
-        address = Address.objects.create(
-            userID=request.user,
-            country=country,
-            state=province,
-            district=district,
-            municipality=municipality,
-            zip_code=postalCode,
-            street=street,
-            landmark=landmark
-        )
-        address.save()
+        if action == 'edit':            
+            # Fetch the related objects from the database
+            address = Address.objects.get(userID = request.user)
+            address = Address.objects.update(
+                userID=request.user,
+                country=country,
+                state=state,
+                district=district,
+                municipality=municipality,
+                zip_code=zip_code,
+                street=street,
+                landmark=landmark,
+                is_deleted = False,
+            )
+        elif action == 'add':            
+            address = Address.objects.create(
+                userID=request.user,
+                country=country,
+                state=state,
+                district=district,
+                municipality=municipality,
+                zip_code=zip_code,
+                street=street,
+                landmark=landmark,
+                is_deleted = False,
+            )
+            address.save()
         return redirect ('/') 
 
 class Product_Detail_View(BaseView):
@@ -236,11 +247,16 @@ class BuyNowView(BaseView):
 
         # Fetch all products matching the selected IDs
         products = Product.objects.filter(uid__in=product_ids)
-
+        if Address.objects.exists():
+            address = Address.objects.get(userID = request.user)
+        else:
+            address = None
         context = {
             "page_name": "buy-now",
             "products": products,
+            "address":address,
         }
+        print("buy get")
         return render(request, f'{app_name}/buynow.html', context)
     
     def post(self, request):
@@ -249,13 +265,41 @@ class BuyNowView(BaseView):
         quantities = request.POST.getlist('quantity')  # List of quantities
 
         # getting address of loged User
-        address = Address.objects.get(userID = request.user)
+        country = request.POST.get('country')
+        state = request.POST.get('province')
+        district = request.POST.get('district')
+        municipality = request.POST.get('municipality')
+        street = request.POST.get('street')
+        zip_code = request.POST.get('postalCode')
+        landmark = request.POST.get('landmark')
+
+        if not Address.objects.exists():
+            Address.objects.create(
+                country=country,
+                state=state,
+                district=district,
+                municipality=municipality,
+                zip_code=zip_code,
+                street=street,
+                landmark=landmark,
+                is_deleted = False,
+            )
 
         # Validate and process each product and its quantity
         if not product_uids or not quantities or len(product_uids) != len(quantities):
             messages.error(request, "Invalid data submitted", status=400)
             return redirect(request.path)
-
+        
+        order_address = OrderAddress.objects.create(
+            country=country,
+            state=state,
+            district=district,
+            municipality=municipality,
+            zip_code=zip_code,
+            street=street,
+            landmark=landmark,
+        )
+        order_address.save()
         orders = []  # List to store created order objects for further use or confirmation
 
         for product_uid, quantity_str in zip(product_uids, quantities):
@@ -266,12 +310,11 @@ class BuyNowView(BaseView):
 
             product = get_object_or_404(Product, uid=product_uid)
             total_price = product.rate * quantity
-
             # Create and save the order object
             order = Order.objects.create(
                 userID=request.user,
                 productID=product,
-                addressID = address,
+                addressID = order_address,
                 quantity=quantity,
                 rate=product.rate,
                 amount=total_price
@@ -376,10 +419,15 @@ class MyCart_View(BaseView): #show items in my cart
             return redirect('customer:buy-now')
         return redirect(request.path)
 
-class Order_Detail_View(View):
+class Order_Detail_View(BaseView):
     def get(self,request):
+        orders = Order.objects.filter(userID=request.user).select_related('addressID', 'productID')
+        # Fetch order statuses for the user's orders
+        order_status = OrderStatus.objects.filter(orderID__in=orders)
         context = {
             'page_name' : 'myorder',
+            'orders': orders,
+            'order_status' : order_status,
         }
         return render(request, f'{app_name}/order.html',context)
     def post(self,request):
