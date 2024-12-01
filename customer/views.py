@@ -422,7 +422,6 @@ class MyCart_View(BaseView): #show items in my cart
 class Order_Detail_View(BaseView):
     def get(self,request):
         orders = Order.objects.filter(userID=request.user).select_related('addressID', 'productID')
-
         # Fetch order statuses for the user's orders
         order_status = OrderStatus.objects.filter(orderID__in=orders)
         context = {
