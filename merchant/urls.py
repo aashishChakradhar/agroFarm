@@ -41,6 +41,7 @@ urlpatterns = [
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
     path('account/', views.AccountView.as_view(), name='account'),
     path('order/', views.OrderView.as_view(), name='order'),
+    path('order/edit-order/<int:id>', views.EditOrderView.as_view(), name='edit-order'),
     # path('edit-product/<int:id>', views.EditProductView.as_view(), name='edit-products'),#for merchant
 
     # path('billing-address', views.BillingAddress_View.as_view(), name='billing-address'),#on working phase

@@ -35,6 +35,11 @@
                                     <input type="text" name="price" id="price" value="{{product.rate}}">
                                 </label>
                             </div>
+                            <div class="input-field">
+                                <label><span>Stock(kg)</span>
+                                    <input type="number" name="stock" id="stock" min="0" value="{{product.stock_quantity}}" placeholder="Products in stock">
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -43,7 +48,7 @@
                                 <h3>Publish</h3>
                                 <div class="publish-box">
                                     <span class="publish-date">
-                                        Publish Date: 2001/09/11
+                                        Publish Date: {{product.created}}
                                     </span>
                                     <div class="d-flex justify-content-between align-items-center mt-3">
                                         <a href="/merchant/products/delete-product/{{product.uid}}" class="delete-btn">Delete Product</a>
@@ -53,7 +58,7 @@
                             </div>
                             <div class="form-field user-profile-image">
                                 <span>Product Featured image</span>
-                                <label class="profile-img" for="product-image">
+                                <label class="profile-img" for="productimg">
                                     <input type="file" style="visibility: hidden;" name="productimg" id="productimg"
                                         accept="image/*">
                                     {% if product.featuredimage %}
@@ -66,7 +71,7 @@
                                 <div class="button-wrapper text-end">
                                     <button id="removeimg" class="delete-btn">Remove Image</button>
                                 </div>
-                                <textarea name="productimgblob" id="productimgblob" class="d-none"></textarea>
+                                <textarea name="productimgblob" id="productimgblob" class="d-none">{{product.featuredimage}}</textarea>
                             </div>
                             <div class="category-box">
                                 <span>Categories</span>
