@@ -1,58 +1,52 @@
 {% extends "customer/temp/base.html" %}
 {% load static %}
 {% block body %}
-<div>
-    <div class = 'container' style="width: 1240px;" >
+<section class="section-gaps product-detail">
+    <div class = "container">
         
-        <div class = 'row mx-5' style="">
+        <div class = 'row mx-5'>
             <!-- For image -->
-            {% if products.featuredimage %}
-                <div class = 'col-6 p-4' style = " ">
-                    <img src="{{products.featuredimage}}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
-                </div>
-            {% else %}
-                <div class = 'col-6 p-4' style = " border: 1rem solid black;">
-                    <img src="{% static 'images/default.png' %}" style="height: 15rem; max-height: 100%; object-fit: scale-down; " alt="">
-                </div>
-            {% endif %}
+            <div class = 'col-6 p-4 d-flex justify-content-center'>
+                {% if products.featuredimage %}
+                <img src="{{products.featuredimage}}" style="height: 15rem; max-height: 100%; object-fit: contain; " alt="">
+                {% else %}
+                <img src="{% static 'images/default-nobg.png' %}" style="height: 15rem; max-height: 100%; object-fit: contain; " alt="">
+                {% endif %}
+            </div>
             <!-- For main body -->
             <div class = 'col-6'>
-                <div class='row'>
+                <div class='product-name'>
                     <h1>
                         {{products.name}}
                     </h1>
                 </div>
-                <div class = 'row'>
-                    <h6><strong>Ratings ({{products.review_count}}):</strong> {{products.review_average}}
-                    </h6>
+                <div class = 'product-rating'>
+                    <p><strong>Ratings ({{products.review_count}}):</strong> {{products.review_average}}
+                    </p>
                 </div>
-                <div class = 'row'>
-                    <h4>
+                <div class = 'product-price'>
+                    <p>
                         Rs. {{products.rate}}
-                    </h4>
+                    </p>
                 </div>
-                <div class='row'>
-                    <h5 style='text-align: justify'>
-                        {{products.description | safe}}
-                    </h5>
+                <div class='product-description'>
+                    {{products.description | safe}}
                 </div>
             </div>
-
-            <div class = 'row justify-content-center'>
-                <div class="col-6">
-                </div>
-                <div class='col-6 d-flex justify-content-start'>
-                    <form method = 'POST'>
-                        {% csrf_token %}
-                        <input name='product_id' value='{{products.uid}}' type="hidden" id = 'uid'>
-                        <button type="submit" name="action" value="Buy Now" class="btn btn-dark">
-                            Buy now
-                        </button>               
-                        <button class="btn btn-success add-to-cart-btn" value="add to cart" data-product-uid="{{ products.uid }}">Add to Cart</button>
-                    </form>
-                </div>
+        </div>
+        <div class = 'row justify-content-center'>
+            <div class="col-6">
             </div>
-            
+            <div class='col-6 d-flex justify-content-start'>
+                <form method = 'POST'>
+                    {% csrf_token %}
+                    <input name='product_id' value='{{products.uid}}' type="hidden" id = 'uid'>
+                    <button type="submit" name="action" value="Buy Now" class="btn btn-dark px-4">
+                        Buy now
+                    </button>               
+                    <button class="btn btn-success add-to-cart-btn px-4" value="add to cart" data-product-uid="{{ products.uid }}">Add to Cart</button>
+                </form>
+            </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-6">
@@ -178,5 +172,5 @@
         </div>
         
     </div>     
-</div>
+</section>
 {% endblock body %}
