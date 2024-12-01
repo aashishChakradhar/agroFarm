@@ -25,5 +25,6 @@ urlpatterns = [
     path('buy-now/', views.BuyNowView.as_view(), name='buy-now'),
 
     path('order-detail/', views.Order_Detail_View.as_view(), name='order-detail'),
+    path('review/', views.Review_View.as_view(), name='review'),
 
 ]

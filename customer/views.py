@@ -451,6 +451,22 @@ class Automate_Data_Entry(BaseView):
 #         }
 #         return render(request, f"{app_name}/billing-address.html", context)
 
+class Review_View(BaseView):
+    def post(self,request):
+        user = request.user
+        productID = request.POST.get('product')
+        product = Product.objects.get(uid=productID)
+        print(product)
+        comment = request.POST.get('comment')
+        rating = request.POST.get('rating')
+        Review.objects.create(
+            userID = user,
+            productID = product,
+            comment = comment,
+            rating = rating,
+        )
+        return redirect(reverse('customer:product-detail', kwargs={'product_id': productID}))
+
 def search_product(request):
     query = request.GET.get('query', '')
     results = []
