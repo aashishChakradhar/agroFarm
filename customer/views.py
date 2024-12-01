@@ -229,10 +229,10 @@ class Product_Detail_View(BaseView):
         action = request.POST.get('action')
         product_ids = request.POST.getlist('product_id')
         print(product_ids)
-        if action == 'Buy Now':
+        if action == 'buy':
             request.session['product_ids'] = product_ids  # Save IDs in session
             return redirect('customer:buy-now')
-        elif action=='add to cart':
+        elif action=='cart':
             return redirect(request.path)
 
         # Default action (in case something goes wrong)
