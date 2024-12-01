@@ -320,7 +320,7 @@ body{
 .order-table .status-btn.processing-btn{
     --bg-color: rgb(245, 245, 55);
 }
-.order-table .status-btn.complete-btn{
+.order-table .status-btn.completed-btn{
     --bg-color: rgb(0, 221, 0);
 }
 .order-table .status-btn.cancelled-btn{

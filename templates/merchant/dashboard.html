@@ -20,14 +20,12 @@
                         <span>Order ID</span>
                         <span>Issues date</span>
                     </li>
+                    {% for order in orders %}
                     <li class="d-flex justify-content-between align-items-center px-4 py-2">
-                        <span>Order 1</span>
-                        <span>7/29/24</span>
+                        <span>#{{order.uid}}</span>
+                        <span>{{order.created}}</span>
                     </li>
-                    <li class="d-flex justify-content-between align-items-center px-4 py-2">
-                        <span>Order 2</span>
-                        <span>7/29/24</span>
-                    </li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>

@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.db.models import Prefetch
 
 from .models import *
 # from customer.models import ExtraDetails
@@ -59,7 +60,7 @@ class Login(View):
         user = authenticate(username = username, password = password)
         if user is not None:# checks if the user is logged in or not?
             login(request,user) #logins the user
-            return redirect('/merchant')
+            return redirect('/merchant/dashboard/')
         else:
             messages.error(request, "Invalid username or password. Please try again.")
             return redirect(request.path)
@@ -121,7 +122,7 @@ class SignupView (View):
         user = authenticate(username = username, password = password)
         if user is not None:# checks if the user is logged in or not?
             login(request,user) #logins the user
-            return redirect('/')
+            return redirect(f'{app_name}/dashboard/')
         
         messages.error(request, "Error logging in. Please try again.")
         return redirect(request.path) 
@@ -149,8 +150,9 @@ class AddProductView(BaseView):
         try:
             producttitle = request.POST.get('producttitle')
             featuredimage = request.POST.get('productimgblob')
-            print(featuredimage)
             price = request.POST.get('price')
+            stock = request.POST.get('stock')
+            
             cat = request.POST.getlist('producttype')
             description = request.POST.get('editorContent')
             sellerid = request.user
@@ -172,6 +174,7 @@ class AddProductView(BaseView):
                 name=producttitle,
                 merchantID=sellerid,
                 featuredimage=featuredimage,
+                stock_quantity = stock,
                 rate = price,
                 description = description
             )
@@ -206,11 +209,9 @@ class ProductView(BaseView):
     
 class DashboardView(BaseView):
     def get(self, request):
-        if request.user.is_superuser:
-            orders = Order.objects.all().order_by('-created')
-        else:
-            orders = Order.objects.filter(sellerId=request.user).order_by('-created')
-
+        current_user = request.user
+        user_product_ids = Product.objects.filter(merchantID=current_user.id).values_list('uid', flat=True)
+        orders = Order.objects.filter(productID__in=user_product_ids)
         try:
             current_user = request.user
             context = {
@@ -277,13 +278,11 @@ class AccountView(BaseView):
     
 class OrderView(BaseView):
     def get(self,request):
-        orders = Order.objects.all().order_by('-created')
-        # if request.user.is_superuser:
-        #     orders = Order.objects.all().order_by('-created')
-        # else:
-        #     orders = Order.objects.filter(sellerId=request.user).order_by('-created')
+        current_user = request.user
+        user_product_ids = Product.objects.filter(merchantID=current_user.id).values_list('uid', flat=True)
+        orders = Order.objects.filter(productID__in=user_product_ids)
         context = {
-            'order' : orders,
+            'orders' : orders,
             'page_name':'order'
         }
         return render(request,f'{app_name}/order.html',context)
@@ -308,6 +307,7 @@ class EditProductView(BaseView):
             producttitle = request.POST.get('producttitle')
             featuredimage = request.POST.get('productimgblob')
             price = request.POST.get('price')
+            stock = request.POST.get('stock')
             cat = request.POST.getlist('producttype')
             description = request.POST.get('editorContent')
 
@@ -328,6 +328,8 @@ class EditProductView(BaseView):
             product.featuredimage=featuredimage
             product.rate = price
             product.description = description
+
+            product.stock_quantity = stock
 
             product.save()
 
@@ -455,3 +457,34 @@ class DeleteCategoryView(View):
         except Exception as e:
             messages.error(request, "Deletion Unsuccessful")
             return redirect('/merchant/products/producttype/')
+        
+class EditOrderView(BaseView):
+    def get(self, request, id):
+        try:
+            order = Order.objects.get(uid=id)
+            context = {
+                'order' : order,
+                'address' : order.addressID,
+                'page_name': 'edit-order'
+            }
+            return render(request, f"{app_name}/edit_order.html" ,context)
+        except Exception as e:
+            messages.error(request, str(e))
+            return render(request,f"{app_name}/edit_order.html")
+
+    def post(self,request, id):
+        try:
+            order = get_object_or_404(Order, uid=id)
+
+            status = request.POST.get('orderstatus')
+            
+            order.status=status
+
+            order.save()
+
+            messages.success(request, "Your Order Has Been Updated!")
+            return redirect('/merchant/order/edit-order/' + str(id))  # Redirect to a blog list or success page after editing
+        
+        except Exception as e:
+            messages.error(request, str(e)) 
+            return render(request,f"{app_name}/edit_order.html")
