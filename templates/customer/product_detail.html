@@ -23,13 +23,16 @@
                     </h1>
                 </div>
                 <div class = 'row'>
+                    <h6><strong>Ratings ({{products.review_count}}):</strong> {{products.review_average}}
+                    </h6>
+                </div>
+                <div class = 'row'>
                     <h4>
                         Rs. {{products.rate}}
                     </h4>
                 </div>
-                
                 <div class='row'>
-                    <h5>
+                    <h5 style='text-align: justify'>
                         {{products.description | safe}}
                     </h5>
                 </div>
@@ -102,9 +105,47 @@
                     <h2 class="text-center mb-4">Reviews</h2>
                     {% for review in reviews %}
                     <div class="review mb-4 p-3" style="border: 1px solid #ccc; border-radius: 5px;">
-                        <h4 class="mb-2">{{ review.userID }}</h4>
-                        <p><strong>Rating:</strong> {{ review.rating }}</p>
-                        <p><strong>Comment:</strong> {{ review.comment }}</p>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mb-2">{{ review.userID }}</h4>
+                                <p><strong>Rating:</strong> {{ review.rating }}</p>
+                                <p><strong>Comment:</strong> {{ review.comment }}</p>
+                                
+                            </div>
+                            <div class="col-3 d-flex justify-content-end">
+                                <form action="{% url "customer:delete-review" %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name='productID' value='{{products.uid}}'>
+                                    <input name='reviewID' value="{{review.uid}}" type="hidden">
+                                    <button class='btn btn-danger' type="submit">Delete Comment</button>
+                                </form>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <form action="{% url 'customer:review' %}" method="POST" class="mt-4 mx-auto" style="width: 50%;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name='product' value='{{products.uid}}'>
+                                    <div class="mb-3">
+                                        <label for="rating" class="form-label">Rating</label>
+                                        <select name="rating" id="rating" class="form-select" required>
+                                            <option value="">Select Rating</option>
+                                            <option value="1">1 - Poor</option>
+                                            <option value="2">2 - Fair</option>
+                                            <option value="3">3 - Good</option>
+                                            <option value="4">4 - Very Good</option>
+                                            <option value="5">5 - Excellent</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="comment" class="form-label">Comment</label>
+                                        <textarea name="comment" id="comment" class="form-control" rows="4" placeholder="Write your review..." required></textarea>
+                                    </div>
+                                    <button class="btn btn-success" type="submit">Add Review</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                     {% endfor %}
                 {% else %}
