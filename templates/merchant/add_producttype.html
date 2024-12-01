@@ -11,27 +11,55 @@
         <h1>Product Category</h1>
     </div>
     <div class="dashboard-products-wrapper">
-        {% for message in messages %}
-        {{message}}
-        {% endfor %}
+        <span class="error-message">
+            {% for message in messages %}
+            {{message}}
+            {% endfor %}
+        </span>
         <div class="form-wrap">
             <form method="post" id="addproducttypeform" class="productforms">
                 {% csrf_token %}
-                <input type="text" name="producttypetitle" id="producttypetitle" placeholder="Name">
-                <div class="form-field user-profile-image">
-                    <label class="profile-img" for="producttypeimg">
-                        Featured Image
-                        <input type="file" style="visibility: hidden;" name="producttypeimg" id="producttypeimg"
-                            accept="image/*">
-                        <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg"
-                            alt="img">
-                    </label>
-                    <button id="removeimg">Remove Image</button>
+                <div class="add-form-layout row">
+                    <div class="col-md-8">
+                        <div class="left-field">
+                            <div class="input-field">
+                                <input type="text" name="producttypetitle" id="producttypetitle" placeholder="Name">
+                            </div>
+                            <div class="description-field">
+                                <div id="editor"></div>
+                                <input type="hidden" name="editorContent" id="editorContent">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="right-bar">
+                            <div class="publish-button">
+                                <h3>Publish</h3>
+                                <div class="publish-box text-end">
+                                    <div class="d-flex justify-content-end align-items-center mt-3">
+                                        <input type="submit" value="Publish" class="green-btn">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field user-profile-image">
+                                <span>
+                                    Featured Image
+                                </span>
+                                <label class="profile-img" for="producttypeimg">
+                                    <input type="file" style="visibility: hidden;" name="producttypeimg" id="producttypeimg"
+                                        accept="image/*">
+                                    <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg"
+                                        alt="img">
+                                </label>
+                                <div class="button-wrapper text-end">
+                                    <button id="removeimg" class="delete-btn">Remove Image</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
                 <textarea name="producttypeimgblob" id="producttypeimgblob" class="d-none"></textarea>
-                <div id="editor"></div>
-                <input type="hidden" name="editorContent" id="editorContent">
-                <input type="submit" value="Publish">
             </form>
         </div>
     </div>
