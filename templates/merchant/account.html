@@ -1,127 +1,164 @@
 {% extends "merchant/temp/base.html" %}
 
 {% block title %}
-  {{page_name}}
+{{page_name}}
 {% endblock title %}
 
 {% block body %}
-{% for message in messages %}
-  {{message}}
-{% endfor %}
-<div class="dashboard-content-wrapper">
-  <h2>Profile</h2>
-  <form method="post" id="accountdetail" class="accountdetailform">
-    {% csrf_token %}
-    <div class="form-field user-profile-image">
-      <label class="profile-img" for="profileimg">
-        Profile image 
-        <input type="file" style="visibility: hidden;" name="profileimg" id="profileimg" accept="image/*">
-        {% if extrafields.profileimg %}
-        <img src="{{extrafields.profileimg}}" id="fimg" alt="img">
-        {% else %}
-        <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg" alt="img">
-        {% endif %}
-      </label>
-      <button id="removeimg">Remove Image</button>
-    </div>
-    <textarea name="profileimgblob" id="profileimgblob" class="d-none"></textarea>
-    <div class="form-field user-first-name">
-      <label>First Name</label>
-      <input type="text" name="firstname" value={{user.first_name}}>
-    </div>
-    <div class="form-field user-last-name">
-      <label>Last Name</label>
-      <input type="text" name="lastname" value={{user.last_name}}>
-    </div>
-    <div class="form-field user-name">
-      <label>Username</label>
-      <input type="text" name="username" value={{user.username}} disabled>
-    </div>
-    <div class="form-field user-email">
-      <label>Email</label>
-      <input type="text" name="email" value={{user.email}} disabled>
-    </div>
-    <div class="form-field">
-      <button id="setPassword">Set New Password</button>
-    </div>
-    <div class="password-fields d-none">
-      <div class="form-field user-password">
-        <label>New Password</label>
-        <input type="password" name="newpassword" id="newpassword">
-        <div class="newpasswordstrength"></div>
-      </div>
-      <div class="form-field user-password">
-        <label>Confirm Password</label>
-        <input type="password" name="confirmpassword" id="confirmpassword">
-      </div>
+<div class="dashboard-product">
+	<div class="title">
+		<h1>Profile</h1>
+	</div>
+	<div class="dashboard-products-wrapper pb-5">
+		<span class="error-message">
+			{% for message in messages %}
+			{{message}}
+			{% endfor %}
+		</span>
+		<form method="post" id="accountdetail" class="accountdetailform add-form-layout">
+			{% csrf_token %}
+			<div class="form-field mb-4">
+				<div class="profile-img-wrapper">
+					<span>Profile image</span>
+					<div class="profile-img">
+						<label class="profile-img" for="profileimg">
+							<input type="file" style="visibility: hidden;" name="profileimg" id="profileimg"
+								accept="image/*">
+							{% if extrafields.profileimg %}
+							<img src="{{extrafields.profileimg}}" id="fimg" alt="img">
+							{% else %}
+							<img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png" id="fimg"
+								alt="img">
+							{% endif %}
+						</label>
+						<button id="removeimg" class="delete-btn">Remove Image</button>
+					</div>
+				</div>
 
-      <div class="cancel-btn-wrap">
-        <button id="cancelBtn">Cancel</button>
-      </div>
-    </div>
-    <div class="form-field user-phone">
-      <label>Phone</label>
-      <input type="text" name="phone" value={{extrafields.mobile}}>
-    </div>
-    <div class="form-field user-bio">
-      <label>Bio</label>
-      <textarea id="biotext" name="biotext" rows="4" cols="50">{{extrafields.bio}}</textarea>
-    </div>
-    <div class="form-field submit-button">
-      <input type="submit" value="Update Profile">
-    </div>
-  </form>
+			</div>
+			<textarea name="profileimgblob" id="profileimgblob" class="d-none"></textarea>
+
+			<div class="custom-sty-form">
+				<div class="row gy-3">
+					<div class="col-md-6">
+						<div class="form-field user-first-name">
+							<label>First Name</label>
+							<input type="text" name="firstname" value={{user.first_name}}>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-field user-last-name">
+							<label>Last Name</label>
+							<input type="text" name="lastname" value={{user.last_name}}>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-field user-name">
+							<label>Username</label>
+							<input type="text" name="username" value={{user.username}} disabled>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-field user-email">
+							<label>Email</label>
+							<input type="text" name="email" value={{user.email}} disabled>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-field">
+							<button id="setPassword" class="default-btn">Set New Password</button>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="password-fields d-none">
+							<div class="form-field user-password">
+								<label>New Password</label>
+								<input type="password" name="newpassword" id="newpassword">
+								<div class="newpasswordstrength"></div>
+							</div>
+							<div class="form-field user-password mt-3">
+								<label>Confirm Password</label>
+								<input type="password" name="confirmpassword" id="confirmpassword">
+							</div>
+
+							<div class="cancel-btn-wrap mt-4">
+								<button id="cancelBtn" class="delete-btn">Cancel</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-field user-phone">
+							<label>Phone</label>
+							<input type="text" name="phone" value={{extrafields.mobile}}>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-field user-bio">
+							<label>Bio</label>
+							<textarea id="biotext" name="biotext" rows="4" cols="50">{{extrafields.bio}}</textarea>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-field submit-button">
+							<input type="submit" value="Update Profile" class="green-btn">
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</form>
+	</div>
 </div>
 
 <script>
-  const newpassword = document.getElementById('newpassword');
-  const confirmpassword = document.getElementById('confirmpassword');
-  const passwordField = document.querySelector('.password-fields');
-  const newpasswordstrength = document.querySelector('.newpasswordstrength');
+	const newpassword = document.getElementById('newpassword');
+	const confirmpassword = document.getElementById('confirmpassword');
+	const passwordField = document.querySelector('.password-fields');
+	const newpasswordstrength = document.querySelector('.newpasswordstrength');
 
-  document.getElementById('setPassword').addEventListener('click', (e)=>{
-    e.preventDefault();
-    passwordField.classList.remove('d-none');
-  });
+	document.getElementById('setPassword').addEventListener('click', (e) => {
+		e.preventDefault();
+		passwordField.classList.remove('d-none');
+	});
 
-  document.getElementById('cancelBtn').addEventListener('click', (e)=>{
-    e.preventDefault();
-    passwordField.classList.add('d-none');
-  });
+	document.getElementById('cancelBtn').addEventListener('click', (e) => {
+		e.preventDefault();
+		passwordField.classList.add('d-none');
+	});
 
-  newpassword.addEventListener('input', (e)=>{
-    let password = e.target.value;
-    const strength = checkPasswordStrength(e.target.value);
-    newpasswordstrength.innerHTML = strength;
-    newpasswordstrength.classList.remove('weak', 'medium', 'strong');
-    newpasswordstrength.classList.add(strength);
-  })
+	newpassword.addEventListener('input', (e) => {
+		let password = e.target.value;
+		const strength = checkPasswordStrength(e.target.value);
+		newpasswordstrength.innerHTML = strength;
+		newpasswordstrength.classList.remove('weak', 'medium', 'strong');
+		newpasswordstrength.classList.add(strength);
+	})
 
-  confirmpassword.addEventListener('input', (e)=>{
-    if(newpassword.value === e.target.value){
-      e.classList.add('passwordmatch');
-    }
-  })
+	confirmpassword.addEventListener('input', (e) => {
+		if (newpassword.value === e.target.value) {
+			e.classList.add('passwordmatch');
+		}
+	})
 
-  function checkPasswordStrength(password) {
-    const minLength = /.{8,}/;
-    const hasUpperCase = /[A-Z]/;
-    const hasLowerCase = /[a-z]/;
-    const hasNumber = /\d/;
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
+	function checkPasswordStrength(password) {
+		const minLength = /.{8,}/;
+		const hasUpperCase = /[A-Z]/;
+		const hasLowerCase = /[a-z]/;
+		const hasNumber = /\d/;
+		const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
 
-    let score = 0;
+		let score = 0;
 
-    if (minLength.test(password)) score++;
-    if (hasUpperCase.test(password)) score++;
-    if (hasLowerCase.test(password)) score++;
-    if (hasNumber.test(password)) score++;
-    if (hasSpecialChar.test(password)) score++;
+		if (minLength.test(password)) score++;
+		if (hasUpperCase.test(password)) score++;
+		if (hasLowerCase.test(password)) score++;
+		if (hasNumber.test(password)) score++;
+		if (hasSpecialChar.test(password)) score++;
 
-    if (score >= 4) return 'strong';
-    if (score === 3) return 'medium';
-    return 'weak';
-  }
+		if (score >= 4) return 'strong';
+		if (score === 3) return 'medium';
+		return 'weak';
+	}
 </script>
 {% endblock body %}
-
