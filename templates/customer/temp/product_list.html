@@ -51,16 +51,15 @@
                 
                 <div class='row'>
                     <div class='col-5 px-0 mx-1'>
-                            <input type="hidden" name='action' value='buy'>
                             <input type="hidden" name='uid' value='{{product.uid}}'>
-                            <button type="submit" class="btn btn-primary w-100">Buy Now</button>
+                            <button type="submit" name='action' value='buy' class="btn btn-primary w-100">Buy Now</button>
                         
                     </div>
                     <div class='col-4 px-0 mx-1' hidden>
                         <a href="/product-detail/{{ products.uid }}" class="btn btn-danger w-100">View Product</a>
                     </div>
                     <div class='col-6 px-0 mx-1'>
-                        <button class="btn btn-success add-to-cart-btn w-100" data-product-uid="{{ products.uid }}">Add to Cart</button>
+                        <button class="btn btn-success add-to-cart-btn w-100" name = 'action' value='cart' data-product-uid="{{ products.uid }}">Add to Cart</button>
                     </div>
                 </div>
             </div>
