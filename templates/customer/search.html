@@ -1,16 +1,16 @@
 {% extends "customer/temp/base.html" %}
 
 {% block body %}
-<section class="search-result">
+<section class="search-result section-gaps">
     <div class="container">
-        <div class="search-query">
-            <p>Search result for: {{ query }}</p>
+        <div class="search-query pb-2">
+            <h1>Search result for: {{ query }}</h1>
         </div>
 
         <div class="search-result-wrap">
             <div class='row'>
                 {% for product in results %}
-                <div class='col-3'>
+                <div class='col-md-3'>
                     {% include "customer/temp/product_list.html" with products=product %}
                 </div>
                 {% endfor %}
