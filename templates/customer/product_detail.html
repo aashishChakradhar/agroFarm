@@ -41,7 +41,7 @@
                 <form method = 'POST'>
                     {% csrf_token %}
                     <input name='product_id' value='{{products.uid}}' type="hidden" id = 'uid'>
-                    <button type="submit" name="action" value="Buy Now" class="btn btn-dark px-4">
+                    <button type="submit" name="action" value="buy" class="btn btn-dark px-4">
                         Buy now
                     </button>               
                     <button class="btn btn-success add-to-cart-btn px-4" value="add to cart" data-product-uid="{{ products.uid }}">Add to Cart</button>
