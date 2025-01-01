@@ -5,12 +5,12 @@
     {% csrf_token %}
         {% if products.featuredimage %}
         <a href="/product-detail/{{ products.uid }}" >
-            <img src="{{products.featuredimage}}" class="card-img-top" alt="{{ products.name }}" style="height: 10rem; object-fit: scale-down;">
+            <img src="{{products.featuredimage}}" class="card-img-top" alt="{{ products.name }}" style="height: 10rem; object-fit: cover;">
         </a>
         
         {% else %}
         <a href="/product-detail/{{ products.uid }}" >
-            <img src="{% static 'images/default-nobg.png' %}" class="card-img-top" alt="{{ products.name }}" style="height: 10rem; object-fit: scale-down;">
+            <img src="{% static 'images/default-nobg.png' %}" class="card-img-top" alt="{{ products.name }}" style="height: 10rem; object-fit: cover;">
         </a>
 
         {% endif %}

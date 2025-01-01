@@ -9,6 +9,7 @@ from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Prefetch
+from templatetags.product_data_fetcher import get_product_data
 
 from .models import *
 # from customer.models import ExtraDetails
@@ -488,3 +489,10 @@ class EditOrderView(BaseView):
         except Exception as e:
             messages.error(request, str(e)) 
             return render(request,f"{app_name}/edit_order.html")
+        
+class FetchedProductView(BaseView):
+    def get(self, request):
+        data = get_product_data()
+        if isinstance(data, str):  # Handle error case where a string is returned
+            return render(request, 'error.html', {'error': data})
+        return render(request, f'{app_name}/test_fetchproduct.html', {'products': data})
