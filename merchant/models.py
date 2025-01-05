@@ -36,10 +36,11 @@ class ExtraUserDetails(BaseModel):
 
 
 class Category(BaseModel):
-    merchantID = models.ForeignKey(User, on_delete=models.CASCADE,default=00)
-    name = models.CharField(max_length=30, default='')
-    featuredimage = models.CharField(max_length=1024, default='') 
-    description = models.CharField(max_length=1024, default='')
+    name = models.CharField(max_length=50, default='')
+    unit = models.CharField(max_length=30, default='')
+    min_price = models.CharField(max_length=30, default='')
+    max_price = models.CharField(max_length=30, default='')
+    avg_price = models.CharField(max_length=30, default='')
     def __str__(self):
         return self.name
 
