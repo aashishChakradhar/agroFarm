@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Prefetch
 from templatetags.product_data_fetcher import get_product_data
+from datetime import datetime
 
 from .models import *
 # from customer.models import ExtraDetails
@@ -493,6 +494,31 @@ class EditOrderView(BaseView):
 class FetchedProductView(BaseView):
     def get(self, request):
         data = get_product_data()
-        if isinstance(data, str):  # Handle error case where a string is returned
+        
+        # Handle error case
+        if isinstance(data, str):
             return render(request, 'error.html', {'error': data})
-        return render(request, f'{app_name}/test_fetchproduct.html', {'products': data})
+        
+        # Save each product in the database
+        for x in data:
+            name = data[x]['name']
+            unit = data[x]['unit']
+            min_price = data[x]['min']
+            max_price = data[x]['max']
+            avg_price = data[x]['avg']
+            
+            # Check if the product exists; if not, create or update it
+            Category.objects.update_or_create(
+                name=name,
+                defaults={
+                    'unit': unit,
+                    'min_price': min_price,
+                    'max_price': max_price,
+                    'avg_price': avg_price,
+                }
+            )
+        
+        # Fetch products from the database to display
+        products = Product.objects.all()
+        
+        return render(request, f'{app_name}/test_fetchproduct.html', {'products': products})
