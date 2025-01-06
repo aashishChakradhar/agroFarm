@@ -318,7 +318,6 @@ class BuyNowView(BaseView):
                 quantity=quantity,
                 rate=product.rate,
                 amount=total_price,
-                order_status = 'pending',
             )
             orders.append(order)
             # OrderStatus.objects.create(

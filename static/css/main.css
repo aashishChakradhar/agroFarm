@@ -6,6 +6,14 @@
     --color-bg: #eae3d2;
     --color-bgd: #f9f5eb;
 }
+.container{
+    width: 1240px;
+}
+
+.section-gaps{
+    padding: 96px 0;
+}
+
 .navbar {
     padding: 1em 0;
     width: 100%;
@@ -69,7 +77,6 @@
 }
 
 .dropdown{
-    padding: 0 10px 0 20px;
     background-color: var(--primary-color);
     border-radius: 40px;
     margin: 5px 0 ;
@@ -160,6 +167,9 @@ img{
     border-radius: 20px;
     padding: 8px 15px;
     background-color: #ffff;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
 }
 
 .search-form-wrapper form input:focus{
@@ -168,7 +178,8 @@ img{
 }
 
 .login-signup-wrapper a{
-    color: #000;
+    color: #fff;
+    font-size: 22px;
 }
 
 .login-signup-wrapper a:hover, .login-signup-wrapper a:focus{
@@ -177,4 +188,29 @@ img{
 
 .dropdown-menu{
     z-index: 99999;
+}
+
+.login-signup-wrapper a.dropdown-item{
+    color: #000;
+    font-size: 16px;
+}
+
+.table-responsive .status-btn{
+    background-color: var(--bg-color);
+    color: #000000;
+    display: inline-block;
+    width: 130px;
+    text-align: center;
+    padding: 5px 20px;
+    border-radius: 4px;
+}
+.table-responsive .status-btn.processing-btn{
+    --bg-color: rgb(245, 245, 55);
+}
+.table-responsive .status-btn.completed-btn{
+    --bg-color: rgb(0, 221, 0);
+}
+.table-responsive .status-btn.cancelled-btn{
+    --bg-color: rgb(255, 0, 0);
+    color: #ffffff;
 }
