@@ -28,6 +28,22 @@ from static.pythonFiles.automate_data_entry import automate_data_entry as automa
 
 app_name = 'customer'
 
+# for automating email while buying product
+
+from django.core.mail import send_mail
+from django.conf import settings
+
+admin = 'ashishchakradhar01@gmail.com'
+
+def send_mail_to_merchant(details):
+    send_mail(
+        f"Product Order Recieved",
+        f"You have recieved an order for {details['products']} from {details['userID']}.\nOrderID= {details.orderID}",
+        settings.EMAIL_HOST_USER,
+        [admin],
+        fail_silently=False,
+    )
+
 class BaseView(LoginRequiredMixin, View): #to check login or not
     login_url = '/login/'
     redirect_field_name = ''
@@ -256,15 +272,15 @@ class BuyNowView(BaseView):
             "products": products,
             "address":address,
         }
-        print("buy get")
         return render(request, f'{app_name}/buynow.html', context)
     
     def post(self, request):
         # Get all the product UIDs and quantities from the POST data
         product_uids = request.POST.getlist('cart_item')  # List of product UIDs
+        product_name=request.POST.getlist('item_name') # List to store name of products
         quantities = request.POST.getlist('quantity')  # List of quantities
 
-        # getting address of loged User
+        # getting address of logged User
         country = request.POST.get('country')
         state = request.POST.get('province')
         district = request.POST.get('district')
@@ -301,7 +317,6 @@ class BuyNowView(BaseView):
         )
         order_address.save()
         orders = []  # List to store created order objects for further use or confirmation
-
         for product_uid, quantity_str in zip(product_uids, quantities):
             quantity = int(quantity_str)
 
@@ -320,20 +335,17 @@ class BuyNowView(BaseView):
                 amount=total_price,
             )
             orders.append(order)
-            # OrderStatus.objects.create(
-            #     orderID = order,
-            #     is_pending = True,
-            #     is_accepted=False,
-            #     is_complete = False,
-            #     is_cancelled=False,
-            # )
 
             # Delete the item from the cart after processing
             CartItem.objects.filter(user=request.user, product=product).delete()
-
+        detail_dir = { #directory for email support
+            'userID':request.user,
+            'products':product_name,
+            'price':total_price,
+        }
         # Redirect to a confirmation or success page with relevant details
         messages.success(request, "Order has been placed")
-
+        send_mail_to_merchant(detail_dir)
         return redirect('customer:order-detail')
 
 class AddToCartView(BaseView): #adds items to cart
