@@ -1,3 +1,4 @@
+APScheduler==3.11.0
 asgiref==3.8.1
 asttokens==2.4.1
 beautifulsoup4==4.12.3
@@ -35,6 +36,7 @@ psutil==6.1.0
 pure_eval==0.2.3
 Pygments==2.18.0
 python-dateutil==2.9.0.post0
+python-decouple==3.8
 pytz==2024.2
 pywin32==308
 pyzmq==26.2.0
@@ -46,5 +48,6 @@ stack-data==0.6.3
 tornado==6.4.1
 traitlets==5.14.3
 tzdata==2024.1
+tzlocal==5.2
 urllib3==2.3.0
 wcwidth==0.2.13
