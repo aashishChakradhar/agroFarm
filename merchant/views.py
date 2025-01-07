@@ -22,6 +22,20 @@ from django.http import JsonResponse
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+
+from django.core.mail import send_mail
+from django.conf import settings
+
+def send_mail_to_customer(order):
+    customer = get_object_or_404(User,id=order.userID_id)
+    send_mail(
+        f"Order ID : #{order.uid}",
+        f"Your order for {order.productID} from {order.merchantID} is {order.status}.",
+        settings.EMAIL_HOST_USER,
+        [customer.email],
+        fail_silently=False,
+    )    
+
 # Create your views here.
 
 app_name = 'merchant'
@@ -484,6 +498,7 @@ class EditOrderView(BaseView):
 
             order.save()
 
+            send_mail_to_customer(order)
             messages.success(request, "Your Order Has Been Updated!")
             return redirect('/merchant/order/edit-order/' + str(id))  # Redirect to a blog list or success page after editing
         
