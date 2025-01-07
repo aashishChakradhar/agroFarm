@@ -100,7 +100,8 @@ class OrderAddress(BaseModel):
         return f"{self.street}, {self.municipality}, {self.district}, {self.state}, {self.country}"
 
 class Order(BaseModel):
-    userID = models.ForeignKey(User, on_delete=models.CASCADE)
+    merchantID = models.ForeignKey(User,on_delete=models.CASCADE,related_name='merchant_transactions',default = 1) 
+    userID = models.ForeignKey(User, on_delete=models.CASCADE,related_name='buyer_transactions') #buyer ID
     productID = models.ForeignKey(Product, on_delete=models.CASCADE)
     addressID = models.ForeignKey(OrderAddress, on_delete=models.CASCADE,default=0)
     quantity = models.PositiveIntegerField(default=1)  # Changed to store whole numbers
