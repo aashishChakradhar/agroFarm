@@ -33,16 +33,16 @@ app_name = 'customer'
 from django.core.mail import send_mail
 from django.conf import settings
 
-admin = 'ashishchakradhar01@gmail.com'
-
-def send_mail_to_merchant(details):
-    send_mail(
-        f"Product Order Recieved",
-        f"You have recieved an order for {details['products']} from {details['userID']}.\nOrderID= {details.orderID}",
-        settings.EMAIL_HOST_USER,
-        [admin],
-        fail_silently=False,
-    )
+def send_mail_to_merchant(orders):
+    for order in orders:
+        merchant = get_object_or_404(User,id=order.merchantID_id)
+        send_mail(
+            f"Order ID : #{order.uid}",
+            f"You have recieved an order for {order.productID} from {order.userID}.",
+            settings.EMAIL_HOST_USER,
+            [merchant.email],
+            fail_silently=False,
+        )    
 
 class BaseView(LoginRequiredMixin, View): #to check login or not
     login_url = '/login/'
@@ -275,12 +275,11 @@ class BuyNowView(BaseView):
         return render(request, f'{app_name}/buynow.html', context)
     
     def post(self, request):
-        # Get all the product UIDs and quantities from the POST data
+        # Get data from form
         product_uids = request.POST.getlist('cart_item')  # List of product UIDs
-        product_name=request.POST.getlist('item_name') # List to store name of products
         quantities = request.POST.getlist('quantity')  # List of quantities
 
-        # getting address of logged User
+        # getting address of buyer from form
         country = request.POST.get('country')
         state = request.POST.get('province')
         district = request.POST.get('district')
@@ -289,6 +288,7 @@ class BuyNowView(BaseView):
         zip_code = request.POST.get('postalCode')
         landmark = request.POST.get('landmark')
 
+        # if user doesnot have address saved
         if not Address.objects.exists():
             Address.objects.create(
                 country=country,
@@ -306,6 +306,7 @@ class BuyNowView(BaseView):
             messages.error(request, "Invalid data submitted", status=400)
             return redirect(request.path)
         
+        # creating delivery address
         order_address = OrderAddress.objects.create(
             country=country,
             state=state,
@@ -323,11 +324,14 @@ class BuyNowView(BaseView):
             if quantity < 1:
                 return HttpResponse('Quantity must be at least 1.', status=400)
 
-            product = get_object_or_404(Product, uid=product_uid)
+            product = get_object_or_404(Product, uid=product_uid) #fetching object of selected product from db
+            merchant = get_object_or_404(User, id = product.merchantID_id) #fetching object of concerned merchant from db
+
             total_price = product.rate * quantity
             # Create and save the order object
             order = Order.objects.create(
-                userID=request.user,
+                merchantID = merchant,
+                userID=request.user, # buyer/current user
                 productID=product,
                 addressID = order_address,
                 quantity=quantity,
@@ -338,14 +342,9 @@ class BuyNowView(BaseView):
 
             # Delete the item from the cart after processing
             CartItem.objects.filter(user=request.user, product=product).delete()
-        detail_dir = { #directory for email support
-            'userID':request.user,
-            'products':product_name,
-            'price':total_price,
-        }
         # Redirect to a confirmation or success page with relevant details
         messages.success(request, "Order has been placed")
-        send_mail_to_merchant(detail_dir)
+        send_mail_to_merchant(orders)
         return redirect('customer:order-detail')
 
 class AddToCartView(BaseView): #adds items to cart
