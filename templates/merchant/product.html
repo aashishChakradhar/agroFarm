@@ -32,7 +32,7 @@
                 </svg>
             </th>
             <th>Product Name</th>
-            <th>Price</th>
+            <th>Price (Rs)</th>
             <th>Category</th>
             <th>Published Date</th>
         </thead>
@@ -43,11 +43,7 @@
                 <td><img src="{% if x.featuredimage %}{{x.featuredimage}}{% else %}{% static 'images/default-nobg.png' %}{% endif %}" alt="{{x.name}} image"></td>
                 <td><a href="/merchant/products/edit-product/{{x.uid}}">{{ x.name }}</a></td>
                 <td>{{ x.rate }}</td>
-                <td>
-                  {% for type in x.categoryID.all %}
-                    {{ type.name }}{% if not forloop.last %}, {% endif %}
-                  {% endfor %}
-                </td>
+                <td>{{x.categoryID}}</td>
                 <td>{{ x.created }}</td>
             </tr>
             {% empty %}
