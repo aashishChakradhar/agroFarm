@@ -36,6 +36,7 @@ class ExtraUserDetails(BaseModel):
 
 
 class Category(BaseModel):
+    merchantID = models.ForeignKey(User,on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=50, default='')
     unit = models.CharField(max_length=30, default='')
     min_price = models.CharField(max_length=30, default='')

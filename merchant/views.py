@@ -204,7 +204,7 @@ class ProductView(BaseView):
         if request.user.is_superuser:
             products = Product.objects.all().order_by('-created')
         else:
-            products = Product.objects.filter(sellerId=request.user).order_by('-created')
+            products = Product.objects.filter(merchantID=request.user).order_by('-created')
         
         try:
             context = {
