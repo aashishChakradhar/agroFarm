@@ -45,6 +45,7 @@
                 <ul class="dropdown-menu">
                   {% if request.user.is_authenticated %}
                     <li><a class="dropdown-item" href="{% url 'customer:logout' %}">Logout</a></li>
+                    <li><a class="dropdown-item" href="{% url 'merchant:dashboard' %}">Dashboard</a></li>
                     <li><a class="dropdown-item" href="{% url 'merchant:signup' %}">Become a merchant</a></li>
                   {% else %}
                     <li><a class="dropdown-item" href="{% url 'customer:login' %}">Login</a></li>
