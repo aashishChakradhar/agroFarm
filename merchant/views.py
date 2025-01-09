@@ -138,7 +138,7 @@ class SignupView (View):
         user = authenticate(username = username, password = password)
         if user is not None:# checks if the user is logged in or not?
             login(request,user) #logins the user
-            return redirect(f'{app_name}/dashboard/')
+            return redirect('merchant:dashboard')
         
         messages.error(request, "Error logging in. Please try again.")
         return redirect(request.path) 
