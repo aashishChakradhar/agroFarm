@@ -15,6 +15,7 @@ def fetch_and_store_data():
         # Parse and process the data
         data = response.json()  # Assuming the API returns JSON data
         for x in data:
+            slug = x
             name = data[x]['name']
             unit = data[x]['unit']
             min_price = data[x]['min']
@@ -25,6 +26,7 @@ def fetch_and_store_data():
             Product.objects.update_or_create(
                 name=name,
                 defaults={
+                    'slug': slug,
                     'unit': unit,
                     'min_price': min_price,
                     'max_price': max_price,
