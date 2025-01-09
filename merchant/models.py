@@ -60,11 +60,11 @@ class Product(BaseModel):
     def __str__(self):
         return self.name
 
-# class Product_Tag(BaseModel):
-#     tagID = models.ForeignKey(Tag, on_delete=models.CASCADE)
-#     produtID = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     def __str__(self):
-#         return self.title
+class Product_User(BaseModel):
+    userID = models.ForeignKey(User, on_delete=models.CASCADE)
+    produtID = models.ForeignKey(Product, on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.userID} has {self.productID}"
     
 class Review(BaseModel):
     userID = models.ForeignKey(User,on_delete=models.CASCADE)
