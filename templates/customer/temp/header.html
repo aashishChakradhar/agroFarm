@@ -45,8 +45,11 @@
                 <ul class="dropdown-menu">
                   {% if request.user.is_authenticated %}
                     <li><a class="dropdown-item" href="{% url 'customer:logout' %}">Logout</a></li>
+                    {% if request.user.is_staff or request.user.is_superuser %}
                     <li><a class="dropdown-item" href="{% url 'merchant:dashboard' %}">Dashboard</a></li>
+                    {% else %}
                     <li><a class="dropdown-item" href="{% url 'merchant:signup' %}">Become a merchant</a></li>
+                    {% endif %}
                   {% else %}
                     <li><a class="dropdown-item" href="{% url 'customer:login' %}">Login</a></li>
                     <li><a class="dropdown-item" href="{% url 'customer:signup' %}">Signup</a></li>
