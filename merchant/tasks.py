@@ -1,5 +1,5 @@
 import requests
-from merchant.models import Category
+from merchant.models import Product
 import logging
 from datetime import datetime
 
@@ -22,10 +22,9 @@ def fetch_and_store_data():
             avg_price = data[x]['avg']
             
             # Check if the product exists; if not, create or update it
-            Category.objects.update_or_create(
+            Product.objects.update_or_create(
                 name=name,
                 defaults={
-                    'modified' : datetime.now(),
                     'unit': unit,
                     'min_price': min_price,
                     'max_price': max_price,
