@@ -30,14 +30,17 @@
                                 <input type="hidden" name="editorContent" id="editorContent">
                             </div>
                             <div class="input-field">
-                                <label><span>Product Price</span>
-                                    <input type="text" name="price" id="price" placeholder="Price">
-                                </label>
-                            </div>
-                            <div class="input-field">
                                 <label><span>Stock(kg)</span>
                                     <input type="number" name="stock" id="stock" min="0" placeholder="Products in stock">
                                 </label>
+                            </div>
+                            <div class="category-box">
+                                <span>Categories</span>
+                                <select name="producttype" id="producttype">
+                                    {% for x in categories %}
+                                    <option value="{{ x.uid }}" {% if forloop.counter == 1 %} selected {% endif%}>{{ x.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -63,17 +66,6 @@
                                     <button id="removeimg" class="delete-btn">Remove Image</button>
                                 </div>
                                 <textarea name="productimgblob" id="productimgblob" class="d-none"></textarea>  
-                            </div>
-                            <div class="category-box">
-                                <span>Categories</span>
-                                <ul>
-                                    {% for x in categories %}
-                                    <li>
-                                        <input type="checkbox" id="type{{forloop.counter}}" name="producttype" value="{{x}}" />
-                                        <label for="type{{forloop.counter}}">{{x}}</label>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
                             </div>
                         </div>
                     </div>

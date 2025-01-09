@@ -52,7 +52,7 @@ class Tag(BaseModel):
 
 class Product(BaseModel):
     merchantID = models.ForeignKey(User, on_delete=models.CASCADE,default=00)
-    categoryID = models.ManyToManyField(Category, default='')
+    categoryID = models.ForeignKey(Category, on_delete=models.CASCADE, default=00)
     tagID = models.ManyToManyField(Tag)
     name = models.CharField(max_length=30,default="unknown")
     featuredimage = models.CharField(max_length=1024, default='') 
