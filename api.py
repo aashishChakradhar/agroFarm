@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import re
-import time
 
 app = FastAPI()
 

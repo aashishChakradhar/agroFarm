@@ -150,54 +150,53 @@ class Index(BaseView):
         }
         return render(request,f'{app_name}/index.html',context)
     
-class AddProductView(BaseView):
-    def get(self, request):
-        try:
-            context = {
-                'categories': Category.objects.all() ,
-                'page_name': 'add-product'
-            }
-            return render(request, f"{app_name}/add_product.html" ,context)
-        except Exception as e:
-            messages.error(request, str(e))
-            return render(request,f"{app_name}/add_product.html")
+# class AddProductView(BaseView):
+#     def get(self, request):
+#         try:
+#             context = {
+#                 'page_name': 'add-product'
+#             }
+#             return render(request, f"{app_name}/add_product.html" ,context)
+#         except Exception as e:
+#             messages.error(request, str(e))
+#             return render(request,f"{app_name}/add_product.html")
 
-    def post(self,request):
-        try:
-            producttitle = request.POST.get('producttitle')
-            featuredimage = request.POST.get('productimgblob')
-            stock = request.POST.get('stock')
+#     def post(self,request):
+#         try:
+#             producttitle = request.POST.get('producttitle')
+#             featuredimage = request.POST.get('productimgblob')
+#             stock = request.POST.get('stock')
             
-            cat = request.POST.get('producttype')
-            description = request.POST.get('editorContent')
-            sellerid = request.user
+#             cat = request.POST.get('producttype')
+#             description = request.POST.get('editorContent')
+#             sellerid = request.user
 
-            category = get_object_or_404(Category, uid=cat)
-            price = category.avg_price
-            price = price.split(' ')[1]
+#             category = get_object_or_404(Category, uid=cat)
+#             price = category.avg_price
+#             price = price.split(' ')[1]
 
-            if not producttitle or not price:
-                messages.error(request, "All fields are required.")
-                return render(request, f'{app_name}/add_product.html')
+#             if not producttitle or not price:
+#                 messages.error(request, "All fields are required.")
+#                 return render(request, f'{app_name}/add_product.html')
             
-            product = Product(
-                name=producttitle,
-                merchantID=sellerid,
-                featuredimage=featuredimage,
-                stock_quantity = stock,
-                rate = price,
-                description = description,
-                categoryID = category
-            )
-            product.save()
+#             product = Product(
+#                 name=producttitle,
+#                 merchantID=sellerid,
+#                 featuredimage=featuredimage,
+#                 stock_quantity = stock,
+#                 rate = price,
+#                 description = description,
+#                 categoryID = category
+#             )
+#             product.save()
 
-            messages.success(request, "Your Product Has Been Successfully Added!")
-            return redirect(request.path) 
+#             messages.success(request, "Your Product Has Been Successfully Added!")
+#             return redirect(request.path) 
         
-        except Exception as e:
-            messages.error(request, str(e))
+#         except Exception as e:
+#             messages.error(request, str(e))
       
-        return render(request, f'{app_name}/add_product.html') 
+#         return render(request, f'{app_name}/add_product.html') 
 
 class ProductView(BaseView):
     def get(self, request):
@@ -219,12 +218,12 @@ class ProductView(BaseView):
 class DashboardView(BaseView):
     def get(self, request):
         current_user = request.user
-        user_product_ids = Product.objects.filter(merchantID=current_user.id).values_list('uid', flat=True)
-        orders = Order.objects.filter(productID__in=user_product_ids)
+        # user_product_ids = Product.objects.filter(merchantID=current_user.id).values_list('uid', flat=True)
+        # orders = Order.objects.filter(productID__in=user_product_ids)
         try:
             current_user = request.user
             context = {
-                'orders' : orders,
+                # 'orders' : orders,
                 'user' : current_user,
                 'page_name': 'Dashboard'
             }

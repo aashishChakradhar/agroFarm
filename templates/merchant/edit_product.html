@@ -23,7 +23,7 @@
                     <div class="col-md-8">
                         <div class="left-field">
                             <div class="input-field">
-                                <input type="text" name="producttitle" id="producttitle" value="{{product.name}}">
+                                <input type="text" name="producttitle" id="producttitle" value="{{product.name}}" readonly>
                             </div>
                             <div class="description-field">
                                 <div id="editor"></div>
@@ -31,17 +31,9 @@
                                     value="{{product.description}}">
                             </div>
                             <div class="input-field">
-                                <label><span>Stock(kg)</span>
-                                    <input type="number" name="stock" id="stock" min="0" value="{{product.stock_quantity}}" placeholder="Products in stock">
+                                <label><span>Stock({{product.unit}})</span>
+                                    <input type="number" name="stock" id="stock" min="0" placeholder="Products in stock">
                                 </label>
-                            </div>
-                            <div class="category-box">
-                                <span>Categories</span>
-                                <select name="producttype" id="producttype">
-                                    {% for x in categories %}
-                                    <option value="{{ x.uid }}" {% if x == product.categoryID %} selected {% endif %} >{{ x.name }}</option>
-                                    {% endfor %}
-                                </select>
                             </div>
                         </div>
                     </div>

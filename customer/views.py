@@ -150,21 +150,21 @@ class Signup_View (View):
             
 class Index(View):
     def get(self, request):
-        categorys = Category.objects.all()
-        products = Product.objects.all()
-        category = []
-        for categories in categorys:
-            # Check if there is any product that belongs to this category
-            if categories.product_set.exists():  # product_set is the reverse relation for Category
-                category_products = categories.product_set.all()[:4]  # [:4] limits to 4 products
-                category.append({
-                    'category': categories,
-                    'products': category_products
-                })
+        # categorys = Category.objects.all()
+        # products = Product.objects.all()
+        # category = []
+        # for categories in categorys:
+        #     # Check if there is any product that belongs to this category
+        #     if categories.product_set.exists():  # product_set is the reverse relation for Category
+        #         category_products = categories.product_set.all()[:4]  # [:4] limits to 4 products
+        #         category.append({
+        #             'category': categories,
+        #             'products': category_products
+        #         })
         context = {
             "page_name":"home",
             "rangelist" : [1,2,3,4] ,
-            "categorys": category
+            # "categorys": category
         }
         return render(request,f'{app_name}/index.html',context)
     
