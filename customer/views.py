@@ -150,21 +150,19 @@ class Signup_View (View):
             
 class Index(View):
     def get(self, request):
-        # categorys = Category.objects.all()
-        # products = Product.objects.all()
-        # category = []
-        # for categories in categorys:
-        #     # Check if there is any product that belongs to this category
-        #     if categories.product_set.exists():  # product_set is the reverse relation for Category
-        #         category_products = categories.product_set.all()[:4]  # [:4] limits to 4 products
-        #         category.append({
-        #             'category': categories,
-        #             'products': category_products
-        #         })
+        product_users = Product_User.objects.filter(is_available = True)
+        combined_data = []
+        for product_user in product_users:
+            product = Product.objects.get(uid = product_user.productID.uid)
+            combined_data.append(
+                {
+                    'products':product,
+                    'product_user':product_user
+                }
+            )
         context = {
             "page_name":"home",
-            "rangelist" : [1,2,3,4] ,
-            # "categorys": category
+            "combined_data": combined_data
         }
         return render(request,f'{app_name}/index.html',context)
     
@@ -272,6 +270,7 @@ class BuyNowView(BaseView):
             "products": products,
             "address":address,
         }
+        print(product_ids)
         return render(request, f'{app_name}/buynow.html', context)
     
     def post(self, request):
@@ -324,24 +323,25 @@ class BuyNowView(BaseView):
             if quantity < 1:
                 return HttpResponse('Quantity must be at least 1.', status=400)
 
-            product = get_object_or_404(Product, uid=product_uid) #fetching object of selected product from db
-            merchant = get_object_or_404(User, id = product.merchantID_id) #fetching object of concerned merchant from db
+            # product = get_object_or_404(Product, uid=product_uid) #fetching object of selected product from db
+            product_user = get_object_or_404(Product_User,productID = product_uid)
+            # merchant = get_object_or_404(User, id = product.merchantID_id) #fetching object of concerned merchant from db
 
-            total_price = product.rate * quantity
+            total_price = product_user.price * quantity
             # Create and save the order object
             order = Order.objects.create(
-                merchantID = merchant,
+                merchantID = product_user.userID,
                 userID=request.user, # buyer/current user
-                productID=product,
+                productID=product_user.productID,
                 addressID = order_address,
                 quantity=quantity,
-                rate=product.rate,
+                rate=product_user.price,
                 amount=total_price,
             )
             orders.append(order)
 
             # Delete the item from the cart after processing
-            CartItem.objects.filter(user=request.user, product=product).delete()
+            CartItem.objects.filter(user=request.user, product=product_user.uid).delete()
         # Redirect to a confirmation or success page with relevant details
         messages.success(request, "Order has been placed")
         send_mail_to_merchant(orders)
@@ -469,7 +469,7 @@ class Review_View(BaseView):
         comment = request.POST.get('comment')
         rating = request.POST.get('rating')
 
-        product = Product.objects.get(uid=productID)
+        product = Product_User.objects.get(productID=productID)
         product_avg = float(product.review_average)
         product_count = int(product.review_count) +1
         new_average = float((product_avg * (product_count - 1)) + int(rating)) / product_count
