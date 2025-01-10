@@ -52,19 +52,20 @@ class Tag(BaseModel):
 
 class Product(BaseModel):
     name = models.CharField(max_length=30,default="unknown")
+    slug = models.CharField(max_length=30,default="unknown")
     unit = models.CharField(max_length=30,default="unknown")
-    avg_price = models.DecimalField(max_digits=5, decimal_places=2,default=00)
-    max_price = models.DecimalField(max_digits=5, decimal_places=2,default=00)
-    min_price = models.DecimalField(max_digits=5, decimal_places=2,default=00)
+    avg_price = models.CharField(max_length=30,default="")
+    max_price = models.CharField(max_length=30,default="")
+    min_price = models.CharField(max_length=30,default="")
     is_available = models.BooleanField(default=True)
     def __str__(self):
         return self.name
 
 class Product_User(BaseModel):
-    userID = models.ForeignKey(User, on_delete=models.CASCADE) #seller/merchant ID
+    userID = models.ForeignKey(User, on_delete=models.CASCADE)
     productID = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-    price = models.DecimalField(max_digits=8, decimal_places=2)
+    quantity = models.IntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     is_available = models.BooleanField(default=True)
     review_average = models.DecimalField(max_digits=3, decimal_places=2)
     def __str__(self):

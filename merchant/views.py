@@ -297,9 +297,13 @@ class OrderView(BaseView):
 class EditProductView(BaseView):
     def get(self, request, id):
         try:
+            product = get_object_or_404(Product, uid=id)
+            min_price = product.min_price.split(' ')[1]
+            max_price = product.max_price.split(' ')[1]
             context = {
                 'product' : get_object_or_404(Product, uid=id),
-                'categories': Category.objects.all() ,
+                'min_price': min_price,
+                'max_price': max_price,
                 'page_name': 'edit-product'
             }
             return render(request, f"{app_name}/edit_product.html" ,context)
@@ -309,37 +313,28 @@ class EditProductView(BaseView):
 
     def post(self,request, id):
         try:
-            product = get_object_or_404(Product, uid=id)
-
-            producttitle = request.POST.get('producttitle')
-            featuredimage = request.POST.get('productimgblob')
             price = request.POST.get('price')
             stock = request.POST.get('stock')
-            cat = request.POST.get('producttype')
-            description = request.POST.get('editorContent')
 
-            category = get_object_or_404(Category, uid=cat)
-            price = category.avg_price
-            price = price.split(' ')[1]
-
-            if not producttitle or not price:
+            if not stock or not price:
                 messages.error(request, "All fields are required.")
                 return render(request, f'{app_name}/edit_product.html')
-            
-            product.name=producttitle
-            product.featuredimage=featuredimage
-            product.rate = price
-            product.description = description
 
-            product.stock_quantity = stock
-            product.categoryID = category
-            product.save()
+            Product_User.objects.update_or_create(
+                productID=Product.objects.get(uid=id), 
+                userID=request.user,
+                defaults={
+                    'quantity' : stock,
+                    'price':price,
+                }
+            )
 
             messages.success(request, "Your Product Has Been Updated!")
             return redirect('/merchant/products/edit-product/' + str(id))  # Redirect to a blog list or success page after editing
         
         except Exception as e:
             messages.error(request, str(e)) 
+            return render(request,f"{app_name}/edit_product.html")
 
 class DeleteProductView(View):
     def get(self, request, id):
