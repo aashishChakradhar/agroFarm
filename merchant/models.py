@@ -61,7 +61,7 @@ class Product(BaseModel):
         return self.name
 
 class Product_User(BaseModel):
-    userID = models.ForeignKey(User, on_delete=models.CASCADE)
+    userID = models.ForeignKey(User, on_delete=models.CASCADE) #seller/merchant ID
     productID = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
