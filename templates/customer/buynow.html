@@ -56,23 +56,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for product in products %}
+                            {% for combined_data in combined_data %}
                                 <tr>
-                                    <input type="hidden" name="cart_item" id="{{ product.uid }}" value="{{ product.uid }}">
-                                    <input type="hidden" name="item_name" id="{{ product.name }}" value="{{ product.name }}">
+                                    <input type="hidden" name="cart_item" id="{{ combined_data.products.uid }}" value="{{ combined_data.products.uid }}">
+                                    <input type="hidden" name="item_name" id="{{ combined_data.products.name }}" value="{{ combined_data.products.name }}">
                                     <td>
-                                        {{ product.name }}
+                                        {{ combined_data.products.name }}
                                     </td>
                                     <td>
-                                        <span id="rate-{{ product.uid }}">{{ product.rate }}</span>
+                                        <span id="rate-{{ combined_data.products.uid }}">{{ combined_data.product_user.price }}</span>
                                     </td>
                                     <td>
-                                        <label for="quantity-{{ product.uid }}">
-                                            <input type="number" name='quantity' id='quantity-{{ product.uid }}' min="10" value="10">
+                                        <label for="quantity-{{ combined_data.products.uid }}">
+                                            <input type="number" name='quantity' id='quantity-{{ combined_data.products.uid }}' min="10" value="10">
                                         </label>
                                     </td>
                                     <td>
-                                        <span id="price-{{ product.uid }}">0.00</span>
+                                        <span id="price-{{ combined_data.products.uid }}">0.00</span>
                                     </td>
                                 </tr>
                             {% endfor %}

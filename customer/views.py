@@ -262,12 +262,23 @@ class BuyNowView(BaseView):
         # Fetch all products matching the selected IDs
         products = Product.objects.filter(uid__in=product_ids)
         if Address.objects.filter(userID = request.user).exists():
+            print("yes")
             address = Address.objects.get(userID = request.user)
         else:
             address = None
+        for product in products:
+            product_users = Product_User.objects.filter(productID = product)
+            combined_data = []
+            for product_user in product_users:
+                combined_data.append(
+                    {
+                        'products':product,
+                        'product_user':product_user
+                    }
+                )
         context = {
             "page_name": "buy-now",
-            "products": products,
+            "combined_data": combined_data,
             "address":address,
         }
         print(product_ids)
@@ -288,8 +299,9 @@ class BuyNowView(BaseView):
         landmark = request.POST.get('landmark')
 
         # if user doesnot have address saved
-        if not Address.objects.exists():
+        if not Address.objects.filter(userID = request.user).exists():
             Address.objects.create(
+                userID = request.user,
                 country=country,
                 state=state,
                 district=district,
@@ -299,6 +311,7 @@ class BuyNowView(BaseView):
                 landmark=landmark,
                 is_deleted = False,
             )
+            print('saved')
 
         # Validate and process each product and its quantity
         if not product_uids or not quantities or len(product_uids) != len(quantities):
