@@ -1,52 +1,32 @@
 {% load static %}
 <div class="card" style="width: 19rem; height:22rem; border:#9e9b9b solid 2px;">
-    
-    <form action="{% url 'customer:home' %}" method="post">
-    {% csrf_token %}
-        {% if products.featuredimage %}
-        <a href="/product-detail/{{ products.uid }}" >
-            <img src="{{products.featuredimage}}" class="card-img-top" alt="{{ products.name }}" style="height: 10rem; object-fit: cover;">
-        </a>
-        
-        {% else %}
-        <a href="/product-detail/{{ products.uid }}" >
-            <img src="{% static 'images/default-nobg.png' %}" class="card-img-top" alt="{{ products.name }}" style="height: 10rem; object-fit: cover;">
-        </a>
 
-        {% endif %}
-        <div class="card-body">
-            <a class="product-list-link" href="/product-detail/{{ products.uid }}" >
-                <h4 class="card-title">{{ products.name }}</h4>
+    <form action="{% url 'customer:home' %}" method="post">
+        {% csrf_token %}
+
+        {% if combined_data.product_user.featuredimage %}
+            <a href="/product-detail/{{ combined_data.products.uid }}" >
+                <img src="{{combined_data.product_user.featuredimage}}" class="card-img-top" alt="{{ combined_data.products.name }}" style="height: 10rem; object-fit: cover;">
             </a>
-            <!-- <div class="category-name" style="font-size: 12px;">
-                {{ category.name }}
-            </div> -->
-            <div class='price'>
-                <div class='col-8 p-0 m-0'>
-                    <h5>Rs. {{ products.rate }}</h5>
-                </div>
-                <div class='col-4' hidden>
-                    Sale
-                </div>
-            </div>
-            <!-- <div class='rating'>
-                <h6 class="text-justify">
-                    <strong>Ratings: </strong>{{products.review_average}}
-                </h6>
-                {{ review.rating }}
-            </div> -->
-            <div class="stock-status" style="min-height: 25px;">
-                {% if products.stock_quantity == 0 %}
-                    <h6>Out of Stock</h6>
-                {% endif %}
-            </div>
+        {% else %}
+            <a href="/product-detail/{{ combined_data.products.uid }}" >
+                <img src="{% static 'images/default-nobg.png' %}" class="card-img-top" alt="{{ combined_data.products.name }}" style="height: 10rem; object-fit: cover;">
+            </a>
+        {% endif %}
+
+        <div class="card-body">
+            <a class="product-list-link" href="/product-detail/{{ combined_data.products.uid }}" >
+                <h4 class="card-title">{{ combined_data.products.name }}</h4>
+            </a>
+            <h6>{{combined_data.product_user.price}} per {{combined_data.products.unit}}</h6>
+            
             <div class="button-group d-flex justify-content-center">
                 <div class="buy-button" style="margin-right:10px;">
-                        <input type="hidden" name='uid' value='{{product.uid}}'>
+                        <input type="hidden" name='uid' value='{{combined_data.products.uid}}'>
                         <button type="submit" name='action' value='buy' class="btn btn-dark px-4">Buy Now</button>
                 </div>
                 <div class='cart-button'>
-                    <button class="btn btn-success add-to-cart-btn px-4" name = 'action' value='cart' data-product-uid="{{ products.uid }}">Add to Cart</button>
+                    <button class="btn btn-success add-to-cart-btn px-4" name = 'action' value='cart' data-product-uid="{{ combined_data.products.uid }}">Add to Cart</button>
                 </div>
             </div>
         </div>
