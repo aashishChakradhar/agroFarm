@@ -1,7 +1,7 @@
 {% extends "customer/temp/base.html" %}
 
 {% block body %}
-<section class="image-slider">
+{% comment %} <section class="image-slider">
     <div id="carouselExampleFade" class="carousel slide carousel-fade">
       <div class="carousel-inner">
         <div class="carousel-item active">
@@ -23,21 +23,16 @@
         <span class="visually-hidden">Next</span>
       </button>    
     </div>
-</section>
+</section> {% endcomment %}
 <section class="product-listing section-gaps">
   <div class="container">
-    {% for categories in categorys %}
-      <div class="category-list pb-5">
-        <h3 class="pb-2">{{ categories.category.name }}</h3>
-        <div class='row'>
-          {% for product in categories.products %}
-          <div class='col-md-3'>
-            {% include "customer/temp/product_list.html" with products=product category=categories.category %}
-          </div>
-          {% endfor %}
+    <div class='row'>
+      {% for combined_data in combined_data %}
+        <div class='col-md-3'>
+          {% include "customer/temp/product_list.html" with combined_data=combined_data%}
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
   </div>
 </section>
 
