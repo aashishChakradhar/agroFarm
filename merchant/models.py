@@ -63,11 +63,11 @@ class Product(BaseModel):
 
 class Product_User(BaseModel):
     userID = models.ForeignKey(User, on_delete=models.CASCADE)
-    productID = models.ForeignKey(Product, on_delete=models.CASCADE)
+    productID = models.ForeignKey(Product, on_delete=models.CASCADE,  related_name="product_user")
     quantity = models.IntegerField(default=0)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     is_available = models.BooleanField(default=True)
-    review_average = models.DecimalField(max_digits=3, decimal_places=2)
+    review_average = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
     def __str__(self):
         return f"{self.userID} has {self.productID}"
     
