@@ -52,20 +52,7 @@
                             </div>
                             <div class="form-field user-profile-image">
                                 <span>Product Featured image</span>
-                                <label class="profile-img" for="productimg">
-                                    <input type="file" style="visibility: hidden;" name="productimg" id="productimg"
-                                        accept="image/*">
-                                    {% if product.featuredimage %}
-                                    <img src="{{product.featuredimage}}" id="fimg" alt="img">
-                                    {% else %}
-                                    <img src="http://matters.cloud392.com/wp-content/uploads/2024/06/camera-icon.png"
-                                        id="fimg" alt="img">
-                                    {% endif %}
-                                </label>
-                                <div class="button-wrapper text-end">
-                                    <button id="removeimg" class="delete-btn">Remove Image</button>
-                                </div>
-                                <textarea name="productimgblob" id="productimgblob" class="d-none">{{product.featuredimage}}</textarea>
+                                <img src="{% static 'images/' %}{{ product.slug }}.png" id="fimg" alt="img">
                             </div>
                         </div>
                     </div>
