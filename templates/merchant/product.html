@@ -37,7 +37,13 @@
             {% for x in products %}
             <tr>
                 <td>{{forloop.counter}}</td>
-                <td><img src="{% static 'images/' %}{{ x.slug }}.png" onerror="this.src=`{% static 'images/default-nobg.png' %}`" alt="{{ x.name }} image"></td>
+                <td>
+                  {% if x.image_exists %}
+                  <img src="{% static 'images/' %}{{ x.slug }}.png" alt="{{ x.name }} image">
+                  {% else %}
+                  <img src="{% static 'images/default-nobg.png' %}" alt="{{ x.name }} image">
+                  {% endif %}
+                </td>
                 <td><a href="/merchant/products/edit-product/{{x.uid}}">{{ x.name }}</a></td>
                 <td>{{ x.min_price }} - {{ x.max_price}} ({{x.avg_price}})</td>
             </tr>
