@@ -11,6 +11,7 @@ from django.db import transaction
 from django.db.models import Prefetch
 from templatetags.product_data_fetcher import get_product_data
 from datetime import datetime
+import os
 
 from .models import *
 # from customer.models import ExtraDetails
@@ -202,6 +203,9 @@ class ProductView(BaseView):
     def get(self, request):
         products = Product.objects.all().order_by('-created')
         # user_product = Product.objects.filter(product_user__userID=request.user).order_by('-created')
+        for product in products:
+            image_path = os.path.join('static/', 'images', f"{product.slug}.png")
+            product.image_exists = os.path.isfile(image_path)
         
         try:
             context = {
@@ -298,10 +302,13 @@ class EditProductView(BaseView):
             product = get_object_or_404(Product, uid=id)
             min_price = product.min_price.split(' ')[1]
             max_price = product.max_price.split(' ')[1]
+            image_path = os.path.join('static/', 'images', f"{product.slug}.png")
+            image_exists = os.path.isfile(image_path)
             context = {
                 'product' : get_object_or_404(Product, uid=id),
                 'min_price': min_price,
                 'max_price': max_price,
+                'image_exists' : image_exists,
                 'page_name': 'edit-product'
             }
             return render(request, f"{app_name}/edit_product.html" ,context)
