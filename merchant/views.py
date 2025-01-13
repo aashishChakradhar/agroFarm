@@ -200,10 +200,8 @@ class Index(BaseView):
 
 class ProductView(BaseView):
     def get(self, request):
-        if request.user.is_superuser:
-            products = Product.objects.all().order_by('-created')
-        else:
-            products = Product.objects.filter(merchantID=request.user).order_by('-created')
+        products = Product.objects.all().order_by('-created')
+        # user_product = Product.objects.filter(product_user__userID=request.user).order_by('-created')
         
         try:
             context = {
