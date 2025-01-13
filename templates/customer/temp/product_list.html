@@ -4,15 +4,13 @@
     <form action="{% url 'customer:home' %}" method="post">
         {% csrf_token %}
 
-        {% if combined_data.product_user.featuredimage %}
-            <a href="/product-detail/{{ combined_data.products.uid }}" >
-                <img src="{{combined_data.product_user.featuredimage}}" class="card-img-top" alt="{{ combined_data.products.name }}" style="height: 10rem; object-fit: cover;">
-            </a>
-        {% else %}
-            <a href="/product-detail/{{ combined_data.products.uid }}" >
+        <a href="/product-detail/{{ combined_data.products.uid }}" >
+            {% if combined_data.image_exists %}
+                <img src="{% static 'images/' %}{{ combined_data.products.slug }}.png" class="card-img-top" alt="{{ combined_data.products.name }}" style="height: 10rem; object-fit: cover;">
+            {% else %}
                 <img src="{% static 'images/default-nobg.png' %}" class="card-img-top" alt="{{ combined_data.products.name }}" style="height: 10rem; object-fit: cover;">
-            </a>
-        {% endif %}
+            {% endif %}
+        </a>
 
         <div class="card-body">
             <a class="product-list-link" href="/product-detail/{{ combined_data.products.uid }}" >
