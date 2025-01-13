@@ -22,6 +22,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 # from django.contrib.auth.decorators import login_required
 # from django.urls import reverse_lazy
+import os
 
 from myutility import *
 from static.pythonFiles.automate_data_entry import automate_data_entry as automatic
@@ -154,10 +155,15 @@ class Index(View):
         combined_data = []
         for product_user in product_users:
             product = Product.objects.get(uid = product_user.productID.uid)
+
+            image_path = os.path.join('static/', 'images', f"{product.slug}.png")
+            image_exists = os.path.isfile(image_path)
+
             combined_data.append(
                 {
                     'products':product,
-                    'product_user':product_user
+                    'product_user':product_user,
+                    'image_exists':image_exists
                 }
             )
         context = {
