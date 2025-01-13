@@ -1,5 +1,5 @@
 import requests
-from merchant.models import Product
+from merchant.models import Product, Product_User
 import logging
 from datetime import datetime
 
@@ -32,7 +32,7 @@ def fetch_and_store_data():
                     'max_price': max_price,
                     'avg_price': avg_price,
                 }
-            )
+            )                
         
         # Fetch products from the database to display
         logging.info("API data fetched and stored successfully.")
