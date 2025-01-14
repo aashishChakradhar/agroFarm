@@ -53,7 +53,11 @@
                             </div>
                             <div class="form-field user-profile-image">
                                 <span>Product Featured image</span>
-                                <img src="{% static 'images/' %}{{ product.slug }}.png" id="fimg" alt="img">
+                                {% if image_exists %}
+                                <img src="{% static 'images/' %}{{ product.slug }}.png" alt="{{ product.name }} image">
+                                {% else %}
+                                <img src="{% static 'images/default-nobg.png' %}" alt="{{ product.name }} image">
+                                {% endif %}
                             </div>
                         </div>
                     </div>

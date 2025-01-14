@@ -214,3 +214,8 @@ img{
     --bg-color: rgb(255, 0, 0);
     color: #ffffff;
 }
+
+.customer-footer{
+    background: #343333;
+    color: #fff;
+}
