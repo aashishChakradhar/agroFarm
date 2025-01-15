@@ -237,11 +237,20 @@ class Product_Detail_View(BaseView):
         product = get_object_or_404(Product, uid=product_id)
         review = Review.objects.filter(productID = product)
         address = Address.objects.filter(userID = request.user)
+        farmer_products = Product_User.objects.filter(productID = product_id)
+        for x in farmer_products:
+            detail = get_object_or_404(ExtraUserDetails, userID=x.userID.id)
+            x.latitude = detail.latitude 
+            x.longitude = detail.longitude
+        image_path = os.path.join('static/', 'images', f"{product.slug}.png")
+        image_exists = os.path.isfile(image_path)
         context = {
             "page_name": "product",
-            "products": product,
+            "product": product,
             "reviews" : review,
             "address":address,
+            "image_exists":image_exists,
+            "farmer_products" : farmer_products
         }
         return render(request, f'{app_name}/product_detail.html', context)
     

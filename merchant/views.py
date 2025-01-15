@@ -253,6 +253,8 @@ class AccountView(BaseView):
         phone = request.POST.get('phone')
         featuredimage = request.POST.get('profileimgblob') if request.POST.get('profileimgblob') else ''
         biotext = request.POST.get('biotext')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
 
         try:
             # Update User fields
@@ -265,13 +267,17 @@ class AccountView(BaseView):
                 extrauserfields.mobile=phone
                 extrauserfields.profileimg=featuredimage
                 extrauserfields.bio=biotext
+                extrauserfields.latitude = latitude
+                extrauserfields.longitude = longitude
                 extrauserfields.save()
             except:
                 ExtraUserDetails.objects.create(
                     userID=user, 
                     mobile=phone, 
                     profileimg=featuredimage, 
-                    bio=biotext
+                    bio=biotext,
+                    latitude = latitude,
+                    longitude = longitude
                 )
 
             messages.success(request, "Your profile has been successfully updated!")

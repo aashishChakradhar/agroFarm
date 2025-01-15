@@ -6,31 +6,51 @@
         
         <div class = 'row mx-5'>
             <!-- For image -->
-            <div class = 'col-6 p-4 d-flex justify-content-center'>
-                {% if products.featuredimage %}
-                <img src="{{products.featuredimage}}" style="height: 15rem; max-height: 100%; object-fit: contain; " alt="">
+            <div class = 'col-6 p-4 d-flex justify-content-center featuredimage'>
+                {% if image_exists %}
+                    <img src="{% static 'images/' %}{{ product.slug }}.png" alt="{{ product.name }} image">
                 {% else %}
-                <img src="{% static 'images/default-nobg.png' %}" style="height: 15rem; max-height: 100%; object-fit: contain; " alt="">
+                    <img src="{% static 'images/default-nobg.png' %}" alt="{{ product.name }} image">
                 {% endif %}
             </div>
             <!-- For main body -->
             <div class = 'col-6'>
                 <div class='product-name'>
                     <h1>
-                        {{products.name}}
+                        {{product.name}}
                     </h1>
                 </div>
-                <div class = 'product-rating'>
-                    <p><strong>Ratings ({{products.review_count}}):</strong> {{products.review_average}}
-                    </p>
-                </div>
                 <div class = 'product-price'>
-                    <p>
-                        Rs. {{products.rate}}
-                    </p>
+                    <p>{{ product.avg_price }} /<span>{{product.unit}}</span></p>
+                    <p class="small-text">Today Average Price <strong>(Kalimati)*</strong></p>
+                </div>
+                <div class = 'product-quantity'>
+                    <label for="">Quantity</label>
+                    <input id="quantity" type="number" min="0" value="0">
                 </div>
                 <div class='product-description'>
-                    {{products.description | safe}}
+                    {{product.description | safe}}
+                </div>
+                <div class="farmers">
+                    <div class="farmer-wrapper">
+                        {% for farmer in farmer_products %}
+                        <div class="farmer-item">
+                            <div class="price">
+                                {{ farmer.price }} /<span>{{product.unit}}</span>
+                            </div>
+                            <div class="product-info">
+                                <div class="stock">
+                                    <span>Available stock: {{farmer.quantity}}{{product.unit}}</span>
+                                </div>
+                                <div class="farmer-name locationpoint" data-lat="{{farmer.latitude}}" data-long="{{farmer.longitude}}">
+                                    <span>
+                                        {{farmer.userID.first_name}} {{farmer.userID.last_name}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -40,12 +60,16 @@
             <div class='col-6 d-flex justify-content-start'>
                 <form method = 'POST'>
                     {% csrf_token %}
-                    <input name='product_id' value='{{products.uid}}' type="hidden" id = 'uid'>
+                    <input name='product_id' value='{{product.uid}}' type="hidden" id = 'uid'>
                     <button type="submit" name="action" value="buy" class="btn btn-dark px-4">
                         Buy now
                     </button>               
-                    <button class="btn btn-success add-to-cart-btn px-4" value="add to cart" data-product-uid="{{ products.uid }}">Add to Cart</button>
+                    <button class="btn btn-success add-to-cart-btn px-4" value="add to cart" data-product-uid="{{ product.uid }}" data-quantity="0">Add to Cart</button>
                 </form>
+            </div>
+            <div class="information">
+                <p>*average price is not the actual price.</p>
+                <p>**out of area will cost more.</p>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -109,7 +133,7 @@
                             <div class="col-3 d-flex justify-content-end">
                                 <form action="{% url "customer:delete-review" %}" method="post">
                                     {% csrf_token %}
-                                    <input type="hidden" name='productID' value='{{products.uid}}'>
+                                    <input type="hidden" name='productID' value='{{product.uid}}'>
                                     <input name='reviewID' value="{{review.uid}}" type="hidden">
                                     <button class='btn btn-danger' type="submit">Delete Comment</button>
                                 </form>
@@ -120,7 +144,7 @@
                             <div class="col">
                                 <form action="{% url 'customer:review' %}" method="POST" class="mt-4 mx-auto" style="width: 50%;">
                                     {% csrf_token %}
-                                    <input type="hidden" name='product' value='{{products.uid}}'>
+                                    <input type="hidden" name='product' value='{{product.uid}}'>
                                     <div class="mb-3">
                                         <label for="rating" class="form-label">Rating</label>
                                         <select name="rating" id="rating" class="form-select" required>
@@ -148,7 +172,7 @@
                         <p>Be the first to add a review!</p>
                         <form action="{% url 'customer:review' %}" method="POST" class="mt-4 mx-auto" style="width: 50%;">
                             {% csrf_token %}
-                            <input type="hidden" name='product' value='{{products.uid}}'>
+                            <input type="hidden" name='product' value='{{product.uid}}'>
                             <div class="mb-3">
                                 <label for="rating" class="form-label">Rating</label>
                                 <select name="rating" id="rating" class="form-select" required>
@@ -173,4 +197,5 @@
         
     </div>     
 </section>
+<script src="{% static 'js/customer/location.js' %}"></script>
 {% endblock body %}
