@@ -34,42 +34,38 @@
             {% endif %}
           </div>
           
-            <div class="form_title">
-              Welcome Back
+          <div class="form_title">Welcome Back</div>
+          <form action="{% url 'customer:login' %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="username">Username</label>
+              <input
+                type="text"
+                class="form-control auth-input"
+                id="username"
+                aria-describedby="teztHelp"
+                name="username"
+                required
+              />
             </div>
-
-            <form action="{% url 'customer:login' %}" method="POST">
-              {% csrf_token %}
-              <div class="mb-3">
-                <label for="username">Username</label>
-                <input
-                  type="text"
-                  class="form-control auth-input"
-                  id="username"
-                  aria-describedby="teztHelp"
-                  name="username"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="password">Password</label>
-                <input
-                  type="password"
-                  class="form-control auth-input"
-                  id="password"
-                  name="password"
-                  required
-                />
-              </div>
-              <div class="d-grid gap-2">
-                <button type="submit" class="button btn btn-primary">
-                  Login
-                </button>
-              </div>
-              <a href = "{% url 'customer:signup' %}">Don't have an account</a>
-              <a href = "{% url 'merchant:login' %}">Become a Merchant</a>
-            </form>
-          </div>
+            <div class="mb-3">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                class="form-control auth-input"
+                id="password"
+                name="password"
+                required
+              />
+            </div>
+            <div class="d-grid gap-2">
+              <button type="submit" class="button btn btn-primary">
+                Login
+              </button>
+            </div>
+            <a href = "{% url 'customer:signup' %}">Don't have an account</a>
+            <a href = "{% url 'merchant:login' %}">Become a Merchant</a>
+          </form>
         </div>
       </div>
     </div>
