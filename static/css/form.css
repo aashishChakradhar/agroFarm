@@ -16,6 +16,13 @@ html,body{
     padding: 0;
 }
 
+.alert{
+    margin:0;
+    padding:0.5rem 0.5rem 0.5rem 1.5rem;
+    font-weight: 700;
+    font-size:1.3rem;
+}
+
 .auth-cont {
     display: flex; /* Enable flexbox */
     align-items: center; /* Center items horizontally */
