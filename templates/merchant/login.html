@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>login | agroFarm-merchant</title>
-    {% load static %}
-      
+    
+      {% load static %}
       {% load bootstrap5 %}
       {% bootstrap_css %}
       {% bootstrap_javascript %}
-      
-      <link rel="stylesheet" href="{% static 'css/all.css' %}">
-      <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
       <link rel="stylesheet" href="{% static 'css/form.css' %}"/>
-      <link rel="stylesheet" href="{% static 'css/main.css' %}">
-      <link rel="stylesheet" href="{% static 'css/splide.main.css' %}">
       
   </head>
   <body>
@@ -31,12 +27,13 @@
           <div class = "message" >
             {% if messages %}
               {% for message in messages %}
-                <div class="alert alert-warning d-flex align-items-center" role="alert" >
+                <div class="alert alert-warning d-flex align-items-center" role="alert">
                   {{message}}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-              {% endif %}
-            </div>
+              {% endfor %}
+            {% endif %}
+          </div>
         
             <div class="form_title">
               Welcome Back Merchant
