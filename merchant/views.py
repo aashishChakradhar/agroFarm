@@ -37,8 +37,6 @@ def send_mail_to_customer(order):
         fail_silently=False,
     )    
 
-# Create your views here.
-
 app_name = 'merchant'
 
 class BaseView(LoginRequiredMixin, View):
@@ -404,7 +402,6 @@ class EditOrderView(BaseView):
             messages.error(request, str(e)) 
             return render(request,f"{app_name}/edit_order.html")
         
-
 #can be removed        
 class FetchedProductView(BaseView):
     def get(self, request):
