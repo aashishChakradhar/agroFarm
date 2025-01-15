@@ -10,7 +10,11 @@
       {% bootstrap_css %}
       {% bootstrap_javascript %}
       
+      <link rel="stylesheet" href="{% static 'css/all.css' %}">
+      <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
       <link rel="stylesheet" href="{% static 'css/form.css' %}"/>
+      <link rel="stylesheet" href="{% static 'css/main.css' %}">
+      <link rel="stylesheet" href="{% static 'css/splide.main.css' %}">
       
   </head>
   <body>
@@ -31,45 +35,45 @@
                   {{message}}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-              {% endfor %}
-            {% endif %}
-          </div>
-      
-          <div class="form_title">
-            Welcome Back Merchant
-          </div>
+              {% endif %}
+            </div>
+        
+            <div class="form_title">
+              Welcome Back Merchant
+            </div>
 
-          <form action="{% url 'merchant:login' %}" method="POST">
-            {% csrf_token %}
-            <div class="mb-3">
-              <label for="username">Username</label>
-              <input
-                type="text"
-                class="form-control auth-input"
-                id="username"
-                aria-describedby="teztHelp"
-                name="username"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label for="password">Password</label>
-              <input
-                type="password"
-                class="form-control auth-input"
-                id="password"
-                name="password"
-                required
-              />
-            </div>
-            <div class="d-grid gap-2">
-              <button type="submit" class="log-button btn btn-primary">
-                Login
-              </button>
-            </div>
-            <a href = {%url 'merchant:signup'%}>Don't have an account</a>
-            <a href = {%url 'customer:login'%}>Buy some veggies</a>
-          </form>
+            <form action="{% url 'merchant:login' %}" method="POST">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="username">Username</label>
+                <input
+                  type="text"
+                  class="form-control auth-input"
+                  id="username"
+                  aria-describedby="teztHelp"
+                  name="username"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="password">Password</label>
+                <input
+                  type="password"
+                  class="form-control auth-input"
+                  id="password"
+                  name="password"
+                  required
+                />
+              </div>
+              <div class="d-grid gap-2">
+                <button type="submit" class="button btn btn-primary">
+                  Login
+                </button>
+              </div>
+              <a href = {%url 'merchant:signup'%}>Don't have an account</a>
+              <a href = {%url 'customer:login'%}>Buy some veggies</a>
+            </form>
+          </div>
         </div>
       </div>
     </div>

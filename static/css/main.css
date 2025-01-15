@@ -6,6 +6,9 @@
     --color-bg: #eae3d2;
     --color-bgd: #f9f5eb;
 }
+.container{
+    width: 1240px;
+}
 
 .section-gaps{
     padding: 96px 0;
@@ -14,6 +17,12 @@
 .navbar {
     padding: 1em 0;
     width: 100%;
+}
+
+.custom {
+    border: 0 none;
+    margin: 0;
+    padding: 0;
 }
 
 .brand-name {
@@ -207,7 +216,7 @@ img{
 }
 
 .customer-footer{
-    background: var(--primary-color);
+    background: #343333;
     color: #fff;
 }
 .featuredimage img{
