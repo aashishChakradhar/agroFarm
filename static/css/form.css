@@ -9,54 +9,61 @@
     --color-bgd: #f9f5eb;
 }
 
-.alert {
+html,body{
+    height: 100%;
+    width: 99vw;
     margin: 0;
     padding: 0;
-    padding-left: 1em;
-    height: 3em;
-    color: var(--secondary-color);
-    border: 0.3em solid var(--alert-color);
-    background: transparent;
-    font-weight: bold;
 }
 
-.alert_icon {
-    width: 2em;
-    height: 3em;
-}
-.auth-form {
-    background-color: var(--primary-color);
-    color: var(--color-bgd);
-    width: 70vw; /* 70% of the screen width */
-    height: 100vh; /* Full height of the viewport */
-    margin: 0; /* Reset margin */
-    margin-left: auto; /* Push the form to the right */
-    border-radius: 4rem 0 0 4rem;
-    padding: 0;
+.auth-cont {
     display: flex; /* Enable flexbox */
-    flex-direction: column; /* Arrange children vertically */
     align-items: center; /* Center items horizontally */
     justify-content: center; /* Center items vertically */
-}
-.auth-cont {
-    width: 28vw; /* Width set to 25% of the viewport width */
     height: 100vh; /* Full height of the viewport */
     padding: 0 5rem;
     margin: 0; /* Reset margin */
+    
+}
+
+.auth-form { 
     display: flex; /* Enable flexbox */
     flex-direction: column; /* Arrange children vertically */
     align-items: center; /* Center items horizontally */
     justify-content: center; /* Center items vertically */
     
+    background-color: var(--primary-color);
+    color: var(--color-bgd);
+    width: 100%; /* 70% of the screen width */
+    height: 100vh; /* Full height of the viewport */
+    margin: 0; /* Reset margin */
+    margin-left: auto; /* Push the form to the right */
+    border-radius: 4rem 0 0 4rem;
+    padding: 0;
 }
+
+.btn-close{
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0px;
+    margin-left: 3rem;
+    opacity: 1;
+    background-color: #dad2d2;
+}
+
 .auth-form a{
+    display: flex; /* Enable flexbox */
+    flex-direction: column; /* Arrange children vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    
     color: var(--color-four);
     font-size: larger;
-    font-weight: 200;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    font-weight: 500;
     margin-top: .4rem;
+    text-decoration: none;
 }
 
 .auth-form a:hover{
@@ -72,7 +79,11 @@
     width: 25rem;
 }
 
-.auth-form button {
+.log-button {
+    display: block; /* Ensure button takes block-level styling */
+    margin: auto; /* Center the button horizontally */
+    justify-content: center; /* Center items vertically */
+    
     width: 10rem;
     background-color: var(--color-four);
     color: var(--primary-color);
@@ -80,12 +91,10 @@
     font-weight: 900;
     border: 0 solid var(--color-bgd);
     border-radius: 0.8em;
-    display: block; /* Ensure button takes block-level styling */
-    margin: auto; /* Center the button horizontally */
     margin-bottom: 2rem;
 }
 
-.auth-form  button:hover {
+.log-button:hover {
     background-color: var(--color-bg);
     color: var(--secondary-color);
 }
@@ -101,19 +110,13 @@
     font-weight: bolder;
 }
 
-.btn-close {
-    width: 1rem; /* Adjust width */
-    height: 1rem; /* Adjust height */
-    font-size: 0.8rem; /* Adjust font size */
-    background-color: #eb1d36;
-}
-
 .brand-name {
     display: inline-flex;
     font-size: 3em; /* Adjust size as needed */
     font-weight: 700;
     text-decoration: none;
 }
+
 .agro2 {
     color: var(--secondary-color); /* Color for "Agro" */
 }

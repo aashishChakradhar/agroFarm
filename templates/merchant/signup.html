@@ -10,158 +10,140 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     
-    <link rel="stylesheet" href="{% static 'css/all.css' %}">
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'css/form.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    <link rel="stylesheet" href="{% static 'css/splide.main.css' %}">
     
   </head>
   <body>
-    <div class="container" style="width: 100%;">
-      <div class="row">
-        <div class="col p-0">
-          <div class = "auth-cont">
-            <div class='brand-name'>
-              <span class="agro2">Agro</span><span class="farm2">Farm</span>
-            </div>
+    <div class="row">
+      <div class="col-4 p-0">
+        <div class = "auth-cont">
+          <div class='brand-name'>
+            <span class="agro2">Agro</span><span class="farm2">Farm</span>
           </div>
         </div>
-        <div class="col p-0">   
-          <div class="auth-form">
-            <div class = "message" >
-              {% if messages %}
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  {% for message in messages %}
-                    <div class='container'>
-                      <div class="row">
-                        <div class="col">
-                          <strong>Holy guacamole!</strong> {{message}}
-                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="
-                            width: 1px;
-                            height: 1px;
-                            text-size: 3px;
-                            font-size: 10px;
-                            padding: 10px;
-                          "></button>
-                        </div>
-                      </div>
-                    </div>
-                  {% endfor %}                  
+      </div>
+      <div class="col-8 p-0">   
+        <div class="auth-form">
+          <div class = "message" >
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-warning d-flex align-items-center" role="alert" style="margin:0;padding:0.5rem 0.5rem 0.5rem 1.5rem;font-weight: 700; font-size:1.3rem;">
+                  {{message}}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-              {% endif %}
-            </div>
+              {% endfor %}
+            {% endif %}
+          </div>
 
-            <div class="form_title">Become a Merchant</div>
-              <form action={% url 'merchant:signup' %} method="POST">
-                {% csrf_token %}
-                <input
-                type="hidden"
-                class="form-control"
-                id="status"
-                aria-describedby="teztHelp"
-                name="status"
-                value = "merchant"
-                required
-                />
-                <div class = 'row'>
-                  <div class="col auth-row-input mb-3">
-                    <label for="firstName" >First Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="firstName"
-                      aria-describedby="teztHelp"
-                      name="firstName"
-                      required
-                    />
-                  </div>
-                  <div class="col auth-row-input mb-3">
-                    <label for="lastName" >Last Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="lastName"
-                      aria-describedby="teztHelp"
-                      name="lastName"
-                      required
-                    />
-                  </div>
+          <div class="form_title">Become a Merchant</div>
+            <form action={% url 'merchant:signup' %} method="POST">
+              {% csrf_token %}
+              <input
+              type="hidden"
+              class="form-control"
+              id="status"
+              aria-describedby="teztHelp"
+              name="status"
+              value = "merchant"
+              required
+              />
+              <div class = 'row'>
+                <div class="col auth-row-input mb-3">
+                  <label for="firstName" >First Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="firstName"
+                    aria-describedby="teztHelp"
+                    name="firstName"
+                    required
+                  />
                 </div>
-                <div class = 'row'>
-                  <div class="col auth-row-input mb-3">
-                    <label for="username" >Username</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="username"
-                      aria-describedby="teztHelp"
-                      name="username"
-                      required
-                    />
-                  </div>
-                  <div class="col auth-row-input mb-3">
-                    <label for="email" >Email</label>
-                    <input
-                      type="mail"
-                      class="form-control"
-                      id="email"
-                      name="email"
-                      required
-                    />
-                  </div>
+                <div class="col auth-row-input mb-3">
+                  <label for="lastName" >Last Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="lastName"
+                    aria-describedby="teztHelp"
+                    name="lastName"
+                    required
+                  />
                 </div>
-                <div class = 'row'>
-                  <div class="col auth-row-input mb-3">
-                    <label for="address" >Address</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="address"
-                      name="address"
-                      required
-                    />
-                  </div>
-                  <div class="col auth-row-input mb-3">
-                    <label for="mobile" >Mobile Number</label>
-                    <input
-                      type="tel"
-                      class="form-control"
-                      id="mobile"
-                      name="mobile"
-                      required
-                    />
-                  </div>
+              </div>
+              <div class = 'row'>
+                <div class="col auth-row-input mb-3">
+                  <label for="username" >Username</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    aria-describedby="teztHelp"
+                    name="username"
+                    required
+                  />
                 </div>
-                <div class = 'row'>
-                  <div class="col auth-row-input mb-3">
-                    <label for="password" >Password</label>
-                    <input
-                      type="password"
-                      class="form-control"
-                      id="password"
-                      name="password"
-                      required
-                    />
-                  </div>
-                  <div class="col auth-row-input mb-3">
-                    <label for="confirm-password" >Confirm Password</label>
-                    <input
-                      type="password"
-                      class="form-control"
-                      id="confirm-password"
-                      name="confirm-password"
-                      required
-                    />
-                  </div>
+                <div class="col auth-row-input mb-3">
+                  <label for="email" >Email</label>
+                  <input
+                    type="mail"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    required
+                  />
                 </div>
-                <button type="submit" class="button btn btn-primary ">
-                  Signup
-                </button> 
-                <a href="{% url 'merchant:login' %}">Already have an account</a>
-                <a href="{% url 'customer:login' %}">Buy some veggies</a>
-              </form>
-            </div>
+              </div>
+              <div class = 'row'>
+                <div class="col auth-row-input mb-3">
+                  <label for="address" >Address</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="address"
+                    name="address"
+                    required
+                  />
+                </div>
+                <div class="col auth-row-input mb-3">
+                  <label for="mobile" >Mobile Number</label>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="mobile"
+                    name="mobile"
+                    required
+                  />
+                </div>
+              </div>
+              <div class = 'row'>
+                <div class="col auth-row-input mb-3">
+                  <label for="password" >Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                    required
+                  />
+                </div>
+                <div class="col auth-row-input mb-3">
+                  <label for="confirm-password" >Confirm Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="confirm-password"
+                    name="confirm-password"
+                    required
+                  />
+                </div>
+              </div>
+              <button type="submit" class="log-button btn btn-primary ">
+                Signup
+              </button> 
+              <a href="{% url 'merchant:login' %}">Already have an account</a>
+              <a href="{% url 'customer:login' %}">Buy some veggies</a>
+            </form>
           </div>
         </div>
       </div>
