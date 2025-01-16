@@ -1,56 +1,53 @@
 {% extends "customer/temp/base.html" %}
 {% load static %}
 {% block body %}
+
 <section class="section-gaps product-detail">
     <div class = "container">
         
-        <div class = 'row mx-5'>
-            <!-- For image -->
-            <div class = 'col-6 p-4 d-flex justify-content-center featuredimage'>
-                {% if image_exists %}
+        <div class="row gx-5">
+            <div class="col-3">
+                <div class="detail-image">
+                    {% if image_exists %}
                     <img src="{% static 'images/' %}{{ product.slug }}.png" alt="{{ product.name }} image">
-                {% else %}
-                    <img src="{% static 'images/default-nobg.png' %}" alt="{{ product.name }} image">
-                {% endif %}
+                    {% else %}
+                        <img src="{% static 'images/default-nobg.png' %}" alt="{{ product.name }} image">
+                    {% endif %}
+                </div>
             </div>
-            <!-- For main body -->
-            <div class = 'col-6'>
-                <div class='product-name'>
-                    <h1>
+            <div class="col-6">
+                <div class="detail-content-wrapper">
+                    <h1 class="main-title">
                         {{product.name}}
                     </h1>
-                </div>
-                <div class = 'product-price'>
-                    <p>{{ product.avg_price }} /<span>{{product.unit}}</span></p>
-                    <p class="small-text">Today Average Price <strong>(Kalimati)*</strong></p>
-                </div>
-                <div class = 'product-quantity'>
-                    <label for="">Quantity</label>
-                    <input id="quantity" type="number" min="0" value="0">
-                </div>
-                <div class='product-description'>
-                    {{product.description | safe}}
-                </div>
-                <div class="farmers">
-                    <div class="farmer-wrapper">
+                    <div class="price">
+                        <span class="amount">{{ product.avg_price }} /<small>{{product.unit}}</small></span>
+                        <span class="amount-source">Today Average Price <strong>(Kalimati)*</strong></span>
+                    </div>
+                    <div class="quantity-wrapper">
+                        <span>Quantity</span>
+                        <div class="quantity">
+                            <input id="quantity" type="number" min="0" value="0">
+                        </div>
+                    </div>
+                    <div class="product-listing-stock">
                         {% for farmer in farmer_products %}
-                        <div class="farmer-item">
-                            <div class="price">
-                                {{ farmer.price }} /<span>{{product.unit}}</span>
-                            </div>
-                            <div class="product-info">
-                                <div class="stock">
-                                    <span>Available stock: {{farmer.quantity}}{{product.unit}}</span>
+                        <div class="product-item">
+                            <button class="active locationpoint" data-lat="{{farmer.latitude}}" data-long="{{farmer.longitude}}">
+                                <h3 class="stock-price">{{ farmer.price }}/{{product.unit}}</h3>
+                                <div class="d-flex justify-content-between align-item-center">
+                                    <span>Available stock : {{farmer.quantity}}{{product.unit}}</span>
+                                    <span>{{farmer.userID.first_name}} {{farmer.userID.last_name}}</span>
                                 </div>
-                                <div class="farmer-name locationpoint" data-lat="{{farmer.latitude}}" data-long="{{farmer.longitude}}">
-                                    <span>
-                                        {{farmer.userID.first_name}} {{farmer.userID.last_name}}
-                                    </span>
-                                </div>
-                            </div>
+                            </button>
                         </div>
                         {% endfor %}
                     </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="chart">
+                    <canvas></canvas>
                 </div>
             </div>
         </div>
