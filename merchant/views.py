@@ -137,10 +137,63 @@ class SignupView (View):
         user = authenticate(username = username, password = password)
         if user is not None:# checks if the user is logged in or not?
             login(request,user) #logins the user
-            return redirect('merchant:dashboard')
+            return redirect('merchant:my-address')
         
         messages.error(request, "Error logging in. Please try again.")
         return redirect(request.path) 
+
+class AddressView(BaseView):
+    def get(self, request):
+        if not Address.objects.exists():
+            addrss = None
+        else:
+            # Check if the user has an address
+            address = Address.objects.filter(userID=request.user).first()
+
+        context = {
+            'page_name': 'billing-address',
+            'address': address,
+        }
+        return render(request, f"{app_name}/add-address.html", context)
+
+# logical error
+    def post(self,request):
+        action = request.POST.get('action')
+        country = request.POST.get('country')
+        state = request.POST.get('province')
+        district = request.POST.get('district')
+        municipality = request.POST.get('municipality')
+        street = request.POST.get('street')
+        zip_code = request.POST.get('postalCode')
+        landmark = request.POST.get('landmark')
+        if action == 'edit':            
+            # Fetch the related objects from the database
+            address = Address.objects.get(userID = request.user)
+            address = Address.objects.update(
+                userID=request.user,
+                country=country,
+                state=state,
+                district=district,
+                municipality=municipality,
+                zip_code=zip_code,
+                street=street,
+                landmark=landmark,
+                is_deleted = False,
+            )
+        elif action == 'add':            
+            address = Address.objects.create(
+                userID=request.user,
+                country=country,
+                state=state,
+                district=district,
+                municipality=municipality,
+                zip_code=zip_code,
+                street=street,
+                landmark=landmark,
+                is_deleted = False,
+            )
+            address.save()
+        return redirect ('/') 
 
 class Index(BaseView):
     def get(self, request):

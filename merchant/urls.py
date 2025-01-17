@@ -30,6 +30,7 @@ urlpatterns = [
     path('login/', views.Login.as_view(), name='login'),
     path('signup/', views.SignupView.as_view(), name='signup'),
     path('logout/', views.Logout.as_view(), name='logout'),
+    path('my-address/', views.AddressView.as_view(), name='my-address'),
     # path('products/add-new/', views.AddProductView.as_view(), name='add-products'),#for merchant
     path('products/edit-product/<int:id>', views.EditProductView.as_view(), name='edit-products'),#for merchant
     path('products/delete-product/<int:id>', views.DeleteProductView.as_view(), name="delete-product"),

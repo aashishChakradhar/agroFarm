@@ -288,10 +288,14 @@ img{
   }
   .cavet-wrapper{
     margin-top: 38px;
-    font-szie: 12px;
+    font-size: 12px;
     color: #1E1E1E;
   }
-
+.information{
+    font-size: 12px;
+    font-weight: 500;
+    color:red;
+}
 header{
     background-color: var(--primary-color);
     padding: 15px 0;

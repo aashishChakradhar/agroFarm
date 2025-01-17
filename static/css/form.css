@@ -84,7 +84,7 @@ html,body{
     width: 25rem;
 }
 
-.auth-form button {
+.log-button {
     width: 10rem;
     background-color: var(--color-four);
     color: var(--primary-color);
@@ -97,7 +97,7 @@ html,body{
     margin-bottom: 2rem;
 }
 
-.auth-form  button:hover {
+.log-button:hover {
     background-color: var(--color-bg);
     color: var(--secondary-color);
 }
