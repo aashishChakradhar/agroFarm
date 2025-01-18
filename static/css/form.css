@@ -9,26 +9,38 @@
     --color-bgd: #f9f5eb;
 }
 
-.alert {
+html,body{
+    height: 100%;
+    width: 99vw;
     margin: 0;
     padding: 0;
-    padding-left: 1em;
-    height: 3em;
-    color: var(--secondary-color);
-    border: 0.3em solid var(--alert-color);
-    background: transparent;
-    font-weight: bold;
 }
 
-.alert_icon {
-    width: 2em;
-    height: 3em;
+.alert{
+    margin:0;
+    padding:0.5rem 0.5rem 0.5rem 1.5rem;
+    font-weight: 700;
+    font-size:1.3rem;
 }
-.auth-form {
+
+.auth-cont {
+    display: flex; /* Enable flexbox */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    height: 100vh; /* Full height of the viewport */
+    padding: 0 5rem;
+    margin: 0; /* Reset margin */
+}
+
+.auth-form { 
+    display: flex; /* Enable flexbox */
+    flex-direction: column; /* Arrange children vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    
     background-color: var(--primary-color);
     color: var(--color-bgd);
-    width: 70vw; /* 70% of the screen width */
-    height: 100vh; /* Full height of the viewport */
+    height: 100vh;
     margin: 0; /* Reset margin */
     margin-left: auto; /* Push the form to the right */
     border-radius: 4rem 0 0 4rem;
@@ -39,8 +51,7 @@
     justify-content: center; /* Center items vertically */
 }
 .auth-cont {
-    width: 28vw; /* Width set to 25% of the viewport width */
-    height: 100vh; /* Full height of the viewport */
+    height: 100%; /* Full height of the viewport */
     padding: 0 5rem;
     margin: 0; /* Reset margin */
     display: flex; /* Enable flexbox */
@@ -52,11 +63,12 @@
 .auth-form a{
     color: var(--color-four);
     font-size: larger;
-    font-weight: 200;
+    font-weight: 700;
     display: flex;
     flex-direction: row;
     justify-content: center;
     margin-top: .4rem;
+    text-decoration: none;
 }
 
 .auth-form a:hover{
@@ -72,7 +84,7 @@
     width: 25rem;
 }
 
-.auth-form button {
+.log-button {
     width: 10rem;
     background-color: var(--color-four);
     color: var(--primary-color);
@@ -85,7 +97,7 @@
     margin-bottom: 2rem;
 }
 
-.auth-form  button:hover {
+.log-button:hover {
     background-color: var(--color-bg);
     color: var(--secondary-color);
 }

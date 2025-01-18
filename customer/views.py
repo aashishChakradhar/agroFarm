@@ -184,10 +184,10 @@ class Index(View):
 
 class AddAddress_View(BaseView):
     def get(self,request):
-        if Address.objects.exists():
-            address = Address.objects.get(userID = request.user)
-        else:
+        if not Address.objects.exists():
             address = None
+        else:
+            address = Address.objects.filter(userID = request.user).first()
         context = {
             'page_name': 'billing-address',
             'address' : address,
@@ -232,13 +232,14 @@ class AddAddress_View(BaseView):
             address.save()
         return redirect ('/') 
 
-class Product_Detail_View(BaseView):
-    def get(self, request, product_id):
-        product = get_object_or_404(Product, uid=product_id)
-        review = Review.objects.filter(productID = product)
-        address = Address.objects.filter(userID = request.user)
-        farmer_products = Product_User.objects.filter(productID = product_id)
+class Product_Detail_View(BaseView):#for single page display of product
+    def get(self, request, product_id): 
+        product = get_object_or_404(Product, uid=product_id)#fetching the product
+        review = Review.objects.filter(productID = product)#review of product
+        address = Address.objects.filter(userID = request.user)#current user address
+        farmer_products = Product_User.objects.filter(productID = product_id) #get the related farmer detail
         for x in farmer_products:
+            farmer_address = Address.objects.filter(userID = x.uid)
             detail = get_object_or_404(ExtraUserDetails, userID=x.userID.id)
             x.latitude = detail.latitude 
             x.longitude = detail.longitude
@@ -250,7 +251,9 @@ class Product_Detail_View(BaseView):
             "reviews" : review,
             "address":address,
             "image_exists":image_exists,
-            "farmer_products" : farmer_products
+            "farmer_products" : farmer_products,
+            "farmer_address": farmer_address,
+            "detail":detail,
         }
         return render(request, f'{app_name}/product_detail.html', context)
     

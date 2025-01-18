@@ -27,23 +27,18 @@
 </head>
 <body>
     {% include "customer/temp/header.html" %}
-    <div class="container">
-      <div class="row">
-        <div class="col m-5 px-5">
-          <div class = "message" >
-            {% if messages %}
-              <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                {% for message in messages %}
-                  <p><strong>Holy guacamole!</strong> {{message}}</p>
-                {% endfor %}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            {% endif %}
+
+    <div class = "message" >
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-warning d-flex align-items-center" role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
-        </div>
-        
-      </div>
+        {% endfor %}
+      {% endif %}
     </div>
+    
     {% block body %}
           
     {% endblock body %}
