@@ -92,10 +92,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    document.querySelectorAll('.product-item button').forEach( (element) => {
+    document.querySelectorAll('.product-item .locationpoint').forEach( (element) => {
         element.addEventListener('click', (e) => {
-            // e.preventDefault();
-            e.stopPropagation()
             console.log(e.target.classList.toggle('active'));
         })
     })
