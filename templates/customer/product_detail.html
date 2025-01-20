@@ -6,7 +6,7 @@
     <div class = "container">
         <div class="row gx-5">
             {% comment %} displaying product image {% endcomment %}
-            <div class="col-3 mx-4" style='border:2px solid grey; border-radius:15px'>
+            <div class="col-3">
                 <div class="detail-image">
                     {% if image_exists %}
                     <img src="{% static 'images/' %}{{ product.slug }}.png" alt="{{ product.name }} image">
@@ -16,7 +16,7 @@
                 </div>
             </div>
             {% comment %} displaying product details {% endcomment %}
-            <div class="col-5" style='border:2px solid grey; border-radius:15px'>
+            <div class="col-5">
                 <div class="detail-content-wrapper">
                     <h1 class="main-title">
                         {{product.name}}
@@ -34,7 +34,7 @@
                     <div class="product-listing-stock">
                         {% for farmer in farmer_products %}
                         <div class="product-item">
-                            <button class="active locationpoint" data-lat="{{farmer.latitude}}" data-long="{{farmer.longitude}}">
+                            <div class="active locationpoint" data-lat="{{farmer.latitude}}" data-long="{{farmer.longitude}}">
                                 <h3 class="stock-price">Farmer Price: {{ farmer.price }} per {{product.unit}}</h3>
                                 <div class="d-flex justify-content-start">
                                     Available stock : {{farmer.quantity}} {{product.unit}}
@@ -42,19 +42,26 @@
                                 <div class="d-flex justify-content-start">
                                     {{farmer.userID.first_name}} {{farmer.userID.last_name}}
                                 </div>
-                            </button>
+                            </div>
                         </div>
                         {% endfor %}
                     </div>
+                </div>
+                <div class=" d-flex align-item-center my-4">
+                    <form method = 'POST'>
+                        {% csrf_token %}
+                        <input name='product_id' value='{{product.uid}}' type="hidden" id = 'uid'>
+                        <button type="submit" name="action" value="buy" class="btn btn-dark px-4">Buy now</button>               
+                        <button class="btn btn-success add-to-cart-btn px-4" value="add to cart" data-product-uid="{{ product.uid }}" data-quantity="0">Add to Cart</button>
+                    </form>
                 </div>
                 <div class="information">
                     *average price is not the actual price. <br>
                     **out of area will cost more.
                 </div>
             </div>
-            <div class="col-3 mx-4"style='border:2px solid grey; border-radius:15px'>
-                <h2>Farmer Location</h2>
-                <div class="table-responsive">
+            <div class="col-3">
+                <div class="table-responsive d-none">
                     <table class="table table-bordered">
                         <tbody>
                             {% for address in farmer_address %}
@@ -90,19 +97,12 @@
                         </tbody>
                     </table>
                 </div>
-                {% comment %} <div class="chart">
+                <div class="chart">
                     <canvas></canvas>
-                </div> {% endcomment %}
+                </div>
             </div>
         </div>
-        <div class=" d-flex justify-content-center my-4">
-            <form method = 'POST'>
-                {% csrf_token %}
-                <input name='product_id' value='{{product.uid}}' type="hidden" id = 'uid'>
-                <button type="submit" name="action" value="buy" class="btn btn-dark px-4">Buy now</button>               
-                <button class="btn btn-success add-to-cart-btn px-4" value="add to cart" data-product-uid="{{ product.uid }}" data-quantity="0">Add to Cart</button>
-            </form>
-        </div>
+        
         {% comment %} <div class="row justify-content-center">
             <div class="col-6">
             </div>

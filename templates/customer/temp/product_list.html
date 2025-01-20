@@ -1,14 +1,14 @@
 {% load static %}
-<div class="card" style="width: 19rem; height:22rem; border:#9e9b9b solid 2px;">
+<div class="card">
 
     <form action="{% url 'customer:home' %}" method="post">
         {% csrf_token %}
 
         <a href="/product-detail/{{ combined_data.products.uid }}" >
             {% if combined_data.image_exists %}
-                <img src="{% static 'images/' %}{{ combined_data.products.slug }}.png" class="card-img-top" alt="{{ combined_data.products.name }}" style="height: 10rem; object-fit: cover;">
+                <img src="{% static 'images/' %}{{ combined_data.products.slug }}.png" class="card-img-top" alt="{{ combined_data.products.name }}" style="height: 12rem; object-fit: cover;">
             {% else %}
-                <img src="{% static 'images/default-nobg.png' %}" class="card-img-top" alt="{{ combined_data.products.name }}" style="height: 10rem; object-fit: cover;">
+                <img src="{% static 'images/default-nobg.png' %}" class="card-img-top" alt="{{ combined_data.products.name }}" style="height: 12rem; object-fit: cover;">
             {% endif %}
         </a>
 
@@ -18,14 +18,15 @@
             </a>
             <h6>{{combined_data.product_user.price}} per {{combined_data.products.unit}}</h6>
             
-            <div class="button-group d-flex justify-content-center">
-                <div class="buy-button" style="margin-right:10px;">
-                        <input type="hidden" name='uid' value='{{combined_data.products.uid}}'>
-                        <button type="submit" name='action' value='buy' class="btn btn-dark px-4">Buy Now</button>
+            <div class="button-group d-flex align-items-center gap-4 mt-4">
+                <!-- <div class="buy-button">
+                    <input type="hidden" name='uid' value='{{combined_data.products.uid}}'>
+                    <button type="submit" name='action' value='buy' class="btn btn-dark px-4">Buy Now</button>
                 </div>
                 <div class='cart-button'>
                     <button class="btn btn-success add-to-cart-btn px-4" name = 'action' value='cart' data-product-uid="{{ combined_data.products.uid }}">Add to Cart</button>
-                </div>
+                </div> -->
+                <a href="/product-detail/{{ combined_data.products.uid }}" class="product-list-link">Learn More ></a>
             </div>
         </div>
     </form>

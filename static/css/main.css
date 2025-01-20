@@ -211,6 +211,7 @@ img{
 .detail-image img{
     max-width: 100%;
     height: auto;
+    border-radius: 4px;
   }
   
   h1.main-title{
@@ -235,7 +236,7 @@ img{
   .product-listing-stock .product-item + .product-item{
     margin-top: 16px;
   }
-  .product-listing-stock a{
+  .product-listing-stock .locationpoint{
     display: block;
     color: #686363;
     text-decoration: none;
@@ -244,31 +245,37 @@ img{
     border-radius: 8px;
     font-size: 12px;
     position: relative;
-    overflow: clip;
     transition: all 0.3s ease;
+    cursor: pointer;
   }
-  .badge{
+  .product-listing-stock .locationpoint *{
+    pointer-events: none;
+  }
+  .locationpoint.out-of-area::before{
+    content: 'Out of Area **';
     position: absolute;
     display: inline-block;
     background-color: #b50000;
     color: #ffffff;
-    top: 0;
-    right: 0;
+    top: -1px;
+    right: -1px;
     padding: 5px 15px;
-    border-radius: 0 0 0 8px;
+    border-radius: 0 8px 0 8px;
     font-size: 14px;
     font-weight: 400;
   }
-  
-  .product-listing-stock a h3{
+  small{
+    font-size: 0.7em;
+  }
+  .product-listing-stock .locationpoint h3{
     font-size: 20px;
   }
-  .product-listing-stock a:hover{
+  .product-listing-stock .locationpoint:hover{
     border-color: #217232;
     color: #1E1E1E;
   }
-  .product-listing-stock a.active:hover,
-  .product-listing-stock a.active{
+  .product-listing-stock .locationpoint.active:hover,
+  .product-listing-stock .locationpoint.active{
     background-color: #217232;
     color: #ffffff;
   }
@@ -292,9 +299,10 @@ img{
     color: #1E1E1E;
   }
 .information{
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 500;
-    color:red;
+    color: #b60000;
+    line-height: 1.2;
 }
 header{
     background-color: var(--primary-color);
