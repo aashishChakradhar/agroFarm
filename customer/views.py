@@ -151,21 +151,28 @@ class Signup_View (View):
             
 class Index(View):
     def get(self, request):
-        product_users = Product_User.objects.filter(is_available = True)
+        product_users = Product_User.objects.filter(is_available=True)
         combined_data = []
+        processed_product_ids = set()
+
         for product_user in product_users:
-            product = Product.objects.get(uid = product_user.productID.uid)
+            product_id = product_user.productID.uid  # Get the unique product ID
+            if product_id not in processed_product_ids:
+                product = Product.objects.get(uid=product_id)
 
-            image_path = os.path.join('static/', 'images', f"{product.slug}.png")
-            image_exists = os.path.isfile(image_path)
+                image_path = os.path.join('static/', 'images', f"{product.slug}.png")
+                image_exists = os.path.isfile(image_path)
 
-            combined_data.append(
-                {
-                    'products':product,
-                    'product_user':product_user,
-                    'image_exists':image_exists
-                }
-            )
+                combined_data.append(
+                    {
+                        'products': product,
+                        'product_user': product_user,
+                        'image_exists': image_exists
+                    }
+                )
+
+                # Add the product ID to the processed set
+                processed_product_ids.add(product_id)
         context = {
             "page_name":"home",
             "combined_data": combined_data
