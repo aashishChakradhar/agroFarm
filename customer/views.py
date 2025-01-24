@@ -177,6 +177,7 @@ class Index(View):
             "page_name":"home",
             "combined_data": combined_data
         }
+        print(combined_data)
         return render(request,f'{app_name}/index.html',context)
     
     def post(self,request):
@@ -268,6 +269,7 @@ class Product_Detail_View(BaseView):#for single page display of product
         action = request.POST.get('action')
         product_ids = request.POST.getlist('product_id')
         print(product_ids)
+        print(action)
         if action == 'buy':
             request.session['product_ids'] = product_ids  # Save IDs in session
             return redirect('customer:buy-now')
@@ -540,6 +542,29 @@ class DeleteReview_View(BaseView):
 def search_product(request):
     query = request.GET.get('query', '')
     results = []
+    combined_data = []
     if query:
-        results = Product.objects.filter(name__icontains=query) 
-    return render(request, f'{app_name}/search.html', {'query': query, 'results': results})
+        results = Product.objects.filter(name__icontains=query)
+        processed_product_ids = set()
+        for x in results:
+            product_users = Product_User.objects.filter(productID = x, is_available=True)
+            for product_user in product_users:
+                product_id = product_user.productID.uid  # Get the unique product ID
+                if product_id not in processed_product_ids:
+                    product = Product.objects.get(uid=product_id)
+
+                    image_path = os.path.join('static/', 'images', f"{product.slug}.png")
+                    image_exists = os.path.isfile(image_path)
+
+                    combined_data.append(
+                        {
+                            'products': product,
+                            'product_user': product_user,
+                            'image_exists': image_exists
+                        }
+                    )
+
+                    # Add the product ID to the processed set
+                    processed_product_ids.add(product_id)
+        
+    return render(request, f'{app_name}/search.html', {'query': query, 'results': combined_data})
