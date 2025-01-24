@@ -94,7 +94,54 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('.product-item .locationpoint').forEach( (element) => {
         element.addEventListener('click', (e) => {
-            console.log(e.target.classList.toggle('active'));
+            e.target.classList.toggle('active');
         })
     })
+
+    // document.querySelector('#buyform').addEventListener('submit', (e) => {
+    //     e.preventDefault();
+    //     let res = false;
+    //     document.querySelectorAll('.active').forEach( (element) => {
+    //         if(element.classList.contains('out-of-area')){
+    //             res = confirm("One of the farmers you selected is located farther from your area. As a result, the delivery time may vary depending on the farmer's location, and the costs may be adjusted based on the distance.\n\nIf you want to continue click on 'OK'.");
+    //         }
+    //     });
+    //     if(!res){
+    //         return;
+    //     }
+
+    //     document.querySelector('button[name="action"]').value = 'buy';
+    //     e.target.submit();
+    //     // e.target.submit();
+    // })
+
+    function buybuttondisabler(b){
+        document.querySelectorAll('#buyform button').forEach((element) => {
+            element.disabled = b;
+        });
+    }
+    function checkConditions() {
+        const quantity = document.getElementById('quantity').value;
+        const locationSelected = document.querySelector('.locationpoint.active') !== null;
+
+        if (quantity > 0 && locationSelected) {
+            buybuttondisabler(false);
+        } else {
+            buybuttondisabler(true);
+        }
+    }
+    
+    if(document.getElementById('quantity')){
+        document.getElementById('quantity').addEventListener('change', () => {
+            checkConditions();
+        });
+    }
+    
+    if(document.querySelectorAll('.locationpoint')){
+        document.querySelectorAll('.locationpoint').forEach((element) => {
+            element.addEventListener('click', (e) => {
+                checkConditions();
+            });
+        });
+    }
 });
