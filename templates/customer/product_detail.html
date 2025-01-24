@@ -34,7 +34,7 @@
                     <div class="product-listing-stock">
                         {% for farmer in farmer_products %}
                         <div class="product-item">
-                            <div class="active locationpoint" data-lat="{{farmer.latitude}}" data-long="{{farmer.longitude}}">
+                            <div class="locationpoint" data-lat="{{farmer.latitude}}" data-long="{{farmer.longitude}}">
                                 <h3 class="stock-price">Farmer Price: {{ farmer.price }} per {{product.unit}}</h3>
                                 <div class="d-flex justify-content-start">
                                     Available stock : {{farmer.quantity}} {{product.unit}}
@@ -48,11 +48,11 @@
                     </div>
                 </div>
                 <div class=" d-flex align-item-center my-4">
-                    <form method = 'POST'>
+                    <form method = 'POST' id="buyform">
                         {% csrf_token %}
                         <input name='product_id' value='{{product.uid}}' type="hidden" id = 'uid'>
-                        <button type="submit" name="action" value="buy" class="btn btn-dark px-4">Buy now</button>               
-                        <button class="btn btn-success add-to-cart-btn px-4" value="add to cart" data-product-uid="{{ product.uid }}" data-quantity="0">Add to Cart</button>
+                        <button type="submit" name="action" value="buy" class="btn btn-dark px-4 buynowbtn" disabled>Buy now</button>               
+                        <button class="btn btn-success add-to-cart-btn px-4" value="add to cart" data-product-uid="{{ product.uid }}" data-quantity="0" disabled>Add to Cart</button>
                     </form>
                 </div>
                 <div class="information">
