@@ -8,13 +8,18 @@
             <div class="row justify-content-center">
                 <div class="col-8 text-center">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered my-cart-table">
                             <thead>
                                 <tr>
-                                    <th><label for="select">
-                                        <input type="checkbox" name="action" id="select">Select All
-                                    </label></th>
+                                    <th>
+                                        <label>
+                                            <input type="checkbox" name="action" id="cartSelectAll"><span>Select All</span>
+                                        </label>
+                                    </th>
+                                    <th>ID</th>
                                     <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Farmer</th>
                                     <th>Price</th>
                                 </tr>
                             </thead>
@@ -22,14 +27,32 @@
                                 {% for product in products %}
                                     <tr>
                                         <td>
-                                            <label for="{{ product.uid }}">
-                                                <input type="checkbox" name="cart_item" id="{{ product.uid }}" value="{{ product.uid }}">
-                                                {{ product.uid }}
+                                            <label">
+                                                <input type="checkbox" name="cart_item" id="{{ product.cart.product_id }}" value="{{ product.cart.product_id }}">
                                             </label>
                                         </td>
                                         <td>
                                             <label for="{{ product.uid }}">
-                                                {{ product.name }}
+                                                {{ product.cart.product_id }}
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label for="{{ product.uid }}">
+                                                {{ product.product.name }}
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label>
+                                                <div class="quantity">
+                                                    <button class="quantity-down quantity-button" type="button">-</button>
+                                                    <input id="quantity" name="quantity" type="number" min="0" value="{{ product.cart.quantity }}" step="1">
+                                                    <button class="quantity-up quantity-button" type="button">+</button>
+                                                </div>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label for="{{ product.uid }}">
+                                                {{ product.cart.farmer }}
                                             </label>
                                         </td>
                                         <td>
