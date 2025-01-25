@@ -27,12 +27,12 @@
                             </div>
                             <div class="input-field">
                                 <label><span>Stock({{product.unit}})</span>
-                                    <input type="number" name="stock" id="stock" min="0" placeholder="Products in stock">
+                                    <input type="number" name="stock" id="stock" min="0" placeholder="Products in stock" value="{{product_user.quantity}}">
                                 </label>
                             </div>
                             <div class="input-field">
                                 <label><span>Price (Rs)</span>
-                                    <input type="number" name="price" min="{{ min_price }}" max="{{ max_price }}" id="price" placeholder="{{ product.min_price }} - {{ product.max_price }}" autocomplete="off">
+                                    <input type="number" name="price" min="{{ min_price }}" max="{{ max_price }}" id="price" placeholder="{{ product.min_price }} - {{ product.max_price }}" autocomplete="off" value="{{product_user.price}}">
                                 </label>
                             </div>
                         </div>
