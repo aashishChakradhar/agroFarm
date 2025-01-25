@@ -11,7 +11,7 @@
             <div class='row'>
                 {% for product in results %}
                 <div class='col-md-3'>
-                    {% include "customer/temp/product_list.html" with products=product %}
+                    {% include "customer/temp/product_list.html" with combined_data=product %}
                 </div>
                 {% endfor %}
             </div>

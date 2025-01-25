@@ -94,7 +94,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('.product-item .locationpoint').forEach( (element) => {
         element.addEventListener('click', (e) => {
-            console.log(e.target.classList.toggle('active'));
+            e.target.classList.toggle('active');
+
+            if(e.target.classList.contains('out-of-area') && e.target.classList.contains('active')){
+                document.querySelector('.out-of-area-msg').style.display = 'block';
+            }else{
+                document.querySelector('.out-of-area-msg').style.display = 'none';
+            }
         })
     })
+
+    function buybuttondisabler(b){
+        document.querySelectorAll('#buyform button').forEach((element) => {
+            element.disabled = b;
+        });
+    }
+    function checkConditions() {
+        const quantity = document.getElementById('quantity').value;
+        const locationSelected = document.querySelector('.locationpoint.active') !== null;
+
+        if (quantity > 0 && locationSelected) {
+            buybuttondisabler(false);
+        } else {
+            buybuttondisabler(true);
+        }
+    }
+    
+    if(document.getElementById('quantity')){
+        document.getElementById('quantity').addEventListener('change', () => {
+            checkConditions();
+        });
+    }
+    
+    if(document.querySelectorAll('.locationpoint')){
+        document.querySelectorAll('.locationpoint').forEach((element) => {
+            element.addEventListener('click', (e) => {
+                checkConditions();
+            });
+        });
+    }
 });

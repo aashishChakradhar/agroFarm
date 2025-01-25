@@ -16,16 +16,9 @@
             <a class="product-list-link" href="/product-detail/{{ combined_data.products.uid }}" >
                 <h4 class="card-title">{{ combined_data.products.name }}</h4>
             </a>
-            <h6>{{combined_data.product_user.price}} per {{combined_data.products.unit}}</h6>
+            <h6>{{combined_data.products.avg_price}} per {{combined_data.products.unit}}</h6>
             
             <div class="button-group d-flex align-items-center gap-4 mt-4">
-                <!-- <div class="buy-button">
-                    <input type="hidden" name='uid' value='{{combined_data.products.uid}}'>
-                    <button type="submit" name='action' value='buy' class="btn btn-dark px-4">Buy Now</button>
-                </div>
-                <div class='cart-button'>
-                    <button class="btn btn-success add-to-cart-btn px-4" name = 'action' value='cart' data-product-uid="{{ combined_data.products.uid }}">Add to Cart</button>
-                </div> -->
                 <a href="/product-detail/{{ combined_data.products.uid }}" class="product-list-link">Learn More ></a>
             </div>
         </div>
