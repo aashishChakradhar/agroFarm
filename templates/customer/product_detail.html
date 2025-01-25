@@ -22,21 +22,21 @@
                         {{product.name}}
                     </h1>
                     <div class="price">
-                        <span class="amount">RS. {{ product.avg_price }} /<small>{{product.unit}}</small></span>
+                        <span class="amount">{{ product.avg_price }} /<small>{{product.unit}}</small></span>
                         <span class="amount-source">Average Price Today <strong>(Kalimati)*</strong></span>
                     </div>
                     <div class="quantity-wrapper">
                         <span>Quantity</span>
                         <div class="quantity">
-                            <button class="quantity-down quantity-button">-</button>
-                            <input id="quantity" type="number" min="0" value="0" step="1">
-                            <button class="quantity-up quantity-button">+</button>
+                            <button class="quantity-down quantity-button" type="button">-</button>
+                            <input id="quantity" name="quantity" type="number" min="0" value="0" step="1">
+                            <button class="quantity-up quantity-button" type="button">+</button>
                         </div>
                     </div>
                     <div class="product-listing-stock">
                         {% for farmer in farmer_products %}
                         <div class="product-item">
-                            <div class="locationpoint" data-lat="{{farmer.latitude}}" data-long="{{farmer.longitude}}">
+                            <div class="locationpoint" data-farmerid="{{farmer.uid}}" data-lat="{{farmer.latitude}}" data-long="{{farmer.longitude}}">
                                 <h3 class="stock-price">Farmer Price: {{ farmer.price }} per {{product.unit}}</h3>
                                 <div class="d-flex justify-content-start">
                                     Available stock : {{farmer.quantity}} {{product.unit}}
@@ -62,7 +62,7 @@
                         {% csrf_token %}
                         <input name='product_id' value='{{product.uid}}' type="hidden" id = 'uid'>
                         <button type="submit" name="action" value="buy" class="btn btn-dark px-4 buynowbtn" disabled>Buy now</button>               
-                        <button class="btn btn-success add-to-cart-btn px-4" value="add to cart" data-product-uid="{{ product.uid }}" data-quantity="0" disabled>Add to Cart</button>
+                        <button class="btn btn-success add-to-cart-btn px-4" value="add to cart" data-product-uid="{{ product.uid }}" data-quantity="0" data-farmer="" disabled>Add to Cart</button>
                     </form>
                 </div>
                 <div class="information">
@@ -161,6 +161,13 @@
                                             <option value="5">5 - Excellent</option>
                                         </select>
                                     </div>
+                                    <div class="review-ratings">
+                                        <label><input type="radio" name="ratings" value="1" checked></label>
+                                        <label><input type="radio" name="ratings" value="2"></label>
+                                        <label><input type="radio" name="ratings" value="3"></label>
+                                        <label><input type="radio" name="ratings" value="4"></label>
+                                        <label><input type="radio" name="ratings" value="5"></label>
+                                    </div>
                                     <div class="mb-3">
                                         <label for="comment" class="form-label">Comment</label>
                                         <textarea name="comment" id="comment" class="form-control" rows="4" placeholder="Write your review..." required></textarea>
@@ -189,6 +196,14 @@
                                     <option value="5">5 - Excellent</option>
                                 </select>
                             </div>
+                            
+                            <div class="review-ratings">
+                                <label><input type="radio" name="ratings" value="1" checked></label>
+                                <label><input type="radio" name="ratings" value="2"></label>
+                                <label><input type="radio" name="ratings" value="3"></label>
+                                <label><input type="radio" name="ratings" value="4"></label>
+                                <label><input type="radio" name="ratings" value="5"></label>
+                            </div>
                             <div class="mb-3">
                                 <label for="comment" class="form-label">Comment</label>
                                 <textarea name="comment" id="comment" class="form-control" rows="4" placeholder="Write your review..." required></textarea>
@@ -203,7 +218,7 @@
     </div>     
 </section>
 
-<section class="other-product-section">
+<section class="other-product-section section-gaps pt-0">
     <div class="container">
         <div class="section-title">
             <h2>Other Products</h2>
