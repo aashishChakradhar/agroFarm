@@ -184,6 +184,7 @@ class Index(View):
         product_ids = request.POST.getlist('uid')
         if action == 'buy':
             request.session['product_ids'] = product_ids  # Save IDs in session
+            # request.session['farmer_ids'] = 
             return redirect('customer:buy-now')
         # Default action (in case something goes wrong)
         return redirect(request.path)
@@ -313,26 +314,33 @@ class BuyNowView(BaseView):
         # Fetch all products matching the selected IDs
         products = Product.objects.filter(uid__in=product_ids)
         if Address.objects.filter(userID = request.user).exists():
-            print("yes")
             address = Address.objects.get(userID = request.user)
         else:
             address = None
+
+        combined_data = []
         for product in products:
             product_users = Product_User.objects.filter(productID = product)
-            combined_data = []
+            pusers = []
             for product_user in product_users:
-                combined_data.append(
+                pusers.append(
                     {
-                        'products':product,
-                        'product_user':product_user
+                        'puser':product_user,
                     }
                 )
+            print(pusers)
+            combined_data.append(
+                {
+                    'products':product,
+                    'product_user':pusers
+                }
+            )
         context = {
             "page_name": "buy-now",
             "combined_data": combined_data,
             "address":address,
         }
-        print(product_ids)
+        # print(context)
         return render(request, f'{app_name}/buynow.html', context)
     
     def post(self, request):
@@ -447,11 +455,14 @@ class MyCart_View(BaseView): #show items in my cart
         for cart in carts:
             product = Product.objects.filter(name=cart.product).first()  # Use .first() to get one object or None
             farmer = get_object_or_404(Product_User, uid = cart.farmer)
+            product_farmer = get_object_or_404(User, id = farmer.userID.id)
             if product:
                 products.append(
                     {
                         'cart': cart,
                         'product': product,
+                        'price' : farmer.price,
+                        'product_farmer':product_farmer
                     }
                 )  # Append the product to the list if it exists
 
@@ -460,7 +471,6 @@ class MyCart_View(BaseView): #show items in my cart
             'page_name': 'my-cart',
             'products': products,  # Pass the products to the template if needed
         }
-        print(context)
         return render(request, f'{app_name}/cart.html', context)
     
     def post(self,request):
