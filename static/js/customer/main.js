@@ -95,25 +95,14 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.product-item .locationpoint').forEach( (element) => {
         element.addEventListener('click', (e) => {
             e.target.classList.toggle('active');
+
+            if(e.target.classList.contains('out-of-area') && e.target.classList.contains('active')){
+                document.querySelector('.out-of-area-msg').style.display = 'block';
+            }else{
+                document.querySelector('.out-of-area-msg').style.display = 'none';
+            }
         })
     })
-
-    // document.querySelector('#buyform').addEventListener('submit', (e) => {
-    //     e.preventDefault();
-    //     let res = false;
-    //     document.querySelectorAll('.active').forEach( (element) => {
-    //         if(element.classList.contains('out-of-area')){
-    //             res = confirm("One of the farmers you selected is located farther from your area. As a result, the delivery time may vary depending on the farmer's location, and the costs may be adjusted based on the distance.\n\nIf you want to continue click on 'OK'.");
-    //         }
-    //     });
-    //     if(!res){
-    //         return;
-    //     }
-
-    //     document.querySelector('button[name="action"]').value = 'buy';
-    //     e.target.submit();
-    //     // e.target.submit();
-    // })
 
     function buybuttondisabler(b){
         document.querySelectorAll('#buyform button').forEach((element) => {
