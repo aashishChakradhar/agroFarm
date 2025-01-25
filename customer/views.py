@@ -292,8 +292,8 @@ class Product_Detail_View(BaseView):#for single page display of product
     def post(self,request, product_id):
         action = request.POST.get('action')
         product_ids = request.POST.getlist('product_id')
-        print(product_ids)
-        print(action)
+        quantity = request.POST.get('quantity')
+        print(quantity)
         if action == 'buy':
             request.session['product_ids'] = product_ids  # Save IDs in session
             return redirect('customer:buy-now')
@@ -419,19 +419,12 @@ class AddToCartView(BaseView): #adds items to cart
         # Check if the user is authenticated
         if not request.user.is_authenticated:
             return JsonResponse({'success': False, 'message': 'Please login to add products to your cart.'}, status=401)
-
-        # Check if the product already exists in the cart
-        cart_item = CartItem.objects.filter(user=request.user, product=product).first()
-        if cart_item:
-            print('already exissts')
-            # Return "already in cart" response
-            return JsonResponse({
-                'success': False,
-                'message': f'{product.name} is already in your cart.'
-            }, status=400)
+        
+        quantity = request.GET.get('quantity', 1)
+        farmer = request.GET.get('farmer', 1)
 
         # Add the product to the cart if it doesn't exist
-        CartItem.objects.create(user=request.user, product=product)
+        CartItem.objects.create(user=request.user, product=product, quantity = quantity, farmer = farmer)
 
         # Return success response
         return JsonResponse({
@@ -453,16 +446,21 @@ class MyCart_View(BaseView): #show items in my cart
         # Loop through each cart item and get the related product
         for cart in carts:
             product = Product.objects.filter(name=cart.product).first()  # Use .first() to get one object or None
+            farmer = get_object_or_404(Product_User, uid = cart.farmer)
             if product:
-                print(product.uid)  # Debug print statement
-                products.append(product)  # Append the product to the list if it exists
+                products.append(
+                    {
+                        'cart': cart,
+                        'product': product,
+                    }
+                )  # Append the product to the list if it exists
 
         # Pass the full list of cart items and related products to the context
         context = {
             'page_name': 'my-cart',
-            'carts': carts,
             'products': products,  # Pass the products to the template if needed
         }
+        print(context)
         return render(request, f'{app_name}/cart.html', context)
     
     def post(self,request):
