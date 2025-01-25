@@ -197,6 +197,7 @@ class AddressView(BaseView):
 
 class Index(BaseView):
     def get(self, request):
+        
         context = {
             "page_name":"home",
         }

@@ -28,7 +28,9 @@
                     <div class="quantity-wrapper">
                         <span>Quantity</span>
                         <div class="quantity">
-                            <input id="quantity" type="number" min="0" value="0">
+                            <button class="quantity-down quantity-button">-</button>
+                            <input id="quantity" type="number" min="0" value="0" step="1">
+                            <button class="quantity-up quantity-button">+</button>
                         </div>
                     </div>
                     <div class="product-listing-stock">
@@ -200,5 +202,21 @@
         
     </div>     
 </section>
+
+<section class="other-product-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Other Products</h2>
+        </div>
+        <div class="row">
+            {% for combined_data in combined_data %}
+                <div class='col-md-3'>
+                    {% include "customer/temp/product_list.html" with combined_data=combined_data%}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
 <script src="{% static 'js/customer/location.js' %}"></script>
 {% endblock body %}

@@ -177,13 +177,11 @@ class Index(View):
             "page_name":"home",
             "combined_data": combined_data
         }
-        print(combined_data)
         return render(request,f'{app_name}/index.html',context)
     
     def post(self,request):
         action = request.POST.get('action')
         product_ids = request.POST.getlist('uid')
-        print(product_ids)
         if action == 'buy':
             request.session['product_ids'] = product_ids  # Save IDs in session
             return redirect('customer:buy-now')
@@ -253,6 +251,31 @@ class Product_Detail_View(BaseView):#for single page display of product
             x.longitude = detail.longitude
         image_path = os.path.join('static/', 'images', f"{product.slug}.png")
         image_exists = os.path.isfile(image_path)
+
+        product_users = Product_User.objects.exclude(productID=product_id)
+
+        combined_data = []
+        processed_product_ids = set()
+
+        for product_user in product_users:
+            product_id = product_user.productID.uid  # Get the unique product ID
+            if product_id not in processed_product_ids:
+                product_list = Product.objects.get(uid=product_id)
+
+                image_path = os.path.join('static/', 'images', f"{product_list.slug}.png")
+                image_exists = os.path.isfile(image_path)
+
+                combined_data.append(
+                    {
+                        'products': product_list,
+                        'product_user': product_user,
+                        'image_exists': image_exists
+                    }
+                )
+
+                # Add the product ID to the processed set
+                processed_product_ids.add(product_id)
+        
         context = {
             "page_name": "product",
             "product": product,
@@ -262,6 +285,7 @@ class Product_Detail_View(BaseView):#for single page display of product
             "farmer_products" : farmer_products,
             "farmer_address": farmer_address,
             "detail":detail,
+            "combined_data": combined_data
         }
         return render(request, f'{app_name}/product_detail.html', context)
     
