@@ -358,17 +358,20 @@ class EditProductView(BaseView):
     def get(self, request, id):
         try:
             product = get_object_or_404(Product, uid=id)
+            product_user = get_object_or_404(Product_User, productID=id, userID = request.user)
             min_price = product.min_price.split(' ')[1]
             max_price = product.max_price.split(' ')[1]
             image_path = os.path.join('static/', 'images', f"{product.slug}.png")
             image_exists = os.path.isfile(image_path)
             context = {
-                'product' : get_object_or_404(Product, uid=id),
+                'product' : product,
+                'product_user':product_user,
                 'min_price': min_price,
                 'max_price': max_price,
                 'image_exists' : image_exists,
                 'page_name': 'edit-product'
             }
+    
             return render(request, f"{app_name}/edit_product.html" ,context)
         except Exception as e:
             messages.error(request, str(e))

@@ -222,4 +222,21 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
+    const checkboxes = document.querySelectorAll('.my-cart-table input[name="cart_item"]');
+    if(checkboxes){
+        checkboxes.forEach((item)=>{
+            item.addEventListener('change', () => {
+                let isAnyChecked = Array.from(checkboxes).some(i => i.checked);
+
+                if (isAnyChecked) {
+                    document.querySelector('.buynowbtn').disabled = false;
+                    document.querySelector('.deleteitembtn').disabled = false;
+                } else {
+                    document.querySelector('.buynowbtn').disabled = true;
+                    document.querySelector('.deleteitembtn').disabled = true;
+                }
+            })
+        });
+    }
 });
