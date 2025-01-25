@@ -1,9 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-        button.addEventListener('click', function () {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
             const productUid = this.dataset.productUid;
+            const quantity = this.dataset.quantity;
+            const farmer = this.dataset.farmer;
 
-            fetch(`/add-to-cart/${productUid}/`, {
+            fetch(`/add-to-cart/${productUid}/?quantity=${quantity}&farmer=${farmer}`, {
                 method: 'GET',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
@@ -60,48 +63,99 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    const quantityInputs = document.querySelectorAll('input[name="quantity"]');
-    quantityInputs.forEach((input) => {
-        // Set initial price when the page loads
-        const rateCell = input.closest('tr').querySelector('td:nth-child(3)');
-        const priceCell = input.closest('tr').querySelector('td:nth-child(5)');
+    const quantityInputs = document.querySelector('input[name="quantity"]');
+    if(quantityInputs){
+        quantityInputs.addEventListener('change', (e) => {
+            document.querySelector('.add-to-cart-btn').setAttribute('data-quantity', e.target.value);
+        })
+    }
 
-        const rate = parseFloat(rateCell.textContent);
-        const quantity = parseFloat(input.value);
-
-        if (!isNaN(rate) && !isNaN(quantity)) {
-            const totalPrice = rate * quantity;
-            priceCell.textContent = totalPrice.toFixed(2);
-        }
-
-        // Event listener for quantity change
-        input.addEventListener('input', function () {
-            const updatedQuantity = parseFloat(input.value);
-
-            if (updatedQuantity < 1) {
-                alert("Quantity must be at least 1.");
-                input.value = 1; // Reset to 1 if less than 1
+    if (document.querySelector('.checkout-table')) {
+        const tableRows = document.querySelectorAll('.checkout-table tbody tr');
+        tableRows.forEach((row) => {
+            const rate = parseFloat(row.querySelector('.rate').textContent);
+            const finalPrice = row.querySelector('.total');
+            const quantity = row.querySelector('input[name="quantity"]');
+            function priceChange(){
+                if (quantity.value < 1) {
+                    alert("Quantity must be at least 1.");
+                    quantity.value = 1;
+                }
+                finalPrice.textContent = (rate * quantity.value).toFixed(2);
             }
+            priceChange();
+            quantity.addEventListener('input',()=>{
+                priceChange();
+            });
+            quantity.addEventListener('change',()=>{
+                priceChange();
+            });
+        });
+    }
+    // if(quantityInputs){
+    //     quantityInputs.forEach((input) => {
+    //         // Set initial price when the page loads
+    //         const rateCell = input.closest('tr').querySelector('td:nth-child(3)');
+    //         const priceCell = input.closest('tr').querySelector('td:nth-child(5)');
 
-            if (!isNaN(rate) && !isNaN(updatedQuantity)) {
-                const totalPrice = rate * updatedQuantity;
-                priceCell.textContent = totalPrice.toFixed(2);
-            } else {
-                priceCell.textContent = '';
+    //         const rate = parseFloat(rateCell.textContent);
+    //         const quantity = parseFloat(input.value);
+
+    //         if (!isNaN(rate) && !isNaN(quantity)) {
+    //             const totalPrice = rate * quantity;
+    //             priceCell.textContent = totalPrice.toFixed(2);
+    //         }
+
+    //         // Event listener for quantity change
+    //         input.addEventListener('input', function () {
+    //             const updatedQuantity = parseFloat(input.value);
+
+    //             if (updatedQuantity < 1) {
+    //                 alert("Quantity must be at least 1.");
+    //                 input.value = 1; // Reset to 1 if less than 1
+    //             }
+
+    //             if (!isNaN(rate) && !isNaN(updatedQuantity)) {
+    //                 const totalPrice = rate * updatedQuantity;
+    //                 priceCell.textContent = totalPrice.toFixed(2);
+    //             } else {
+    //                 priceCell.textContent = '';
+    //             }
+    //         });
+    //     });
+    // }
+
+    document.querySelectorAll('.product-listing-stock').forEach(function (element) {
+        element.addEventListener('click', (e) => {
+            if (e.target.classList.contains('locationpoint')) {
+                if (e.target.classList.contains('active')) {
+                    e.target.classList.remove('active');
+                    e.target.classList.remove('active-success');
+                    document.querySelector('.out-of-area-msg').style.display = 'none';
+                } else {
+                    element.querySelectorAll('.locationpoint').forEach(function (child) {
+                        child.classList.remove('active');
+                        child.classList.remove('active-success');
+
+                    });
+                    e.target.classList.add('active');
+                    document.querySelector('.add-to-cart-btn').setAttribute('data-farmer', e.target.getAttribute('data-farmerid'));
+                    if(e.target.classList.contains('out-of-area')){
+                        document.querySelector('.out-of-area-msg').style.display = 'block';
+                    }else{
+                        e.target.classList.add('active-success');
+                        document.querySelector('.out-of-area-msg').style.display = 'none';
+                    }1
+                }
             }
         });
     });
 
     document.querySelectorAll('.product-item .locationpoint').forEach( (element) => {
         element.addEventListener('click', (e) => {
-            e.target.classList.toggle('active');
 
-            if(e.target.classList.contains('out-of-area') ){
-                if(e.target.classList.contains('active')){
-                    document.querySelector('.out-of-area-msg').style.display = 'block';
-                }else{
-                    document.querySelector('.out-of-area-msg').style.display = 'none';
-                }
+            if(e.target.classList.contains('active')){
+                document.querySelector('.add-to-cart-btn').setAttribute('data-farmer', e.target.getAttribute('data-farmerid'))
             }
         })
     })
@@ -117,23 +171,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (quantity > 0 && locationSelected) {
             buybuttondisabler(false);
-        } else {
+        }else {
             buybuttondisabler(true);
         }
-    }
-    
-    if(document.getElementById('quantity')){
-        document.getElementById('quantity').addEventListener('change', () => {
-            checkConditions();
-        });
-    }
-    
-    if(document.querySelectorAll('.locationpoint')){
-        document.querySelectorAll('.locationpoint').forEach((element) => {
-            element.addEventListener('click', (e) => {
-                checkConditions();
-            });
-        });
     }
 
     if(document.querySelector('.okbtn')){
@@ -142,8 +182,6 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.locationpoint.active').forEach((item) => {
                 item.classList.add('active-success');
             })
-            checkConditions();
-
             document.querySelector('.out-of-area-msg').style.display = 'none';
         })
     }
@@ -159,29 +197,29 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('.out-of-area-msg').style.display = 'none';
         })
     }
+    if(document.querySelector('.detail-content-wrapper')){
+        document.querySelector('.detail-content-wrapper').addEventListener('click',()=>{
+            checkConditions();
+        })
+    }
+    if(document.getElementById('quantity')){
+        document.getElementById('quantity').addEventListener('change', () => {
+            checkConditions();
+        });
+    }
 
-    //Quantity JS
-    // Add event listeners to handle the quantity changes
-    document.querySelectorAll('.quantity').forEach(function (spinner) {
-        const input = spinner.querySelector('input[type="number"]');
-        const btnUp = spinner.querySelector('.quantity-up');
-        const btnDown = spinner.querySelector('.quantity-down');
-        const step = parseFloat(input.getAttribute('step')) || 1;
-        const min = parseFloat(input.getAttribute('min')) || 0;
-        const max = parseFloat(input.getAttribute('max')) || 1000;
-        // Event listener for the up button
-        btnUp.addEventListener('click', function () {
-            const oldValue = parseFloat(input.value) || 0;
-            const newVal = oldValue >= max ? oldValue : oldValue + step;
-            input.value = newVal;
-            input.dispatchEvent(new Event('change'));
+    if(document.querySelectorAll('.my-cart-table')){
+        let checkboxs = document.querySelectorAll('.my-cart-table tbody input[type="checkbox"]');
+        document.querySelector('.my-cart-table #cartSelectAll').addEventListener('click',function(){
+            const isChecked = this.checked;
+            checkboxs.forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
         });
-        // Event listener for the down button
-        btnDown.addEventListener('click', function () {
-            const oldValue = parseFloat(input.value) || 0;
-            const newVal = oldValue <= min ? oldValue : oldValue - step;
-            input.value = newVal;
-            input.dispatchEvent(new Event('change'));
+        checkboxs.forEach(checkbox => {
+            checkbox.addEventListener('change',()=>{
+                document.querySelector('.my-cart-table #cartSelectAll').checked = false;
+            });
         });
-    });
+    }
 });

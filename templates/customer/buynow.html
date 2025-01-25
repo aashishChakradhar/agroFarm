@@ -46,7 +46,7 @@
                 </div>
                 <hr>
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered checkout-table">
                         <thead>
                             <tr>
                                 <th>Product</th>
@@ -58,21 +58,23 @@
                         <tbody>
                             {% for combined_data in combined_data %}
                                 <tr>
-                                    <input type="hidden" name="cart_item" id="{{ combined_data.products.uid }}" value="{{ combined_data.products.uid }}">
-                                    <input type="hidden" name="item_name" id="{{ combined_data.products.name }}" value="{{ combined_data.products.name }}">
-                                    <td>
+                                   <td>
                                         {{ combined_data.products.name }}
                                     </td>
                                     <td>
-                                        <span id="rate-{{ combined_data.products.uid }}">{{ combined_data.product_user.price }}</span>
+                                        <span id="rate-{{ combined_data.products.uid }}"  class="rate">{{ combined_data.product_user.price }}</span>
                                     </td>
                                     <td>
                                         <label for="quantity-{{ combined_data.products.uid }}">
-                                            <input type="number" name='quantity' id='quantity-{{ combined_data.products.uid }}' min="10" value="10">
+                                            <div class="quantity">
+                                                <button type="button" class="quantity-down quantity-button">-</button>
+                                                <input type="number" name='quantity' id='quantity-{{ combined_data.products.uid }}'  min="1" value="1" step="1">
+                                                <button type="button" class="quantity-up quantity-button">+</button>
+                                            </div>
                                         </label>
                                     </td>
                                     <td>
-                                        <span id="price-{{ combined_data.products.uid }}">0.00</span>
+                                        <span id="price-{{ combined_data.products.uid }}"  class="total">0.00</span>
                                     </td>
                                 </tr>
                             {% endfor %}
