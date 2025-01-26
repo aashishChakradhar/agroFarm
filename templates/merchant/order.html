@@ -10,6 +10,9 @@
                         <th>Order ID</th>
                         <th>Product Name</th>
                         <th>Customer ID</th>
+                        <th>Quantity</th>
+                        <th>Price(Rs.)</th>
+                        <th>Total Price(Rs.)</th>
                         <th>Status</th>
                         <th>Ordered Date</th>
                     </tr>
@@ -23,6 +26,9 @@
                         <td><a href="/merchant/order/edit-order/{{x.uid}}">#{{x.uid}}</a></td>
                         <td><a href="/merchant/order/edit-order/{{x.uid}}">{{x.productID}}</a></td>
                         <td style="text-transform: capitalize;">{{ x.userID}}</td>
+                        <td style="text-transform: capitalize;">{{ x.quantity}}</td>
+                        <td style="text-transform: capitalize;">{{ x.rate}}</td>
+                        <td style="text-transform: capitalize;">{{ x.amount}}</td>
                         <td>
                             <span class="status-btn {{x.status|lower}}-btn text-capitalize">
                                 {{x.status}}
