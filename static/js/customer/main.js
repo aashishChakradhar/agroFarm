@@ -66,61 +66,31 @@ document.addEventListener('DOMContentLoaded', function () {
     const quantityInputs = document.querySelector('input[name="quantity"]');
     if(quantityInputs){
         quantityInputs.addEventListener('change', (e) => {
-            document.querySelector('.add-to-cart-btn').setAttribute('data-quantity', e.target.value);
+            if(document.querySelector('.add-to-cart-btn')){
+                document.querySelector('.add-to-cart-btn').setAttribute('data-quantity', e.target.value);
+            }
         })
     }
 
-    if (document.querySelector('.checkout-table')) {
-        const tableRows = document.querySelectorAll('.checkout-table tbody tr');
-        tableRows.forEach((row) => {
-            const rate = parseFloat(row.querySelector('.rate').textContent);
-            const finalPrice = row.querySelector('.total');
-            const quantity = row.querySelector('input[name="quantity"]');
-            function priceChange(){
-                if (quantity.value < 1) {
-                    alert("Quantity must be at least 1.");
-                    quantity.value = 1;
-                }
-                finalPrice.textContent = (rate * quantity.value).toFixed(2);
-            }
-            priceChange();
-            quantity.addEventListener('input',()=>{
-                priceChange();
-            });
-            quantity.addEventListener('change',()=>{
-                priceChange();
-            });
-        });
-    }
-    // if(quantityInputs){
-    //     quantityInputs.forEach((input) => {
-    //         // Set initial price when the page loads
-    //         const rateCell = input.closest('tr').querySelector('td:nth-child(3)');
-    //         const priceCell = input.closest('tr').querySelector('td:nth-child(5)');
-
-    //         const rate = parseFloat(rateCell.textContent);
-    //         const quantity = parseFloat(input.value);
-
-    //         if (!isNaN(rate) && !isNaN(quantity)) {
-    //             const totalPrice = rate * quantity;
-    //             priceCell.textContent = totalPrice.toFixed(2);
-    //         }
-
-    //         // Event listener for quantity change
-    //         input.addEventListener('input', function () {
-    //             const updatedQuantity = parseFloat(input.value);
-
-    //             if (updatedQuantity < 1) {
+    // if (document.querySelector('.checkout-table')) {
+    //     const tableRows = document.querySelectorAll('.checkout-table tbody tr');
+    //     tableRows.forEach((row) => {
+    //         const rate = parseFloat(row.querySelector('.rate').textContent);
+    //         const finalPrice = row.querySelector('.total');
+    //         const quantity = row.querySelector('input[name="quantity"]');
+    //         function priceChange(){
+    //             if (quantity.value < 1) {
     //                 alert("Quantity must be at least 1.");
-    //                 input.value = 1; // Reset to 1 if less than 1
+    //                 quantity.value = 1;
     //             }
-
-    //             if (!isNaN(rate) && !isNaN(updatedQuantity)) {
-    //                 const totalPrice = rate * updatedQuantity;
-    //                 priceCell.textContent = totalPrice.toFixed(2);
-    //             } else {
-    //                 priceCell.textContent = '';
-    //             }
+    //             finalPrice.textContent = (rate * quantity.value).toFixed(2);
+    //         }
+    //         priceChange();
+    //         quantity.addEventListener('input',()=>{
+    //             priceChange();
+    //         });
+    //         quantity.addEventListener('change',()=>{
+    //             priceChange();
     //         });
     //     });
     // }
@@ -155,7 +125,9 @@ document.addEventListener('DOMContentLoaded', function () {
         element.addEventListener('click', (e) => {
 
             if(e.target.classList.contains('active')){
-                document.querySelector('.add-to-cart-btn').setAttribute('data-farmer', e.target.getAttribute('data-farmerid'))
+                if(document.querySelector('.add-to-cart-btn')){
+                    document.querySelector('.add-to-cart-btn').setAttribute('data-farmer', e.target.getAttribute('data-farmerid'));
+                }
             }
         })
     })
@@ -210,12 +182,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if(document.querySelectorAll('.my-cart-table')){
         let checkboxs = document.querySelectorAll('.my-cart-table tbody input[type="checkbox"]');
-        document.querySelector('.my-cart-table #cartSelectAll').addEventListener('click',function(){
-            const isChecked = this.checked;
-            checkboxs.forEach(checkbox => {
-                checkbox.checked = isChecked;
+        if(document.querySelector('.my-cart-table #cartSelectAll')){
+            document.querySelector('.my-cart-table #cartSelectAll').addEventListener('click',function(){
+                const isChecked = this.checked;
+                checkboxs.forEach(checkbox => {
+                    checkbox.checked = isChecked;
+                });
             });
-        });
+        }
         checkboxs.forEach(checkbox => {
             checkbox.addEventListener('change',()=>{
                 document.querySelector('.my-cart-table #cartSelectAll').checked = false;
@@ -226,7 +200,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const checkboxes = document.querySelectorAll('.my-cart-table input[name="cart_item"]');
     if(checkboxes){
         checkboxes.forEach((item)=>{
-            item.addEventListener('change', () => {
+            item.addEventListener('change', (e) => {
+                const farmerItem = e.target.closest('label').querySelector('input[name="farmer_item"]');
+                const quantityItem = e.target.closest('label').querySelector('input[name="quantity_item"]');
+                farmerItem.checked = e.target.checked;
+                quantityItem.checked = e.target.checked;
                 let isAnyChecked = Array.from(checkboxes).some(i => i.checked);
 
                 if (isAnyChecked) {
@@ -237,6 +215,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.querySelector('.deleteitembtn').disabled = true;
                 }
             })
+        });
+    }
+
+    document.querySelectorAll('input[name="quantity"]').forEach((element) => {
+        element.addEventListener('change', (e) => {
+            e.target.closest('tr').querySelector('input[name="quantity_item"]').value = e.target.value;
+        })
+    })
+
+    if (document.querySelector('.checkout-table')) {
+        const tableRows = document.querySelectorAll('.checkout-table tbody tr');
+        tableRows.forEach((row) => {
+            const rate = parseFloat(row.querySelector('.rate').textContent);
+            const finalPrice = row.querySelector('.total');
+            const quantity = row.querySelector('.quantity-num');
+
+            finalPrice.textContent = (rate * quantity.textContent).toFixed(2);
         });
     }
 });
