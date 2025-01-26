@@ -271,8 +271,7 @@ class ProductView(BaseView):
     
 class DashboardView(BaseView):
     def get(self, request):
-        user_product_ids = Product_User.objects.filter(userID=request.user).values_list('uid', flat=True)
-        orders = Order.objects.filter(productID__in=user_product_ids)
+        orders = Order.objects.filter(merchantID=request.user)
         try:
             current_user = request.user
             context = {
@@ -346,8 +345,8 @@ class AccountView(BaseView):
 class OrderView(BaseView):
     def get(self,request):
         current_user = request.user
-        user_product_ids = Product_User.objects.filter(userID=current_user.id).values_list('uid', flat=True)
-        orders = Order.objects.filter(productID__in=user_product_ids)
+        # user_product_ids = Product_User.objects.filter(userID=current_user.id).values_list('uid', flat=True)
+        orders = Order.objects.filter(merchantID=current_user)
         context = {
             'orders' : orders,
             'page_name':'order'
