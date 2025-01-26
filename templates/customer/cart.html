@@ -28,7 +28,7 @@
                                     <tr>
                                         <td>
                                             <label">
-                                                <input type="checkbox" name="cart_item" id="{{ product.cart.product_id }}" value="{{ product.cart.product_id }}">
+                                                <input type="checkbox" name="cart_item" id="{{ product.cart.product_id }}" value="{{ product.cart.product_id }}" data-farmer="{{product.product_farmer}}">
                                             </label>
                                         </td>
                                         <td>
@@ -52,12 +52,12 @@
                                         </td>
                                         <td>
                                             <label for="{{ product.uid }}">
-                                                {{ product.cart.farmer }}
+                                                {{ product.product_farmer.first_name}} {{ product.product_farmer.last_name}}
                                             </label>
                                         </td>
                                         <td>
                                             <label for="{{ product.uid }}">
-                                                {{ product.rate }}
+                                                Rs. {{ product.price }}
                                             </label>
                                         </td>
                                     </tr>
@@ -69,10 +69,10 @@
             </div>
             <div class='row justify-content-center'>
                 <div class='col-8 d-flex justify-content-end text-center'>
-                    <button class="btn btn-success mx-3" type="submit" value="buy" name="action">
+                    <button class="btn btn-success mx-3 buynowbtn" type="submit" value="buy" name="action" disabled>
                         Buy Now
                     </button>
-                    <button class="btn btn-danger " type="submit" value="delete" name="action">
+                    <button class="btn btn-danger deleteitembtn" type="submit" value="delete" name="action" disabled>
                         Delete
                     </button>
                 </div>
@@ -91,6 +91,4 @@
     </div>
 </section>
 
-
-    
 {% endblock body %}
