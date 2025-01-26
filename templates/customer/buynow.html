@@ -54,6 +54,7 @@
                             <thead>
                                 <tr>
                                     <th>Product</th>
+                                    <th>Farmer</th>
                                     <th>Rate</th>
                                     <th>Quantity</th>
                                     <th>Price</th>
@@ -63,22 +64,25 @@
                                 {% for combined_data in combined_data %}
                                     <tr>
                                         <td>
+                                            <input type="checkbox" name="product_id" value="{{ combined_data.products.uid }}" style="display: none;" checked>
                                             {{ combined_data.products.name }}
                                         </td>
                                         <td>
-                                            <span id="rate-{{ combined_data.products.uid }}"  class="rate">{{ combined_data.product_user.price }}</span>
+                                            <input type="checkbox" name="farmer" value="{{ combined_data.product_user.0.farmer.id }}" style="display: none;" checked>
+                                            {{ combined_data.product_user.0.farmer.first_name }} {{ combined_data.product_user.0.farmer.last_name }} 
                                         </td>
                                         <td>
+                                            <input type="checkbox" name="price" value="{{ combined_data.product_user.0.puser.price }}" style="display: none;" checked>
+                                            Rs. <span id="rate-{{ combined_data.products.uid }}"  class="rate">{{ combined_data.product_user.0.puser.price }}</span>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="quantity" value="{{ combined_data.product_user.0.quantity }}" style="display: none;" checked>
                                             <label for="quantity-{{ combined_data.products.uid }}">
-                                                <div class="quantity">
-                                                    <button type="button" class="quantity-down quantity-button">-</button>
-                                                    <input type="number" name='quantity' id='quantity-{{ combined_data.products.uid }}'  min="1" value="1" step="1">
-                                                    <button type="button" class="quantity-up quantity-button">+</button>
-                                                </div>
+                                                <span class="quantity-num">{{ combined_data.product_user.0.quantity }}</span> {{combined_data.products.unit}}
                                             </label>
                                         </td>
                                         <td>
-                                            <span id="price-{{ combined_data.products.uid }}"  class="total">0.00</span>
+                                            Rs. <span id="price-{{ combined_data.products.uid }}"  class="total">0.00</span>
                                         </td>
                                     </tr>
                                 {% endfor %}
