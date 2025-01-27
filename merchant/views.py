@@ -271,11 +271,13 @@ class ProductView(BaseView):
     
 class DashboardView(BaseView):
     def get(self, request):
-        orders = Order.objects.filter(merchantID=request.user)
+        orders = Order.objects.filter(merchantID=request.user, status = 'processing')
+        all_orders = Order.objects.filter(merchantID=request.user)
         try:
             current_user = request.user
             context = {
                 'orders' : orders,
+                'allorders': all_orders,
                 'user' : current_user,
                 'page_name': 'Dashboard'
             }
