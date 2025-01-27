@@ -151,7 +151,9 @@ class Signup_View (View):
             
 class Index(View):
     def get(self, request):
-        product_users = Product_User.objects.filter(is_available=True)
+        users = ExtraUserDetails.objects.exclude(latitude = 0, longitude = 0)
+        user_ids = users.values_list('userID', flat=True)
+        product_users = Product_User.objects.filter(is_available=True, userID__in=user_ids)
         combined_data = []
         processed_product_ids = set()
 
@@ -244,7 +246,9 @@ class Product_Detail_View(BaseView):#for single page display of product
         product = get_object_or_404(Product, uid=product_id)#fetching the product
         review = Review.objects.filter(productID = product)#review of product
         address = Address.objects.filter(userID = request.user)#current user address
-        farmer_products = Product_User.objects.filter(productID = product_id) #get the related farmer detail
+        users = ExtraUserDetails.objects.exclude(latitude = 0, longitude = 0)
+        user_ids = users.values_list('userID', flat=True)
+        farmer_products = Product_User.objects.filter(productID=product_id, userID__in=user_ids)
         for x in farmer_products:
             farmer_address = Address.objects.filter(userID = x.uid)
             detail = get_object_or_404(ExtraUserDetails, userID=x.userID.id)
@@ -344,7 +348,6 @@ class BuyNowView(BaseView):
         # Get data from form
         product_uids = request.POST.getlist('product_id')  # List of product UIDs
         farmer_ids = request.POST.getlist('farmer')  # List of product UIDs
-        price_list = request.POST.getlist('price')  # List of product UIDs
         quantities = request.POST.getlist('quantity')  # List of quantities
 
         # getting address of buyer from form
@@ -370,7 +373,6 @@ class BuyNowView(BaseView):
                 is_deleted = False,
             )
             print('saved')
-
         # # Validate and process each product and its quantity
         if not product_uids or not quantities or len(product_uids) != len(quantities):
             messages.error(request, "Invalid data submitted")
@@ -398,6 +400,9 @@ class BuyNowView(BaseView):
             product_user = get_object_or_404(Product_User,productID = product_uid, userID = farmer_ids[i])
 
             total_price = product_user.price * quantity
+
+            product_user.quantity -= quantity
+            product_user.save()
             # Create and save the order object
             order = Order.objects.create(
                 merchantID = product_user.userID,
