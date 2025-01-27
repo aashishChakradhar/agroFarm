@@ -220,7 +220,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('input[name="quantity"]').forEach((element) => {
         element.addEventListener('change', (e) => {
-            e.target.closest('tr').querySelector('input[name="quantity_item"]').value = e.target.value;
+            if(e.target.closest('tr')){
+                e.target.closest('tr').querySelector('input[name="quantity_item"]').value = e.target.value;
+            }
         })
     })
 
