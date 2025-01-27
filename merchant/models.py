@@ -34,7 +34,7 @@ class ExtraUserDetails(BaseModel):
     longitude = models.DecimalField(max_digits=20, decimal_places=10, default=0.0)
     # addressID = models.OneToOneField(Address,on_delete=models.CASCADE, default=0)
     def __str__(self):
-        return self.user.username
+        return self.bio
 
 
 class Category(BaseModel):
