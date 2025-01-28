@@ -1,0 +1,49 @@
+{% extends "customer/temp/base.html" %}
+{% block body %}
+<section class="order-listing-template section-gaps">
+    <div class="container">
+        <div class='row justify-content-center'>
+            <div class='col-8 text-center'>
+                <h2>My Order</h2>
+            </div>
+        </div>
+        <div class='row justify-content-center align-items-center'>
+            <div class='col-8'>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        {% if orders %}
+                            <thead>
+                                <th>Name</th>
+                                <th>Quantity</th>
+                                <th>Rate</th>
+                                <th>Amount</th>
+                                <th>Address</th>
+                                <th>Status</th>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}                               
+                                    <tr>
+                                        <td>{{ order.productID.name }}</td>
+                                        <td>{{ order.quantity }}</td>
+                                        <td>Rs. {{ order.rate }}</td>
+                                        <td>Rs. {{ order.amount }}</td>
+                                        <td>{{ order.addressID.street }}, {{ order.addressID.district }}</td>
+
+                                        <td><span class="status-btn {{order.status|lower}}-btn text-capitalize">{{order.status}}</span></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            {% else %}
+                                <h3 style='text-align:center; margin:5rem 0 0 0'>No orders found.</h3>
+                                <h2 style='text-align:center; margin:2rem 0 2rem 0'>
+                                    <a href="{% url "customer:home" %}">Continue shopping...</a>
+                                </h2>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock body %}
+

@@ -1,0 +1,143 @@
+:root {
+    --primary-color: #519259;
+    --secondary-color: #1A544D;
+    --color-four: #F4EEA9;
+
+    --alert_color: #eb1d36;
+    
+    --color-bg: #eae3d2;
+    --color-bgd: #f9f5eb;
+}
+
+html,body{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.alert{
+    margin:0;
+    padding:0.5rem 0.5rem 0.5rem 1.5rem;
+    font-weight: 700;
+    font-size:1.3rem;
+}
+
+.auth-cont {
+    display: flex; /* Enable flexbox */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    height: 100vh; /* Full height of the viewport */
+    padding: 0 5rem;
+    margin: 0; /* Reset margin */
+}
+
+.auth-form { 
+    display: flex; /* Enable flexbox */
+    flex-direction: column; /* Arrange children vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    
+    background-color: var(--primary-color);
+    color: var(--color-bgd);
+    height: 100vh;
+    margin: 0; /* Reset margin */
+    margin-left: auto; /* Push the form to the right */
+    border-radius: 4rem 0 0 4rem;
+    padding: 0;
+    display: flex; /* Enable flexbox */
+    flex-direction: column; /* Arrange children vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+}
+.auth-cont {
+    height: 100%; /* Full height of the viewport */
+    padding: 0 5rem;
+    margin: 0; /* Reset margin */
+    display: flex; /* Enable flexbox */
+    flex-direction: column; /* Arrange children vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    
+}
+.auth-form a{
+    color: var(--color-four);
+    font-size: larger;
+    font-weight: 700;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: .4rem;
+    text-decoration: none;
+}
+
+.auth-form a:hover{
+    color: var(--secondary-color)
+}
+
+.auth-input{
+    width: 30rem;
+}
+
+.auth-row-input{
+    margin: 0 2rem;
+    width: 25rem;
+}
+
+.log-button {
+    width: 10rem;
+    background-color: var(--color-four);
+    color: var(--primary-color);
+    font-size: 1.5em;
+    font-weight: 900;
+    border: 0 solid var(--color-bgd);
+    border-radius: 0.8em;
+    display: block; /* Ensure button takes block-level styling */
+    margin: auto; /* Center the button horizontally */
+    margin-bottom: 2rem;
+}
+
+.log-button:hover {
+    background-color: var(--color-bg);
+    color: var(--secondary-color);
+}
+
+.auth-form .form_title {
+    font-size: 3em;
+    font-weight: bolder;
+    text-align: center;
+}
+
+.auth-form label {
+    font-size: 1.5em;
+    font-weight: bolder;
+}
+
+.btn-close {
+    width: 1rem; /* Adjust width */
+    height: 1rem; /* Adjust height */
+    font-size: 0.8rem; /* Adjust font size */
+    background-color: #eb1d36;
+}
+
+.brand-name {
+    display: inline-flex;
+    font-size: 3em; /* Adjust size as needed */
+    font-weight: 700;
+    text-decoration: none;
+}
+.agro2 {
+    color: var(--secondary-color); /* Color for "Agro" */
+}
+
+.farm2 {
+    color: #a0a0a0; /* Color for "Farm" */
+}
+
+.brand-name:hover .agro2 {
+    color: #a0a0a0; /* "Agro" color when hovered */
+}
+
+.brand-name:hover .farm2 {
+    color: var(--secondary-color); /* "Farm" color when hovered */
+}

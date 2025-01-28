@@ -1,0 +1,78 @@
+{% extends "merchant/temp/base.html" %}
+{% load static %}
+{% block title %}
+{{page_name}}
+{% endblock title %}
+
+{% block body %}
+<div class="dashboard-product">
+    <div class="title">
+        <h1>Products</h1>
+        <a href="{% url 'merchant:add-products' %}">Add Product</a>
+    </div>
+    <div class="dashboard-products-wrapper">
+        <span class="error-message">
+            {% for message in messages %}
+            {{message}}
+            {% endfor %}
+        </span>
+        <div class="form-wrap">
+            <form method="post" id="addproductform" class="productforms">
+                {% csrf_token %}
+                <div class="add-form-layout row">
+                    <div class="col-md-8">
+                        <div class="left-field">
+                            <div class="input-field">
+                                <input type="text" name="producttitle" id="producttitle" placeholder="Product Title">
+                            </div>
+                            <div class="description-field">
+                                <div id="editor"></div>
+                                <input type="hidden" name="editorContent" id="editorContent">
+                            </div>
+                            <div class="input-field">
+                                <label><span>Stock(kg)</span>
+                                    <input type="number" name="stock" id="stock" min="0" placeholder="Products in stock">
+                                </label>
+                            </div>
+                            <div class="category-box">
+                                <span>Categories</span>
+                                <select name="producttype" id="producttype">
+                                    {% for x in categories %}
+                                    <option value="{{ x.uid }}" {% if forloop.counter == 1 %} selected {% endif%}>{{ x.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="right-bar">
+                            <div class="publish-button">
+                                <h3>Publish</h3>
+                                <div class="publish-box text-end">
+                                    <div class="d-flex justify-content-end align-items-center mt-3">
+                                        <input type="submit" value="Publish" class="green-btn">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field user-profile-image">
+                                <span>Product Featured image</span>
+                                <label class="profile-img" for="productimg">
+                                    <input type="file" style="display: none;" name="productimg" id="productimg"
+                                        accept="image/*">
+                                    <img src="{% static 'images/default.png' %}" id="fimg"
+                                        alt="img">
+                                </label>
+                                <div class="button-wrapper text-end">
+                                    <button id="removeimg" class="delete-btn">Remove Image</button>
+                                </div>
+                                <textarea name="productimgblob" id="productimgblob" class="d-none"></textarea>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% comment %} {% include 'merchant/theme-temp/dashboard-footer.html' %} {% endcomment %}
+{% endblock body %}

@@ -1,0 +1,29 @@
+{% load static %}
+<div class="card">
+
+    <form action="{% url 'customer:home' %}" method="post">
+        {% csrf_token %}
+
+        <a href="/product-detail/{{ combined_data.products.uid }}" >
+            {% if combined_data.image_exists %}
+                <img src="{% static 'images/' %}{{ combined_data.products.slug }}.png" class="card-img-top" alt="{{ combined_data.products.name }}" style="height: 12rem; object-fit: cover;">
+            {% else %}
+                <img src="{% static 'images/default-nobg.png' %}" class="card-img-top" alt="{{ combined_data.products.name }}" style="height: 12rem; object-fit: cover;">
+            {% endif %}
+        </a>
+
+        <div class="card-body">
+            <a class="product-list-link" href="/product-detail/{{ combined_data.products.uid }}" >
+                <h4 class="card-title">{{ combined_data.products.name }}</h4>
+            </a>
+            <h6>{{combined_data.products.avg_price}} per {{combined_data.products.unit}}</h6>
+            
+            <div class="button-group d-flex align-items-center gap-4 mt-4">
+                <a href="/product-detail/{{ combined_data.products.uid }}" class="product-list-link">Learn More ></a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Success Message (Initially hidden) -->
+<div id="success-message" style="display:none;" hidden></div>

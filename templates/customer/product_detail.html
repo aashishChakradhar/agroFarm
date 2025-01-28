@@ -1,0 +1,237 @@
+{% extends "customer/temp/base.html" %}
+{% load static %}
+{% block body %}
+
+<section class="section-gaps product-detail">
+    <div class = "container">
+        <div class="row gx-5">
+            {% comment %} displaying product image {% endcomment %}
+            <div class="col-3">
+                <div class="detail-image">
+                    {% if image_exists %}
+                    <img src="{% static 'images/' %}{{ product.slug }}.png" alt="{{ product.name }} image">
+                    {% else %}
+                        <img src="{% static 'images/default-nobg.png' %}" alt="{{ product.name }} image">
+                    {% endif %}
+                </div>
+            </div>
+            {% comment %} displaying product details {% endcomment %}
+            <div class="col-5">
+                <div class="detail-content-wrapper">
+                    <h1 class="main-title">
+                        {{product.name}}
+                    </h1>
+                    <div class="price">
+                        <span class="amount">{{ product.avg_price }} /<small>{{product.unit}}</small></span>
+                        <span class="amount-source">Average Price Today <strong>(Kalimati)*</strong></span>
+                    </div>
+                    <div class="quantity-wrapper">
+                        <span>Quantity</span>
+                        <div class="quantity">
+                            <button class="quantity-down quantity-button" type="button">-</button>
+                            <input id="quantity" name="quantity" type="number" min="0" value="0" step="1">
+                            <button class="quantity-up quantity-button" type="button">+</button>
+                        </div>
+                    </div>
+                    <div class="product-listing-stock">
+                        {% for farmer in farmer_products %}
+                        <div class="product-item">
+                            <div class="locationpoint" data-farmerid="{{farmer.uid}}" data-lat="{{farmer.latitude}}" data-long="{{farmer.longitude}}">
+                                <h3 class="stock-price">Farmer Price: {{ farmer.price }} per {{product.unit}}</h3>
+                                <div class="d-flex justify-content-start">
+                                    Available stock : {{farmer.quantity}} {{product.unit}}
+                                </div>
+                                <div class="d-flex justify-content-start">
+                                    {{farmer.userID.first_name}} {{farmer.userID.last_name}}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="out-of-area-msg" style="display: none;">
+                        <p>One of the farmers you selected is located farther from your area. As a result, the delivery time may vary depending on the farmer's location, and the costs may be adjusted based on the distance.</p>    
+                        <p>If you want to continue click on '<strong>OK</strong>'.</p>
+                        <div class="area-button">
+                            <button class="green-btn okbtn">Ok</button>
+                            <button class="delete-btn cancelbtn">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class=" d-flex align-item-center my-4">
+                    <form method = 'POST' id="buyform">
+                        {% csrf_token %}
+                        <input name='product_id' value='{{product.uid}}' type="hidden" id = 'uid'>
+                        <button type="submit" name="action" value="buy" class="btn btn-dark px-4 buynowbtn" disabled>Buy now</button>               
+                        <button class="btn btn-success add-to-cart-btn px-4" value="add to cart" data-product-uid="{{ product.uid }}" data-quantity="0" data-farmer="" disabled>Add to Cart</button>
+                    </form>
+                </div>
+                <div class="information">
+                    *average price is not the actual price. <br>
+                    **out of area will cost more.
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="table-responsive d-none">
+                    <table class="table table-bordered">
+                        <tbody>
+                            {% for address in farmer_address %}
+                            <tr>
+                                <td>Country</td>
+                                <td>{{address.country}}</td>
+                            </tr>
+                            <tr>
+                                <td>State</td>
+                                <td>{{address.state}}</td>
+                            </tr>
+                            <tr>
+                                <td>District</td>
+                                <td>{{address.district}}</td>
+                            </tr>
+                            <tr>
+                                <td>Municipality</td>
+                                <td>{{address.municipality}}</td>
+                            </tr>
+                            <tr>
+                                <td>Street</td>
+                                <td>{{address.street}}</td>
+                            </tr>
+                            <tr>
+                                <td>Zip Code</td>
+                                <td>{{address.zip_code}}</td>
+                            </tr>
+                            <tr>
+                                <td>Landmark</td>
+                                <td>{{address.landmark}}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="chart">
+                    <canvas></canvas>
+                </div>
+            </div>
+        </div>
+        
+        {% comment %} <div class="row justify-content-center">
+            <div class="col-6">
+            </div>
+            <div class = 'col-3' style = "">
+                
+            </div>
+        </div> {% endcomment %}
+        <!-- For Ordering -->
+        <!-- For Comments -->
+        <div class="row mx-5 justify-content-center py-5 my-5" style="background-color:#e0dede; border-radius:6px">
+            <div class="col-8">
+                {% if reviews %}
+                    <h2 class="text-center mb-4">Reviews</h2>
+                    {% for review in reviews %}
+                    <div class="review mb-4 p-3" style="border: 1px solid #ccc; border-radius: 5px;">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mb-2">{{ review.userID }}</h4>
+                                <p><strong>Rating:</strong> {{ review.rating }}</p>
+                                <p><strong>Comment:</strong> {{ review.comment }}</p>
+                                
+                            </div>
+                            <div class="col-3 d-flex justify-content-end">
+                                <form action="{% url "customer:delete-review" %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name='productID' value='{{product.uid}}'>
+                                    <input name='reviewID' value="{{review.uid}}" type="hidden">
+                                    <button class='btn btn-danger' type="submit">Delete Comment</button>
+                                </form>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <form action="{% url 'customer:review' %}" method="POST" class="mt-4 mx-auto" style="width: 50%;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name='product' value='{{product.uid}}'>
+                                    <div class="mb-3">
+                                        <label for="rating" class="form-label">Rating</label>
+                                        <select name="rating" id="rating" class="form-select" required>
+                                            <option value="">Select Rating</option>
+                                            <option value="1">1 - Poor</option>
+                                            <option value="2">2 - Fair</option>
+                                            <option value="3">3 - Good</option>
+                                            <option value="4">4 - Very Good</option>
+                                            <option value="5">5 - Excellent</option>
+                                        </select>
+                                    </div>
+                                    <div class="review-ratings">
+                                        <label><input type="radio" name="ratings" value="1" checked></label>
+                                        <label><input type="radio" name="ratings" value="2"></label>
+                                        <label><input type="radio" name="ratings" value="3"></label>
+                                        <label><input type="radio" name="ratings" value="4"></label>
+                                        <label><input type="radio" name="ratings" value="5"></label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="comment" class="form-label">Comment</label>
+                                        <textarea name="comment" id="comment" class="form-control" rows="4" placeholder="Write your review..." required></textarea>
+                                    </div>
+                                    <button class="btn btn-success" type="submit">Add Review</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center">
+                        <h2>No Reviews Yet</h2>
+                        <p>Be the first to add a review!</p>
+                        <form action="{% url 'customer:review' %}" method="POST" class="mt-4 mx-auto" style="width: 50%;">
+                            {% csrf_token %}
+                            <input type="hidden" name='product' value='{{product.uid}}'>
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">Rating</label>
+                                <select name="rating" id="rating" class="form-select" required>
+                                    <option value="">Select Rating</option>
+                                    <option value="1">1 - Poor</option>
+                                    <option value="2">2 - Fair</option>
+                                    <option value="3">3 - Good</option>
+                                    <option value="4">4 - Very Good</option>
+                                    <option value="5">5 - Excellent</option>
+                                </select>
+                            </div>
+                            
+                            <div class="review-ratings">
+                                <label><input type="radio" name="ratings" value="1" checked></label>
+                                <label><input type="radio" name="ratings" value="2"></label>
+                                <label><input type="radio" name="ratings" value="3"></label>
+                                <label><input type="radio" name="ratings" value="4"></label>
+                                <label><input type="radio" name="ratings" value="5"></label>
+                            </div>
+                            <div class="mb-3">
+                                <label for="comment" class="form-label">Comment</label>
+                                <textarea name="comment" id="comment" class="form-control" rows="4" placeholder="Write your review..." required></textarea>
+                            </div>
+                            <button class="btn btn-success" type="submit">Add Review</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+    </div>     
+</section>
+
+<section class="other-product-section section-gaps pt-0">
+    <div class="container">
+        <div class="section-title">
+            <h2>Other Products</h2>
+        </div>
+        <div class="row">
+            {% for combined_data in combined_data %}
+                <div class='col-md-3'>
+                    {% include "customer/temp/product_list.html" with combined_data=combined_data%}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'js/customer/location.js' %}"></script>
+{% endblock body %}

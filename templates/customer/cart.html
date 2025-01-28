@@ -1,0 +1,96 @@
+{% extends "customer/temp/base.html" %}
+{% block body %}
+<section class="cart-body section-gaps">
+    <div class="container">
+        {% if products %}
+        <form action="{% url 'customer:my-cart' %}" method="POST" id="myForm">
+            {% csrf_token %}
+            <div class="row justify-content-center">
+                <div class="col-8 text-center">
+                    <div class="table-responsive">
+                        <table class="table table-bordered my-cart-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <label>
+                                            <input type="checkbox" name="action" id="cartSelectAll"><span>Select All</span>
+                                        </label>
+                                    </th>
+                                    <th>ID</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Farmer</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                    <tr>
+                                        <td>
+                                            <label>
+                                                <input type="checkbox" name="cart_item" id="{{ product.cart.product_id }}" value="{{ product.cart.product_id }}">
+                                                <input type="checkbox" name="farmer_item" value="{{product.product_farmer.id}}" style="display: none;">
+                                                <input type="checkbox" name="quantity_item" value="{{product.cart.quantity}}" style="display: none;">
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label for="{{ product.uid }}">
+                                                {{ product.cart.product_id }}
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label for="{{ product.uid }}">
+                                                {{ product.product.name }}
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label>
+                                                <div class="quantity">
+                                                    <button class="quantity-down quantity-button" type="button">-</button>
+                                                    <input id="quantity" name="quantity" type="number" min="0" value="{{ product.cart.quantity }}" step="1">
+                                                    <button class="quantity-up quantity-button" type="button">+</button>
+                                                </div>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label for="{{ product.uid }}">
+                                                {{ product.product_farmer.first_name}} {{ product.product_farmer.last_name}}
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label for="{{ product.uid }}">
+                                                Rs. {{ product.price }}
+                                            </label>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>                
+                </div>
+            </div>
+            <div class='row justify-content-center'>
+                <div class='col-8 d-flex justify-content-end text-center'>
+                    <button class="btn btn-success mx-3 buynowbtn" type="submit" value="buy" name="action" disabled>
+                        Buy Now
+                    </button>
+                    <button class="btn btn-danger deleteitembtn" type="submit" value="delete" name="action" disabled>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </form>
+        {% else %}
+        <div class='row justify-content-center'>
+            <div class='col-6 text-center'>
+                <h1>OOPS!! CART EMPTY</h1>
+                <h2>
+                    <a href="{% url "customer:home" %}">Continue shopping...</a>
+                </h2>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock body %}

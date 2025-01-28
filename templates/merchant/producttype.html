@@ -1,0 +1,38 @@
+{% extends "merchant/temp/base.html" %}
+{% load static %}
+{% block body %}
+
+{% for message in messages %}
+    <div clas="message">
+        {{message}}
+    </div>
+  {% endfor %}
+
+<div class="dashboard-product">
+    <div class="title">
+        <h1>Product Category</h1>
+    </div>
+    <div class="dashboard-products-wrapper">
+        <table>
+            <thead>
+                <th>S.N</th>
+                <th>Category Name</th>
+                <th>Unit</th>
+                <th>Price (Today)</th>
+            </thead>
+            <tbody>
+                {% for cat in categories %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{ cat.name }}</td>
+                    <td>{{ cat.unit }}</td>
+                    <td>{{ cat.avg_price }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6">Sorry, No products found</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock body %}

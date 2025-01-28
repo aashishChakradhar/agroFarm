@@ -1,0 +1,59 @@
+{% extends "merchant/temp/base.html" %}
+
+{% block title %}
+{{page_name}}
+{% endblock title %}
+
+{% block body %}
+<div class="dashboard-content-wrapper order-page">
+    <div class="welcome-msg title mb-4">
+        <h2>Welcome back, <span class="text-capitalize">{{user}}</span>!</h2>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="latest-orders box">
+                <div class="title">
+                    <h3 class="mb-4">Orders</h3>
+                </div>
+                <table>
+                    <thead>
+                        <th>Order ID</th>
+                        <th>Product Name</th>
+                        <th>Customer Name</th>
+                        <th>Price(Rs.)</th>
+                        <th>Quantity</th>
+                        <th>Issue Date</th>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>#{{order.uid}}</td>
+                            <td>{{order.productID}}</td>
+                            <td>{{order.userID.first_name}} {{order.userID.last_name}}</td>
+                            <td>{{order.amount}}</td>
+                            <td>{{order.quantity}}</td>
+                            <td>{{order.created}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="chart-wrapper box">
+                <div class="title">
+                    <h3 class="mb-4">Sales</h3>
+                </div>
+                <div class="d-none order-date-list">
+                    <ul>
+                        {% for x in allorders %}
+                        <li><span class="tprice">{{x.amount}}</span><span class="cdate">{{ x.created }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

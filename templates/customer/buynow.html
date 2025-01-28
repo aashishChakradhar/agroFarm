@@ -1,0 +1,104 @@
+{% extends "customer/temp/base.html" %}
+{% block body %}
+<section class="checkout-page section-gaps">
+    <div class='container'>
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-12">
+                <div class="page-title mb-5">
+                    <h1>Checkout</h1>
+                </div>
+                <form action="{% url 'customer:buy-now' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="edit">
+            
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                        <label for="country" class="form-label">Country</label>
+                        <input type="text" name="country" id="country" class="form-control" value="{{ address.country }}" required>
+                        </div>
+                        <div class="col-md-6">
+                        <label for="province" class="form-label">Province</label>
+                        <input type="text" name="province" id="province" class="form-control" value="{{ address.state }}" required>
+                        </div>
+                    </div>
+            
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                        <label for="district" class="form-label">District</label>
+                        <input type="text" name="district" id="district" class="form-control" value="{{ address.district }}" required>
+                        </div>
+                        <div class="col-md-6">
+                        <label for="municipality" class="form-label">Municipality</label>
+                        <input type="text" name="municipality" id="municipality" class="form-control" value="{{ address.municipality }}" required>
+                        </div>
+                    </div>
+            
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <input type="text" name="postalCode" id="postalCode" class="form-control" value="{{ address.zip_code }}" required>
+                        </div>
+                        <div class="col-md-6">
+                        <label for="street" class="form-label">Street</label>
+                        <input type="text" name="street" id="street" class="form-control" value="{{ address.street }}" required>
+                        </div>
+                    </div>
+            
+                    <div class="mb-3">
+                        <label for="landmark" class="form-label">Landmark</label>
+                        <textarea name="landmark" id="landmark" class="form-control" rows="4">{{ address.landmark }}</textarea>
+                    </div>
+                    <hr>
+                    <div class="table-responsive">
+                        <table class="table table-bordered checkout-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Farmer</th>
+                                    <th>Rate</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for combined_data in combined_data %}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="product_id" value="{{ combined_data.products.uid }}" style="display: none;" checked>
+                                            {{ combined_data.products.name }}
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="farmer" value="{{ combined_data.product_user.0.farmer.id }}" style="display: none;" checked>
+                                            {{ combined_data.product_user.0.farmer.first_name }} {{ combined_data.product_user.0.farmer.last_name }} 
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="price" value="{{ combined_data.product_user.0.puser.price }}" style="display: none;" checked>
+                                            Rs. <span id="rate-{{ combined_data.products.uid }}"  class="rate">{{ combined_data.product_user.0.puser.price }}</span>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="quantity" value="{{ combined_data.product_user.0.quantity }}" style="display: none;" checked>
+                                            <label for="quantity-{{ combined_data.products.uid }}">
+                                                <span class="quantity-num">{{ combined_data.product_user.0.quantity }}</span> {{combined_data.products.unit}}
+                                            </label>
+                                        </td>
+                                        <td>
+                                            Rs. <span id="price-{{ combined_data.products.uid }}"  class="total">0.00</span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div> 
+                    <div class='row justify-content-end'>
+                        <div class='col-auto'>
+                            <button class='btn btn-success' type="submit">
+                                Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock body %}
