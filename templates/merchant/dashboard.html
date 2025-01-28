@@ -15,24 +15,41 @@
                 <div class="title">
                     <h3 class="mb-4">Orders</h3>
                 </div>
-                <ul class="ps-0 mb-0">
-                    <li class="d-flex justify-content-between align-items-center px-4 py-2">
-                        <span>Order ID</span>
-                        <span>Issues date</span>
-                    </li>
-                    {% for order in orders %}
-                    <li class="d-flex justify-content-between align-items-center px-4 py-2">
-                        <span>#{{order.uid}}</span>
-                        <span>{{order.created}}</span>
-                    </li>
-                    {% endfor %}
-                </ul>
+                <table>
+                    <thead>
+                        <th>Order ID</th>
+                        <th>Product Name</th>
+                        <th>Customer Name</th>
+                        <th>Price(Rs.)</th>
+                        <th>Quantity</th>
+                        <th>Issue Date</th>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>#{{order.uid}}</td>
+                            <td>{{order.productID}}</td>
+                            <td>{{order.userID.first_name}} {{order.userID.last_name}}</td>
+                            <td>{{order.amount}}</td>
+                            <td>{{order.quantity}}</td>
+                            <td>{{order.created}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="col-md-6">
             <div class="chart-wrapper box">
                 <div class="title">
                     <h3 class="mb-4">Sales</h3>
+                </div>
+                <div class="d-none order-date-list">
+                    <ul>
+                        {% for x in allorders %}
+                        <li><span class="tprice">{{x.amount}}</span><span class="cdate">{{ x.created }}</span></li>
+                        {% endfor %}
+                    </ul>
                 </div>
                 <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
             </div>
