@@ -1,6 +1,0 @@
-venv
-myenv
-__pycache__/
-migrations
-*.sqlite3
-.env
