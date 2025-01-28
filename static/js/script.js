@@ -1,31 +1,71 @@
-if(document.getElementById('myChart')){
-  const xValues = [50,60,70,80,90,100,110,120,130,140,150];
-  const yValues = [7,8,8,9,9,9,10,11,14,14,15];
+function generateDateList(startDate, endDate) {
+  const dateList = [];
+  let currentDate = new Date(startDate);
 
-  new Chart("myChart", {
-    type: "line",
-    data: {
-      labels: xValues,
-      datasets: [{
-        fill: false,
-        lineTension: 0,
-        backgroundColor: "rgba(0,0,255,1.0)",
-        borderColor: "rgba(0,0,255,0.1)",
-        data: yValues
-      }]
-    },
-    options: {
-      legend: {display: false},
-      scales: {
-        yAxes: [{ticks: {min: 6, max:16}}],
-      }
-    }
-  });
+  while (currentDate <= new Date(endDate)) {
+    // Format the date as "day short-month"
+    const day = currentDate.getDate();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = monthNames[currentDate.getMonth()];
+
+    // Add formatted date to the list
+    dateList.push(`${day} ${month}`);
+
+    // Increment the current date by 1 day
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dateList;
 }
 
-
 document.addEventListener("DOMContentLoaded", () => {
-    if(document.getElementById('editorContent') && document.querySelector('#editor .ql-editor')){
-        document.querySelector('#editor .ql-editor').innerHTML = document.getElementById('editorContent').value;
+  let data = {};
+
+  document.querySelectorAll('.order-date-list li').forEach((item) => {
+    const amount = item.querySelector('.tprice').innerHTML;
+    const date = item.querySelector('.cdate').innerHTML.split(',')[0];
+
+    if (!data[date]) {
+      data[date] = [];
     }
+    data[date].push(amount);
+  });
+
+  let amounts = [];
+  Object.keys(data).forEach((item) => {
+    let q = 0;
+    data[item].forEach((e) => {
+      q+=parseFloat(e);
+    })
+    amounts.push(q);
+  })
+
+  if(document.getElementById('myChart')){
+    const xValues = Object.keys(data);
+    const yValues = amounts;
+
+    new Chart("myChart", {
+      type: "line",
+      data: {
+        labels: xValues,
+        datasets: [{
+          fill: false,
+          lineTension: 0,
+          backgroundColor: "rgba(0,0,255,1.0)",
+          borderColor: "rgba(0,0,255,0.1)",
+          data: yValues
+        }]
+      },
+      options: {
+        legend: {display: false},
+        scales: {
+          yAxes: [{ticks: {min: 0, max:2000, stepSize: 100 }}],
+        }
+      }
+    });
+  }
+
+  if(document.getElementById('editorContent') && document.querySelector('#editor .ql-editor')){
+    document.querySelector('#editor .ql-editor').innerHTML = document.getElementById('editorContent').value;
+  }
 });
