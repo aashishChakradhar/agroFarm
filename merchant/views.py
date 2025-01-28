@@ -359,7 +359,10 @@ class EditProductView(BaseView):
     def get(self, request, id):
         try:
             product = get_object_or_404(Product, uid=id)
-            product_user = get_object_or_404(Product_User, productID=id, userID = request.user)
+            try:
+                product_user = get_object_or_404(Product_User, productID=id, userID = request.user)
+            except:
+                product_user = 0
             min_price = product.min_price.split(' ')[1]
             max_price = product.max_price.split(' ')[1]
             image_path = os.path.join('static/', 'images', f"{product.slug}.png")
