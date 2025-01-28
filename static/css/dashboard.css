@@ -278,6 +278,8 @@ body{
 
 .order-table table{
     width: 100%;
+    border-radius: 8px;
+    overflow: clip;
 }
 .order-table table thead tr{
     background-color: #ffffff;
@@ -291,23 +293,6 @@ body{
 .order-table tr :is(th,td){
     padding: 5px 20px;
 }
-.order-table tr :is(th,td):first-child{
-    text-align: center;
-    width: 5%;
-}
-.order-table tr :is(th,td):nth-child(2){
-    width: 12%;
-}
-.order-table tr :is(th,td):nth-child(4){
-    width: 12%;
-}
-.order-table tr :is(th,td):nth-child(5){
-    width: 24%;
-    text-align: center;
-}
-.order-table tr :is(th,td):nth-child(6){
-    width: 12%;
-}
 .order-table .status-btn{
     background-color: var(--bg-color);
     color: #000000;
@@ -317,14 +302,22 @@ body{
     padding: 5px 20px;
     border-radius: 4px;
 }
+
+.order-table tr th {
+    background-color: #66A931;
+    color: #FFFFFF;
+    padding-block: 12px;
+}
+
 .order-table .status-btn.processing-btn{
-    --bg-color: rgb(245, 245, 55);
+    --bg-color: #eddd2b;
 }
 .order-table .status-btn.completed-btn{
-    --bg-color: rgb(0, 221, 0);
+    --bg-color: #66A931;
+    color: #fff;
 }
 .order-table .status-btn.cancelled-btn{
-    --bg-color: rgb(255, 0, 0);
+    --bg-color: #eb1d36;
     color: #ffffff;
 }
 
