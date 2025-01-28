@@ -33,35 +33,17 @@
                                                 <input type="checkbox" name="quantity_item" value="{{product.cart.quantity}}" style="display: none;">
                                             </label>
                                         </td>
+                                        <td>{{ product.cart.product_id }}</td>
+                                        <td>{{ product.product.name }}</td>
                                         <td>
-                                            <label for="{{ product.uid }}">
-                                                {{ product.cart.product_id }}
-                                            </label>
+                                            <div class="quantity">
+                                                <button class="quantity-down quantity-button" type="button">-</button>
+                                                <input id="quantity" name="quantity" type="number" min="0" value="{{ product.cart.quantity }}" step="1">
+                                                <button class="quantity-up quantity-button" type="button">+</button>
+                                            </div>
                                         </td>
-                                        <td>
-                                            <label for="{{ product.uid }}">
-                                                {{ product.product.name }}
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <label>
-                                                <div class="quantity">
-                                                    <button class="quantity-down quantity-button" type="button">-</button>
-                                                    <input id="quantity" name="quantity" type="number" min="0" value="{{ product.cart.quantity }}" step="1">
-                                                    <button class="quantity-up quantity-button" type="button">+</button>
-                                                </div>
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <label for="{{ product.uid }}">
-                                                {{ product.product_farmer.first_name}} {{ product.product_farmer.last_name}}
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <label for="{{ product.uid }}">
-                                                Rs. {{ product.price }}
-                                            </label>
-                                        </td>
+                                        <td>{{ product.product_farmer.first_name}} {{ product.product_farmer.last_name}}</td>
+                                        <td>Rs. {{ product.price }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
