@@ -314,6 +314,14 @@ class BuyNowView(BaseView):
         farmer_ids = request.session.get('farmer_ids', [])  # Retrieve product IDs from session
         quantity_items = request.session.get('quantity_items', [])  # Retrieve product IDs from session
 
+        product_info = {}
+        for x in range(len(product_ids)):
+            product_info[product_ids[x]] = {
+                'id': product_ids[x],
+                'farmer_id': farmer_ids[x],
+                'quantity' : quantity_items[x]
+            }
+
         if not product_ids:
             return redirect('customer:product-detail')  # Redirect back if no products are selected
 
@@ -325,12 +333,10 @@ class BuyNowView(BaseView):
             address = None
 
         combined_data = []
-        i = 0
         for product in products:
-            product_users = Product_User.objects.filter(productID = product, userID = farmer_ids[i])
-            farmer = get_object_or_404(User, id=farmer_ids[i])
-            pusers = [{'puser': product_user, 'quantity':quantity_items[i], 'farmer':farmer} for product_user in product_users]
-            i+=1
+            product_users = Product_User.objects.filter(productID = product, userID = product_info[product.uid]['farmer_id'])
+            farmer = get_object_or_404(User, id=product_info[product.uid]['farmer_id'])
+            pusers = [{'puser': product_user, 'quantity':product_info[product.uid]['quantity'], 'farmer':farmer} for product_user in product_users]
             combined_data.append(
                 {
                     'products':product,
@@ -349,6 +355,14 @@ class BuyNowView(BaseView):
         product_uids = request.POST.getlist('product_id')  # List of product UIDs
         farmer_ids = request.POST.getlist('farmer')  # List of product UIDs
         quantities = request.POST.getlist('quantity')  # List of quantities
+
+        product_info = {}
+        for x in range(len(product_uids)):
+            product_info[product_uids[x]] = {
+                'id': product_uids[x],
+                'farmer_id': farmer_ids[x],
+                'quantity' : quantities[x]
+            }
 
         # getting address of buyer from form
         country = request.POST.get('country')
@@ -397,7 +411,7 @@ class BuyNowView(BaseView):
             if quantity < 1:
                 return HttpResponse('Quantity must be at least 1.', status=400)
 
-            product_user = get_object_or_404(Product_User,productID = product_uid, userID = farmer_ids[i])
+            product_user = get_object_or_404(Product_User,productID = product_uid, userID = product_info[product_uid]['farmer_id'])
 
             total_price = product_user.price * quantity
 
@@ -415,8 +429,8 @@ class BuyNowView(BaseView):
             )
             orders.append(order)
 
-            # Delete the item from the cart after processing
-            CartItem.objects.filter(user=request.user, product=product_user.uid).delete()
+            # Delete the item from the cart after processing 
+            CartItem.objects.filter(user=request.user, product=product_user.productID).delete()
         # Redirect to a confirmation or success page with relevant details
         messages.success(request, "Order has been placed")
         send_mail_to_merchant(orders)
@@ -430,6 +444,15 @@ class AddToCartView(BaseView): #adds items to cart
         # Check if the user is authenticated
         if not request.user.is_authenticated:
             return JsonResponse({'success': False, 'message': 'Please login to add products to your cart.'}, status=401)
+        
+        cart_item = CartItem.objects.filter(user=request.user, product=product).first()
+        if cart_item:
+            print('already exissts')
+            # Return "already in cart" response
+            return JsonResponse({
+                'success': False,
+                'message': f'{product.name} is already in your cart.'
+            }, status=400)
         
         quantity = request.GET.get('quantity', 1)
         farmer = request.GET.get('farmer', 1)
@@ -482,7 +505,7 @@ class MyCart_View(BaseView): #show items in my cart
         # Get the list of selected product IDs from the POST data
         selected_product_ids = request.POST.getlist('cart_item')  # 'product' should match the name attribute of your checkboxes
         selected_farmer_ids = request.POST.getlist('farmer_item')
-        selected_quantity = request.POST.getlist('quantity')
+        selected_quantity = request.POST.getlist('quantity_item')
         selected_farmer_ids = [int(x) for x in selected_farmer_ids]
 
         products = []
