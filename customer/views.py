@@ -18,10 +18,8 @@ from customer.models import *
 from merchant.models import *
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.template import loader
-# from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-# from django.contrib.auth.decorators import login_required
-# from django.urls import reverse_lazy
+
+import requests
 import os
 
 from myutility import *
@@ -33,6 +31,14 @@ app_name = 'customer'
 
 from django.core.mail import send_mail
 from django.conf import settings
+
+#khaltiapi
+KHALTI_API_URL = "https://dev.khalti.com/api/v2/epayment/initiate/"
+KHALTI_VERIFY_URL = "https://dev.khalti.com/api/v2/epayment/lookup/"
+PUBLIC_KEY = "0d0d518d59be4978994f298d022acd89"  # Replace with your test public key
+SECRET_KEY = "502acd34427d49b8906b63013a3f4c7b"
+#khaltiapi close
+
 
 def send_mail_to_merchant(orders):
     for order in orders:
@@ -359,7 +365,7 @@ class BuyNowView(BaseView):
         product_info = {}
         for x in range(len(product_uids)):
             product_info[product_uids[x]] = {
-                'id': product_uids[x],
+                'id': int(product_uids[x]),
                 'farmer_id': farmer_ids[x],
                 'quantity' : quantities[x]
             }
@@ -372,6 +378,8 @@ class BuyNowView(BaseView):
         street = request.POST.get('street')
         zip_code = request.POST.get('postalCode')
         landmark = request.POST.get('landmark')
+
+        payment = request.POST.get('paymentoption')
 
         # if user doesnot have address saved
         if not Address.objects.filter(userID = request.user).exists():
@@ -405,6 +413,8 @@ class BuyNowView(BaseView):
         order_address.save()
         orders = []  # List to store created order objects for further use or confirmation
         i = 0
+        price_list = []
+
         for product_uid, quantity_str in zip(product_uids, quantities):
             quantity = int(quantity_str)
 
@@ -414,6 +424,7 @@ class BuyNowView(BaseView):
             product_user = get_object_or_404(Product_User,productID = product_uid, userID = product_info[product_uid]['farmer_id'])
 
             total_price = product_user.price * quantity
+            price_list.append(total_price)
 
             product_user.quantity -= quantity
             product_user.save()
@@ -431,10 +442,79 @@ class BuyNowView(BaseView):
 
             # Delete the item from the cart after processing 
             CartItem.objects.filter(user=request.user, product=product_user.productID).delete()
+
+        total_price = sum([price for price in price_list])
+        customer = request.user.first_name + ' ' + request.user.last_name
+
+        if(payment == 'khaltiapi'):
+            amount = float(total_price) * 100  # Convert Rs to paisa
+            order_id = "order1234"
+
+            payload = {
+                "return_url": "http://127.0.0.1:8000/payment-success/",
+                "website_url": "http://127.0.0.1:8000/",
+                "amount": amount,
+                "purchase_order_id": order_id,
+                "purchase_order_name": 'order',
+                "customer_info": {
+                    "name": customer,
+                    "email": request.user.email
+                },
+                "product_details": [
+                    {
+                        "identity": int(product_info[product]['id']),  # Convert product ID to string
+                        "name": get_object_or_404(Product, uid = product_info[product]['id']).name,
+                        "total_price": float(get_object_or_404(Product_User, productID=product, userID=product_info[product]['farmer_id']).price) * int(product_info[product]['quantity']),  # Calculate total price
+                        "quantity": int(product_info[product]['quantity']),
+                        "unit_price": float(get_object_or_404(Product_User, productID=product, userID=product_info[product]['farmer_id']).price)*100
+                    } for product in product_info
+                ],
+            }
+
+            headers = {"Authorization": f"Key {SECRET_KEY}"}
+
+            response = requests.post(KHALTI_API_URL, json=payload, headers=headers)
+            data = response.json()
+
+            if "payment_url" in data:
+                return redirect(data["payment_url"])  # Redirect user to payment page
+            else:
+                return JsonResponse({"error": "Failed to initiate payment", "details": data})
+
         # Redirect to a confirmation or success page with relevant details
         messages.success(request, "Order has been placed")
         send_mail_to_merchant(orders)
         return redirect('customer:order-detail')
+    
+def khalti_verify(request):
+    pidx = request.GET.get("pidx")  # Get pidx from return URL
+
+    if not pidx:
+        return JsonResponse({"error": "Missing pidx parameter!"})
+
+    payload = {"pidx": pidx}
+    headers = {"Authorization": f"Key {SECRET_KEY}"}
+
+    response = requests.post(KHALTI_VERIFY_URL, json=payload, headers=headers)
+    data = response.json()
+
+    price = float(data.get('total_amount') / 100)
+    if data.get("status") == "Completed":
+        context = {
+            "message": "Payment Successful", 
+            "class": "payment-success",
+            "details": data,
+            "price" : price,
+        }
+    else:
+        context = {
+            "message": "Payment Verification Failed", 
+            "class": "payment-fail",
+            "details": data,
+            "price" : price,
+        }
+
+    return render(request, f'{app_name}/payment-success.html', context)
 
 class AddToCartView(BaseView): #adds items to cart
     def get(self, request, product_uid):
