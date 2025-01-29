@@ -1,0 +1,31 @@
+{% extends "customer/temp/base.html" %}
+
+{% block body %}
+<section class="payment-status section-gaps">
+    <div class="container">
+        <div class="{{ class }}">
+            <h1>{{ message }}</h1>
+        </div>
+        <div class="detail">
+            <div class="payment-id">
+                <strong>Payment ID:</strong> <span>{{details.pidx}}</span>
+            </div>
+            <div class="transaction-id">
+                <strong>Transaction ID:</strong> {{details.transaction_id}}
+            </div>
+            <div class="total-price">
+                <strong>Total amount:</strong> Rs. {{ price }}
+            </div>
+            <div class="status">
+                <strong>Status:</strong> {{details.status}}
+            </div>
+        </div>
+
+        <div class="goback">
+            <a href="/">Go back to Home</a>
+        </div>
+    </div>
+</section>
+
+{% endblock body %}
+
