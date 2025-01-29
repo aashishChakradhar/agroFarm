@@ -23,6 +23,7 @@ urlpatterns = [
     path('search/', views.search_product, name='search_products'),
 
     path('buy-now/', views.BuyNowView.as_view(), name='buy-now'),
+    path('payment-success/', views.khalti_verify, name='payment-success'),
 
     path('order-detail/', views.Order_Detail_View.as_view(), name='order-detail'),
     path('review/', views.Review_View.as_view(), name='review'),
