@@ -13,7 +13,7 @@ from templatetags.product_data_fetcher import get_product_data
 from datetime import datetime
 import os
 
-from .models import *
+from merchant.models import *
 # from customer.models import ExtraDetails
 # from static.pythonfiles.calculations import *
 
@@ -27,6 +27,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.conf import settings
 
+app_name = 'merchant'
+
 def send_mail_to_customer(order):
     customer = get_object_or_404(User,id=order.userID_id)
     send_mail(
@@ -36,8 +38,6 @@ def send_mail_to_customer(order):
         [customer.email],
         fail_silently=False,
     )    
-
-app_name = 'merchant'
 
 class BaseView(LoginRequiredMixin, View):
     login_url = '/merchant/login/'
@@ -64,6 +64,7 @@ class Logout(View):
     
 class Login(View):
     def get(self,request):
+        logout(request)
         context = {
             "page_name":"login",
         }
@@ -82,6 +83,7 @@ class Login(View):
 
 class SignupView (View):
     def get(self,request):
+        logout(request)
         context = {
             'page_name': 'signup'
         }
@@ -145,7 +147,7 @@ class SignupView (View):
 class AddressView(BaseView):
     def get(self, request):
         if not Address.objects.exists():
-            addrss = None
+            address = None
         else:
             # Check if the user has an address
             address = Address.objects.filter(userID=request.user).first()
@@ -169,17 +171,19 @@ class AddressView(BaseView):
         if action == 'edit':            
             # Fetch the related objects from the database
             address = Address.objects.get(userID = request.user)
-            address = Address.objects.update(
-                userID=request.user,
-                country=country,
-                state=state,
-                district=district,
-                municipality=municipality,
-                zip_code=zip_code,
-                street=street,
-                landmark=landmark,
-                is_deleted = False,
-            )
+            # Update the fields
+            address.country = country
+            address.state = state
+            address.district = district
+            address.municipality = municipality
+            address.zip_code = zip_code
+            address.street = street
+            address.landmark = landmark
+            address.is_deleted = False
+
+            # Save the changes
+            address.save()
+            
         elif action == 'add':            
             address = Address.objects.create(
                 userID=request.user,
@@ -197,11 +201,10 @@ class AddressView(BaseView):
 
 class Index(BaseView):
     def get(self, request):
-        
         context = {
             "page_name":"home",
         }
-        return render(request,f'{app_name}/index.html',context)
+        return render(request,f"{app_name}/dashboard.html",context)
     
 # class AddProductView(BaseView):
 #     def get(self, request):
