@@ -416,6 +416,7 @@ class BuyNowView(BaseView):
         orders = []  # List to store created order objects for further use or confirmation
         i = 0
         price_list = []
+        current_orderid = 0
 
         for product_uid, quantity_str in zip(product_uids, quantities):
             quantity = int(quantity_str)
@@ -440,6 +441,7 @@ class BuyNowView(BaseView):
                 rate=product_user.price,
                 amount=total_price,
             )
+            current_orderid = order.uid
             orders.append(order)
 
             # Delete the item from the cart after processing 
@@ -449,8 +451,8 @@ class BuyNowView(BaseView):
         customer = request.user.first_name + ' ' + request.user.last_name
 
         if(payment == 'khaltiapi'):
-            amount = float(total_price) * 100  # Convert Rs to paisa
-            order_id = "order1234"
+            amount = (float(total_price) + 60) * 100 
+            order_id = current_orderid
 
             payload = {
                 "return_url": "http://127.0.0.1:8000/payment-success/",
@@ -462,6 +464,16 @@ class BuyNowView(BaseView):
                     "name": customer,
                     "email": request.user.email
                 },
+                "amount_breakdown": [
+                    {
+                        "label": "Total Price",
+                        "amount": float(total_price) * 100
+                    },
+                    {
+                        "label": "Delivery Charge",
+                        "amount": 60*100
+                    }
+                ],
                 "product_details": [
                     {
                         "identity": int(product_info[product]['id']),  # Convert product ID to string
