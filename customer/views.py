@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 from customer.models import *
-from merchant.models import *
+# from merchant.models import *
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -77,6 +77,7 @@ class Logout_view(BaseView):
            
 class Login_view(View):
     def get(self,request):
+        logout(request)
         context = {
             'page_name': 'Login'
         }
@@ -95,6 +96,7 @@ class Login_view(View):
 
 class Signup_View (View):
     def get(self,request):
+        logout(request)
         context = {
             'page_name': 'signup'
         }
