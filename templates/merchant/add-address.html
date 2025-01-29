@@ -22,7 +22,7 @@
     <div class="container mt-5">
       <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8 col-sm-12">
-          <form action="{% url 'customer:add-address' %}" method="POST">
+          <form action="{% url 'merchant:my-address' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="action" value="edit">
             <div class = "d-flex justify-content-center fs-1 fw-bold mb-3">Address</div>
@@ -75,7 +75,7 @@
     <div class="container mt-5">
       <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8 col-sm-12">
-          <form action="{% url 'customer:add-address' %}" method="POST">
+          <form action="{% url 'merchant:my-address' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name='action' value='add'>
             <div class = "d-flex justify-content-center fs-1 fw-bold mb-3">Address</div>
