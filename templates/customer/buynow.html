@@ -89,6 +89,17 @@
                             </tbody>
                         </table>
                     </div> 
+
+                    <div class="delivery-payment" data-distancebet= "{{ combined_data.0.distance }}">
+                        <strong>Delivery Charge: </strong><span class="delivery-amount"></span> *
+                        <input type="hidden" name="deliveryprice" value="">
+                        <div class="note-message">*delivery charge is calculated as per the distance</div>
+                    </div>
+
+                    <div class="subtotal-amt">
+                        <strong>Subtotal: </strong><span class="subtotal"></span>
+                    </div>
+
                     <div class="payment-gateway">
                         <div class="main-title">
                             <h2>Payment Options</h2>
