@@ -18,10 +18,8 @@ from customer.models import *
 # from merchant.models import *
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.template import loader
-# from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-# from django.contrib.auth.decorators import login_required
-# from django.urls import reverse_lazy
+
+import requests
 import os
 
 from myutility import *
@@ -33,6 +31,14 @@ app_name = 'customer'
 
 from django.core.mail import send_mail
 from django.conf import settings
+
+#khaltiapi
+KHALTI_API_URL = "https://dev.khalti.com/api/v2/epayment/initiate/"
+KHALTI_VERIFY_URL = "https://dev.khalti.com/api/v2/epayment/lookup/"
+PUBLIC_KEY = "0d0d518d59be4978994f298d022acd89"  # Replace with your test public key
+SECRET_KEY = "502acd34427d49b8906b63013a3f4c7b"
+#khaltiapi close
+
 
 def send_mail_to_merchant(orders):
     for order in orders:
@@ -259,7 +265,7 @@ class Product_Detail_View(BaseView):#for single page display of product
         image_path = os.path.join('static/', 'images', f"{product.slug}.png")
         image_exists = os.path.isfile(image_path)
 
-        product_users = Product_User.objects.exclude(productID=product_id)
+        product_users = Product_User.objects.exclude(productID=product_id, userID__in=user_ids)
 
         combined_data = []
         processed_product_ids = set()
@@ -300,7 +306,7 @@ class Product_Detail_View(BaseView):#for single page display of product
         action = request.POST.get('action')
         product_ids = request.POST.getlist('product_id')
         quantity = request.POST.get('quantity')
-        print(quantity)
+
         if action == 'buy':
             request.session['product_ids'] = product_ids  # Save IDs in session
             return redirect('customer:buy-now')
@@ -315,6 +321,16 @@ class BuyNowView(BaseView):
         product_ids = request.session.get('product_ids', [])  # Retrieve product IDs from session
         farmer_ids = request.session.get('farmer_ids', [])  # Retrieve product IDs from session
         quantity_items = request.session.get('quantity_items', [])  # Retrieve product IDs from session
+        distance = request.session.get('distance', [])  # Retrieve product IDs from session
+
+        product_info = {}
+        for x in range(len(product_ids)):
+            product_info[product_ids[x]] = {
+                'id': product_ids[x],
+                'farmer_id': farmer_ids[x],
+                'quantity' : quantity_items[x],
+                'distance' : distance[x],
+            }
 
         if not product_ids:
             return redirect('customer:product-detail')  # Redirect back if no products are selected
@@ -327,16 +343,16 @@ class BuyNowView(BaseView):
             address = None
 
         combined_data = []
-        i = 0
         for product in products:
-            product_users = Product_User.objects.filter(productID = product, userID = farmer_ids[i])
-            farmer = get_object_or_404(User, id=farmer_ids[i])
-            pusers = [{'puser': product_user, 'quantity':quantity_items[i], 'farmer':farmer} for product_user in product_users]
-            i+=1
+            product_users = Product_User.objects.filter(productID = product, userID = product_info[product.uid]['farmer_id'])
+            farmer = get_object_or_404(User, id=product_info[product.uid]['farmer_id'])
+            pusers = [{'puser': product_user, 'quantity':product_info[product.uid]['quantity'], 'farmer':farmer} for product_user in product_users]
+            distance = product_info[product.uid]['distance']
             combined_data.append(
                 {
                     'products':product,
-                    'product_user':pusers
+                    'product_user':pusers,
+                    'distance': float(distance)
                 }
             )
         context = {
@@ -352,6 +368,14 @@ class BuyNowView(BaseView):
         farmer_ids = request.POST.getlist('farmer')  # List of product UIDs
         quantities = request.POST.getlist('quantity')  # List of quantities
 
+        product_info = {}
+        for x in range(len(product_uids)):
+            product_info[product_uids[x]] = {
+                'id': int(product_uids[x]),
+                'farmer_id': farmer_ids[x],
+                'quantity' : quantities[x]
+            }
+
         # getting address of buyer from form
         country = request.POST.get('country')
         state = request.POST.get('province')
@@ -360,6 +384,9 @@ class BuyNowView(BaseView):
         street = request.POST.get('street')
         zip_code = request.POST.get('postalCode')
         landmark = request.POST.get('landmark')
+
+        payment = request.POST.get('paymentoption')
+        deliverycharge = request.POST.get('deliveryprice')
 
         # if user doesnot have address saved
         if not Address.objects.filter(userID = request.user).exists():
@@ -393,15 +420,19 @@ class BuyNowView(BaseView):
         order_address.save()
         orders = []  # List to store created order objects for further use or confirmation
         i = 0
+        price_list = []
+        current_orderid = 0
+
         for product_uid, quantity_str in zip(product_uids, quantities):
             quantity = int(quantity_str)
 
             if quantity < 1:
                 return HttpResponse('Quantity must be at least 1.', status=400)
 
-            product_user = get_object_or_404(Product_User,productID = product_uid, userID = farmer_ids[i])
+            product_user = get_object_or_404(Product_User,productID = product_uid, userID = product_info[product_uid]['farmer_id'])
 
             total_price = product_user.price * quantity
+            price_list.append(total_price)
 
             product_user.quantity -= quantity
             product_user.save()
@@ -415,14 +446,108 @@ class BuyNowView(BaseView):
                 rate=product_user.price,
                 amount=total_price,
             )
+            current_orderid = order.uid
             orders.append(order)
 
-            # Delete the item from the cart after processing
-            CartItem.objects.filter(user=request.user, product=product_user.uid).delete()
+            # Delete the item from the cart after processing 
+            CartItem.objects.filter(user=request.user, product=product_user.productID).delete()
+
+            if(payment == 'khaltiapi'):
+                is_online = True,
+                is_cashOnDelivery = False
+            else:
+                is_online = False
+                is_cashOnDelivery = True
+
+            PaymentMethod.objects.create(
+                orderID = order,
+                is_online = is_online,
+                is_cashOnDelivery = is_cashOnDelivery
+            )
+
+        prices = sum([price for price in price_list])
+        total_price = float(prices) + float(deliverycharge)
+        customer = request.user.first_name + ' ' + request.user.last_name
+
+        if(payment == 'khaltiapi'):
+            amount = (float(total_price)) * 100 
+            order_id = current_orderid
+
+            payload = {
+                "return_url": "http://127.0.0.1:8000/payment-success/",
+                "website_url": "http://127.0.0.1:8000/",
+                "amount": amount,
+                "purchase_order_id": order_id,
+                "purchase_order_name": 'order',
+                "customer_info": {
+                    "name": customer,
+                    "email": request.user.email
+                },
+                "amount_breakdown": [
+                    {
+                        "label": "Total Price",
+                        "amount": float(prices) * 100
+                    },
+                    {
+                        "label": "Delivery Charge",
+                        "amount": float(deliverycharge)*100
+                    }
+                ],
+                "product_details": [
+                    {
+                        "identity": int(product_info[product]['id']),  # Convert product ID to string
+                        "name": get_object_or_404(Product, uid = product_info[product]['id']).name,
+                        "total_price": float(get_object_or_404(Product_User, productID=product, userID=product_info[product]['farmer_id']).price) * int(product_info[product]['quantity']),  # Calculate total price
+                        "quantity": int(product_info[product]['quantity']),
+                        "unit_price": float(get_object_or_404(Product_User, productID=product, userID=product_info[product]['farmer_id']).price)*100
+                    } for product in product_info
+                ],
+            }
+
+            headers = {"Authorization": f"Key {SECRET_KEY}"}
+
+            response = requests.post(KHALTI_API_URL, json=payload, headers=headers)
+            data = response.json()
+
+            if "payment_url" in data:
+                return redirect(data["payment_url"])  # Redirect user to payment page
+            else:
+                return JsonResponse({"error": "Failed to initiate payment", "details": data})
+
         # Redirect to a confirmation or success page with relevant details
         messages.success(request, "Order has been placed")
         send_mail_to_merchant(orders)
         return redirect('customer:order-detail')
+    
+def khalti_verify(request):
+    pidx = request.GET.get("pidx")  # Get pidx from return URL
+
+    if not pidx:
+        return JsonResponse({"error": "Missing pidx parameter!"})
+
+    payload = {"pidx": pidx}
+    headers = {"Authorization": f"Key {SECRET_KEY}"}
+
+    response = requests.post(KHALTI_VERIFY_URL, json=payload, headers=headers)
+    data = response.json()
+
+    price = float(data.get('total_amount') / 100)
+    if data.get("status") == "Completed":
+        context = {
+            "message": "Payment Successful", 
+            "class": "payment-success",
+            "details": data,
+            "price" : price,
+        }
+    else:
+        context = {
+            "message": "Payment Verification Failed", 
+            "class": "payment-fail",
+            "details": data,
+            "price" : price,
+        }
+
+    return render(request, f'{app_name}/payment-success.html', context)
 
 class AddToCartView(BaseView): #adds items to cart
     def get(self, request, product_uid):
@@ -433,11 +558,21 @@ class AddToCartView(BaseView): #adds items to cart
         if not request.user.is_authenticated:
             return JsonResponse({'success': False, 'message': 'Please login to add products to your cart.'}, status=401)
         
+        cart_item = CartItem.objects.filter(user=request.user, product=product).first()
+        if cart_item:
+            print('already exissts')
+            # Return "already in cart" response
+            return JsonResponse({
+                'success': False,
+                'message': f'{product.name} is already in your cart.'
+            }, status=400)
+        
         quantity = request.GET.get('quantity', 1)
         farmer = request.GET.get('farmer', 1)
+        distance = request.GET.get('distance', 0)
 
         # Add the product to the cart if it doesn't exist
-        CartItem.objects.create(user=request.user, product=product, quantity = quantity, farmer = farmer)
+        CartItem.objects.create(user=request.user, product=product, quantity = quantity, farmer = farmer, distance = distance)
 
         # Return success response
         return JsonResponse({
@@ -484,7 +619,8 @@ class MyCart_View(BaseView): #show items in my cart
         # Get the list of selected product IDs from the POST data
         selected_product_ids = request.POST.getlist('cart_item')  # 'product' should match the name attribute of your checkboxes
         selected_farmer_ids = request.POST.getlist('farmer_item')
-        selected_quantity = request.POST.getlist('quantity')
+        selected_quantity = request.POST.getlist('quantity_item')
+        selected_distance = request.POST.getlist('distance')
         selected_farmer_ids = [int(x) for x in selected_farmer_ids]
 
         products = []
@@ -506,6 +642,7 @@ class MyCart_View(BaseView): #show items in my cart
             request.session['product_ids'] =  productID_list# Save IDs in session
             request.session['farmer_ids'] =  selected_farmer_ids# Save IDs in session
             request.session['quantity_items'] =  selected_quantity# Save IDs in session
+            request.session['distance'] =  selected_distance# Save IDs in session
             return redirect('customer:buy-now')
         return redirect(request.path)
 

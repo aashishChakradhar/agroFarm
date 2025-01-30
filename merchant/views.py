@@ -275,7 +275,7 @@ class ProductView(BaseView):
 class DashboardView(BaseView):
     def get(self, request):
         orders = Order.objects.filter(merchantID=request.user, status = 'processing')
-        all_orders = Order.objects.filter(merchantID=request.user)
+        all_orders = Order.objects.filter(merchantID=request.user, status = 'completed')
         try:
             current_user = request.user
             context = {

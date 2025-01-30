@@ -5,8 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const productUid = this.dataset.productUid;
             const quantity = this.dataset.quantity;
             const farmer = this.dataset.farmer;
+            const distance = this.dataset.distance;
 
-            fetch(`/add-to-cart/${productUid}/?quantity=${quantity}&farmer=${farmer}`, {
+            fetch(`/add-to-cart/${productUid}/?quantity=${quantity}&farmer=${farmer}&distance=${distance}`, {
                 method: 'GET',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
@@ -110,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                     e.target.classList.add('active');
                     document.querySelector('.add-to-cart-btn').setAttribute('data-farmer', e.target.getAttribute('data-farmerid'));
+                    document.querySelector('.add-to-cart-btn').setAttribute('data-distance', e.target.getAttribute('data-distance'));
                     if(e.target.classList.contains('out-of-area')){
                         document.querySelector('.out-of-area-msg').style.display = 'block';
                     }else{
@@ -123,10 +125,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('.product-item .locationpoint').forEach( (element) => {
         element.addEventListener('click', (e) => {
-
             if(e.target.classList.contains('active')){
+
                 if(document.querySelector('.add-to-cart-btn')){
                     document.querySelector('.add-to-cart-btn').setAttribute('data-farmer', e.target.getAttribute('data-farmerid'));
+                    document.querySelector('.add-to-cart-btn').setAttribute('data-distance',e.target.getAttribute('data-distance'));
                 }
             }
         })
@@ -203,8 +206,10 @@ document.addEventListener('DOMContentLoaded', function () {
             item.addEventListener('change', (e) => {
                 const farmerItem = e.target.closest('label').querySelector('input[name="farmer_item"]');
                 const quantityItem = e.target.closest('label').querySelector('input[name="quantity_item"]');
+                const distance = e.target.closest('label').querySelector('input[name="distance"]');
                 farmerItem.checked = e.target.checked;
                 quantityItem.checked = e.target.checked;
+                distance.checked = e.target.checked;
                 let isAnyChecked = Array.from(checkboxes).some(i => i.checked);
 
                 if (isAnyChecked) {
@@ -235,5 +240,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
             finalPrice.textContent = (rate * quantity.textContent).toFixed(2);
         });
+    }
+
+    if(document.querySelector('.delivery-payment')){
+        const distance = document.querySelector('.delivery-payment').getAttribute('data-distancebet');
+        if(distance > 5){
+            let d = distance, b = 0, i = 0;
+            while(d>0){
+                d = d-10;
+                i++;
+                if(d < 10){
+                    b = d;
+                    break;
+                }
+            }
+            let amt = (60*i + (6*d));
+            document.querySelector('input[name="deliveryprice"]').value = amt;
+            document.querySelector('.delivery-amount').innerHTML = `Rs. ${amt}`;
+            
+        }else{
+            document.querySelector('input[name="deliveryprice"]').value = 0;
+            document.querySelector('.delivery-amount').innerHTML = 'Free Delivery';
+        }
+    }
+    if(document.querySelector('.subtotal')){
+        const deliverycharge = parseFloat(document.querySelector('input[name="deliveryprice"]').value);
+
+        let productprice = 0;
+        document.querySelectorAll('.total').forEach((item) => {
+            productprice += parseFloat(item.innerHTML);
+        })
+
+        let subtotal = productprice + deliverycharge;
+        document.querySelector('.subtotal').innerHTML = `Rs. ${subtotal}`;
     }
 });
