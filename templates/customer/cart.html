@@ -12,9 +12,9 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        <label>
+                                        <!-- <label>
                                             <input type="checkbox" name="action" id="cartSelectAll"><span>Select All</span>
-                                        </label>
+                                        </label> -->
                                     </th>
                                     <th>ID</th>
                                     <th>Product</th>
@@ -31,6 +31,7 @@
                                                 <input type="checkbox" name="cart_item" id="{{ product.cart.product_id }}" value="{{ product.cart.product_id }}">
                                                 <input type="checkbox" name="farmer_item" value="{{product.product_farmer.id}}" style="display: none;">
                                                 <input type="checkbox" name="quantity_item" value="{{product.cart.quantity}}" style="display: none;">
+                                                <input type="checkbox" name="distance" value="{{product.cart.distance}}" style="display: none;">
                                             </label>
                                         </td>
                                         <td>{{ product.cart.product_id }}</td>
