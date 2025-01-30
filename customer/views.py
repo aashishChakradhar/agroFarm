@@ -265,7 +265,7 @@ class Product_Detail_View(BaseView):#for single page display of product
         image_path = os.path.join('static/', 'images', f"{product.slug}.png")
         image_exists = os.path.isfile(image_path)
 
-        product_users = Product_User.objects.exclude(productID=product_id)
+        product_users = Product_User.objects.exclude(productID=product_id, userID__in=user_ids)
 
         combined_data = []
         processed_product_ids = set()
@@ -306,7 +306,7 @@ class Product_Detail_View(BaseView):#for single page display of product
         action = request.POST.get('action')
         product_ids = request.POST.getlist('product_id')
         quantity = request.POST.get('quantity')
-        print(quantity)
+
         if action == 'buy':
             request.session['product_ids'] = product_ids  # Save IDs in session
             return redirect('customer:buy-now')
@@ -321,13 +321,15 @@ class BuyNowView(BaseView):
         product_ids = request.session.get('product_ids', [])  # Retrieve product IDs from session
         farmer_ids = request.session.get('farmer_ids', [])  # Retrieve product IDs from session
         quantity_items = request.session.get('quantity_items', [])  # Retrieve product IDs from session
+        distance = request.session.get('distance', [])  # Retrieve product IDs from session
 
         product_info = {}
         for x in range(len(product_ids)):
             product_info[product_ids[x]] = {
                 'id': product_ids[x],
                 'farmer_id': farmer_ids[x],
-                'quantity' : quantity_items[x]
+                'quantity' : quantity_items[x],
+                'distance' : distance[x],
             }
 
         if not product_ids:
@@ -345,10 +347,12 @@ class BuyNowView(BaseView):
             product_users = Product_User.objects.filter(productID = product, userID = product_info[product.uid]['farmer_id'])
             farmer = get_object_or_404(User, id=product_info[product.uid]['farmer_id'])
             pusers = [{'puser': product_user, 'quantity':product_info[product.uid]['quantity'], 'farmer':farmer} for product_user in product_users]
+            distance = product_info[product.uid]['distance']
             combined_data.append(
                 {
                     'products':product,
-                    'product_user':pusers
+                    'product_user':pusers,
+                    'distance': float(distance)
                 }
             )
         context = {
@@ -382,6 +386,7 @@ class BuyNowView(BaseView):
         landmark = request.POST.get('landmark')
 
         payment = request.POST.get('paymentoption')
+        deliverycharge = request.POST.get('deliveryprice')
 
         # if user doesnot have address saved
         if not Address.objects.filter(userID = request.user).exists():
@@ -447,11 +452,25 @@ class BuyNowView(BaseView):
             # Delete the item from the cart after processing 
             CartItem.objects.filter(user=request.user, product=product_user.productID).delete()
 
-        total_price = sum([price for price in price_list])
+            if(payment == 'khaltiapi'):
+                is_online = True,
+                is_cashOnDelivery = False
+            else:
+                is_online = False
+                is_cashOnDelivery = True
+
+            PaymentMethod.objects.create(
+                orderID = order,
+                is_online = is_online,
+                is_cashOnDelivery = is_cashOnDelivery
+            )
+
+        prices = sum([price for price in price_list])
+        total_price = float(prices) + float(deliverycharge)
         customer = request.user.first_name + ' ' + request.user.last_name
 
         if(payment == 'khaltiapi'):
-            amount = (float(total_price) + 60) * 100 
+            amount = (float(total_price)) * 100 
             order_id = current_orderid
 
             payload = {
@@ -467,11 +486,11 @@ class BuyNowView(BaseView):
                 "amount_breakdown": [
                     {
                         "label": "Total Price",
-                        "amount": float(total_price) * 100
+                        "amount": float(prices) * 100
                     },
                     {
                         "label": "Delivery Charge",
-                        "amount": 60*100
+                        "amount": float(deliverycharge)*100
                     }
                 ],
                 "product_details": [
@@ -550,9 +569,10 @@ class AddToCartView(BaseView): #adds items to cart
         
         quantity = request.GET.get('quantity', 1)
         farmer = request.GET.get('farmer', 1)
+        distance = request.GET.get('distance', 0)
 
         # Add the product to the cart if it doesn't exist
-        CartItem.objects.create(user=request.user, product=product, quantity = quantity, farmer = farmer)
+        CartItem.objects.create(user=request.user, product=product, quantity = quantity, farmer = farmer, distance = distance)
 
         # Return success response
         return JsonResponse({
@@ -600,6 +620,7 @@ class MyCart_View(BaseView): #show items in my cart
         selected_product_ids = request.POST.getlist('cart_item')  # 'product' should match the name attribute of your checkboxes
         selected_farmer_ids = request.POST.getlist('farmer_item')
         selected_quantity = request.POST.getlist('quantity_item')
+        selected_distance = request.POST.getlist('distance')
         selected_farmer_ids = [int(x) for x in selected_farmer_ids]
 
         products = []
@@ -621,6 +642,7 @@ class MyCart_View(BaseView): #show items in my cart
             request.session['product_ids'] =  productID_list# Save IDs in session
             request.session['farmer_ids'] =  selected_farmer_ids# Save IDs in session
             request.session['quantity_items'] =  selected_quantity# Save IDs in session
+            request.session['distance'] =  selected_distance# Save IDs in session
             return redirect('customer:buy-now')
         return redirect(request.path)
 
