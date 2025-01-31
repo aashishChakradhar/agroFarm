@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
             let lat = item.getAttribute('data-lat');
             let long = item.getAttribute('data-long');
 
+            // console.log(getDistanceFromLatLonInKm(lat, long, endLati, endLongi))
+
             if(getDistanceFromLatLonInKm(lat, long, endLati, endLongi) >= 5){
                 item.classList.add('out-of-area');
                 item.setAttribute('data-distance', getDistanceFromLatLonInKm(lat, long, endLati, endLongi))
