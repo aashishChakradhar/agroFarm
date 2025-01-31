@@ -70,31 +70,17 @@ document.addEventListener('DOMContentLoaded', function () {
             if(document.querySelector('.add-to-cart-btn')){
                 document.querySelector('.add-to-cart-btn').setAttribute('data-quantity', e.target.value);
             }
+
+            document.querySelectorAll('.locationpoint').forEach( (item) => {
+                let quantity = item.querySelector('.farmer-quantity').textContent.trim();
+                if(parseInt(e.target.value) > parseInt(quantity)){
+                    item.style.display = 'none';
+                }else{
+                    item.style.display = 'block';
+                }
+            })
         })
     }
-
-    // if (document.querySelector('.checkout-table')) {
-    //     const tableRows = document.querySelectorAll('.checkout-table tbody tr');
-    //     tableRows.forEach((row) => {
-    //         const rate = parseFloat(row.querySelector('.rate').textContent);
-    //         const finalPrice = row.querySelector('.total');
-    //         const quantity = row.querySelector('input[name="quantity"]');
-    //         function priceChange(){
-    //             if (quantity.value < 1) {
-    //                 alert("Quantity must be at least 1.");
-    //                 quantity.value = 1;
-    //             }
-    //             finalPrice.textContent = (rate * quantity.value).toFixed(2);
-    //         }
-    //         priceChange();
-    //         quantity.addEventListener('input',()=>{
-    //             priceChange();
-    //         });
-    //         quantity.addEventListener('change',()=>{
-    //             priceChange();
-    //         });
-    //     });
-    // }
 
     document.querySelectorAll('.product-listing-stock').forEach(function (element) {
         element.addEventListener('click', (e) => {
@@ -255,8 +241,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
             let amt = (60*i + (6*d));
-            document.querySelector('input[name="deliveryprice"]').value = amt;
-            document.querySelector('.delivery-amount').innerHTML = `Rs. ${amt}`;
+            document.querySelector('input[name="deliveryprice"]').value = amt.toFixed(2);
+            document.querySelector('.delivery-amount').innerHTML = `Rs. ${amt.toFixed(2)}`;
             
         }else{
             document.querySelector('input[name="deliveryprice"]').value = 0;
@@ -274,4 +260,32 @@ document.addEventListener('DOMContentLoaded', function () {
         let subtotal = productprice + deliverycharge;
         document.querySelector('.subtotal').innerHTML = `Rs. ${subtotal}`;
     }
+
+    //select only one item from cart
+    let cartRow = document.querySelectorAll('.my-cart-table input[name="cart_item"]');
+    cartRow.forEach(function(element, index) {
+        element.addEventListener('change', function() {
+            cartRow.forEach(function(ele, index2) {
+                if (index !== index2) {
+                    ele.disabled = element.checked; // Disable others if the current one is checked
+                } else {
+                    ele.disabled = false; // Keep the selected one enabled
+                }
+            });
+        });
+    });
+
+    //Farmer sorting
+    let container = document.querySelector(".product-listing-stock");
+    let items = Array.from(document.querySelectorAll(".product-item"));
+
+    // Sort items: Those without .out-of-area come first
+    items.sort((a, b) => {
+        let aOutOfArea = a.querySelector(".locationpoint").classList.contains("out-of-area") ? 1 : 0;
+        let bOutOfArea = b.querySelector(".locationpoint").classList.contains("out-of-area") ? 1 : 0;
+        return aOutOfArea - bOutOfArea;
+    });
+
+    // Append sorted items back to the container
+    items.forEach(item => container.appendChild(item));
 });
