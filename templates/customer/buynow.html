@@ -90,14 +90,16 @@
                         </table>
                     </div> 
 
-                    <div class="delivery-payment" data-distancebet= "{{ combined_data.0.distance }}">
-                        <strong>Delivery Charge: </strong><span class="delivery-amount"></span> *
-                        <input type="hidden" name="deliveryprice" value="">
-                        <div class="note-message">*delivery charge is calculated as per the distance</div>
-                    </div>
+                    <div class="delivery-final flex-wrap">
+                        <div class="delivery-payment" data-distancebet= "{{ combined_data.0.distance }}">
+                            <strong>Delivery Charge: </strong><span class="delivery-amount"></span> *
+                            <input type="hidden" name="deliveryprice" value="">
+                            <div class="note-message">*delivery charge is calculated as per the distance</div>
+                        </div>
 
-                    <div class="subtotal-amt">
-                        <strong>Subtotal: </strong><span class="subtotal"></span>
+                        <div class="subtotal-amt">
+                            <strong>Subtotal: </strong><span class="subtotal"></span>
+                        </div>
                     </div>
 
                     <div class="payment-gateway">
@@ -105,7 +107,7 @@
                             <h2>Payment Options</h2>
                         </div>
                         <label>
-                            <input type="radio" name="paymentoption" value="cashondelivery">
+                            <input type="radio" name="paymentoption" value="cashondelivery" checked>
                             Cash on Delivery
                         </label>
                         <label>
@@ -113,7 +115,7 @@
                             Khalti
                         </label>
                     </div>
-                    <div class='row justify-content-end'>
+                    <div class='row justify-content-end mt-4'>
                         <div class='col-auto'>
                             <button class='btn btn-success' type="submit">
                                 Buy Now

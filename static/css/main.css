@@ -187,7 +187,7 @@ img{
 }
 
 .login-signup-wrapper a:hover, .login-signup-wrapper a:focus{
-    color: var(--secondary-color)
+    color: #fff;
 }
 
 .dropdown-menu{
@@ -197,6 +197,7 @@ img{
 .login-signup-wrapper a.dropdown-item{
     color: #000;
     font-size: 16px;
+    background: inherit;
 }
 .table{
     vertical-align: middle;
@@ -525,4 +526,97 @@ select#orderstatus {
     border-radius: 8px;
     font-weight: 500;
     margin-top: 10px;
+}
+
+.delivery-final {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    border: 1px solid;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.note-message {
+    font-size: 0.8em;
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--alert_color);
+}
+
+span.subtotal {
+    font-size: 1.7em;
+    font-weight: 700;
+}
+
+.payment-gateway input {
+    display: none;
+}
+.payment-gateway label{
+    border: 1px solid #101010;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.payment-gateway label:hover,
+.payment-gateway label:has(input:checked){
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.payment-gateway {
+    padding: 20px;
+    border: 1px solid;
+    border-radius: 8px;
+}
+
+.payment-gateway h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.goback a{
+    display: inline-block;
+    padding: 8px 25px;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    line-height: 1.5;
+    text-decoration: none;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+.goback a:hover{
+    background-color: var(--secondary-color);
+}
+.status{
+    color: var(--primary-color);
+    font-weight: 600;
+}
+.payment-success-box strong{
+    color: initial;
+    font-weight: bold;
+}
+.payment-success-box {
+    display: block;
+    border-radius: 12px;
+    background: #FFFFF0;
+    padding: 20px 30px 30px;
+    box-shadow: 4px 4px 13px 0px #e0e0e0;
+    margin: auto;
+    max-width: max-content;
+}
+
+.payment-success {
+    margin-bottom: 20px;
+}
+
+.total-price {
+    font-weight: 700;
 }

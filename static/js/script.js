@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
           fill: false,
           lineTension: 0,
           backgroundColor: "rgba(0,0,255,1.0)",
-          borderColor: "rgba(0,0,255,0.1)",
+          borderColor: "#66A931",
           data: yValues
         }]
       },
@@ -63,9 +63,5 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     });
-  }
-
-  if(document.getElementById('editorContent') && document.querySelector('#editor .ql-editor')){
-    document.querySelector('#editor .ql-editor').innerHTML = document.getElementById('editorContent').value;
   }
 });

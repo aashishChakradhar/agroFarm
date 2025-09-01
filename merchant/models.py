@@ -32,6 +32,8 @@ class ExtraUserDetails(BaseModel):
     bio = models.CharField(max_length=1024, default='') 
     latitude = models.DecimalField(max_digits=20, decimal_places=10, default=0.0)
     longitude = models.DecimalField(max_digits=20, decimal_places=10, default=0.0)
+    apisecretkey = models.CharField(max_length=1024, default='') 
+    apipublickey = models.CharField(max_length=1024, default='') 
     # addressID = models.OneToOneField(Address,on_delete=models.CASCADE, default=0)
     def __str__(self):
         return self.bio

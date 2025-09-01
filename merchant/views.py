@@ -197,7 +197,7 @@ class AddressView(BaseView):
                 is_deleted = False,
             )
             address.save()
-        return redirect ('/') 
+        return redirect (request.path) 
 
 class Index(BaseView):
     def get(self, request):
@@ -205,54 +205,6 @@ class Index(BaseView):
             "page_name":"home",
         }
         return render(request,f"{app_name}/dashboard.html",context)
-    
-# class AddProductView(BaseView):
-#     def get(self, request):
-#         try:
-#             context = {
-#                 'page_name': 'add-product'
-#             }
-#             return render(request, f"{app_name}/add_product.html" ,context)
-#         except Exception as e:
-#             messages.error(request, str(e))
-#             return render(request,f"{app_name}/add_product.html")
-
-#     def post(self,request):
-#         try:
-#             producttitle = request.POST.get('producttitle')
-#             featuredimage = request.POST.get('productimgblob')
-#             stock = request.POST.get('stock')
-            
-#             cat = request.POST.get('producttype')
-#             description = request.POST.get('editorContent')
-#             sellerid = request.user
-
-#             category = get_object_or_404(Category, uid=cat)
-#             price = category.avg_price
-#             price = price.split(' ')[1]
-
-#             if not producttitle or not price:
-#                 messages.error(request, "All fields are required.")
-#                 return render(request, f'{app_name}/add_product.html')
-            
-#             product = Product(
-#                 name=producttitle,
-#                 merchantID=sellerid,
-#                 featuredimage=featuredimage,
-#                 stock_quantity = stock,
-#                 rate = price,
-#                 description = description,
-#                 categoryID = category
-#             )
-#             product.save()
-
-#             messages.success(request, "Your Product Has Been Successfully Added!")
-#             return redirect(request.path) 
-        
-#         except Exception as e:
-#             messages.error(request, str(e))
-      
-#         return render(request, f'{app_name}/add_product.html') 
 
 class ProductView(BaseView):
     def get(self, request):
@@ -274,7 +226,7 @@ class ProductView(BaseView):
     
 class DashboardView(BaseView):
     def get(self, request):
-        orders = Order.objects.filter(merchantID=request.user, status = 'processing')
+        orders = Order.objects.filter(merchantID=request.user, status = 'processing').order_by('-created')
         all_orders = Order.objects.filter(merchantID=request.user, status = 'completed')
         try:
             current_user = request.user
@@ -313,6 +265,8 @@ class AccountView(BaseView):
         biotext = request.POST.get('biotext')
         latitude = request.POST.get('latitude')
         longitude = request.POST.get('longitude')
+        secretkey = request.POST.get('apisecretkey')
+        publickey = request.POST.get('apipublickey')
 
         try:
             # Update User fields
@@ -327,6 +281,8 @@ class AccountView(BaseView):
                 extrauserfields.bio=biotext
                 extrauserfields.latitude = latitude
                 extrauserfields.longitude = longitude
+                extrauserfields.apisecretkey = secretkey
+                extrauserfields.apipublickey = publickey
                 extrauserfields.save()
             except:
                 ExtraUserDetails.objects.create(
@@ -335,7 +291,9 @@ class AccountView(BaseView):
                     profileimg=featuredimage, 
                     bio=biotext,
                     latitude = latitude,
-                    longitude = longitude
+                    longitude = longitude,
+                    apisecretkey = secretkey,
+                    apipublickey = publickey
                 )
 
             messages.success(request, "Your profile has been successfully updated!")
@@ -350,8 +308,7 @@ class AccountView(BaseView):
 class OrderView(BaseView):
     def get(self,request):
         current_user = request.user
-        # user_product_ids = Product_User.objects.filter(userID=current_user.id).values_list('uid', flat=True)
-        orders = Order.objects.filter(merchantID=current_user)
+        orders = Order.objects.filter(merchantID=current_user).order_by('-status', '-created')
         context = {
             'orders' : orders,
             'page_name':'order'

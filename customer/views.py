@@ -224,7 +224,6 @@ class AddAddress_View(BaseView):
             # Fetch the related objects from the database
             address = Address.objects.get(userID = request.user)
             address = Address.objects.update(
-                userID=request.user,
                 country=country,
                 state=state,
                 district=district,
@@ -247,7 +246,7 @@ class AddAddress_View(BaseView):
                 is_deleted = False,
             )
             address.save()
-        return redirect ('/') 
+        return redirect (request.path) 
 
 class Product_Detail_View(BaseView):#for single page display of product
     def get(self, request, product_id): 
@@ -452,17 +451,17 @@ class BuyNowView(BaseView):
             # Delete the item from the cart after processing 
             CartItem.objects.filter(user=request.user, product=product_user.productID).delete()
 
-            if(payment == 'khaltiapi'):
-                is_online = True,
+            if payment == 'khaltiapi':
+                is_online = True
                 is_cashOnDelivery = False
             else:
                 is_online = False
                 is_cashOnDelivery = True
 
             PaymentMethod.objects.create(
-                orderID = order,
-                is_online = is_online,
-                is_cashOnDelivery = is_cashOnDelivery
+                orderID=order,
+                is_online=is_online,
+                is_cashOnDelivery=is_cashOnDelivery
             )
 
         prices = sum([price for price in price_list])
@@ -470,6 +469,9 @@ class BuyNowView(BaseView):
         customer = request.user.first_name + ' ' + request.user.last_name
 
         if(payment == 'khaltiapi'):
+            farmer = get_object_or_404(User, id= farmer_ids[0])
+            secretkey = get_object_or_404(ExtraUserDetails, userID = farmer).apisecretkey
+            publickey = get_object_or_404(ExtraUserDetails, userID = farmer).apipublickey
             amount = (float(total_price)) * 100 
             order_id = current_orderid
 
@@ -504,7 +506,7 @@ class BuyNowView(BaseView):
                 ],
             }
 
-            headers = {"Authorization": f"Key {SECRET_KEY}"}
+            headers = {"Authorization": f"Key {secretkey}"}
 
             response = requests.post(KHALTI_API_URL, json=payload, headers=headers)
             data = response.json()
@@ -520,13 +522,17 @@ class BuyNowView(BaseView):
         return redirect('customer:order-detail')
     
 def khalti_verify(request):
+    farmer = Order.objects.latest('created').merchantID
+    secretkey = get_object_or_404(ExtraUserDetails, userID = farmer).apisecretkey
+    publickey = get_object_or_404(ExtraUserDetails, userID = farmer).apipublickey
+
     pidx = request.GET.get("pidx")  # Get pidx from return URL
 
     if not pidx:
         return JsonResponse({"error": "Missing pidx parameter!"})
 
     payload = {"pidx": pidx}
-    headers = {"Authorization": f"Key {SECRET_KEY}"}
+    headers = {"Authorization": f"Key {secretkey}"}
 
     response = requests.post(KHALTI_VERIFY_URL, json=payload, headers=headers)
     data = response.json()
